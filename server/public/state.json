@@ -1,0 +1,688 @@
+{
+  "disasterMode": "flood",
+  "disasterData": {
+    "type": "flood",
+    "titleTh": "อุทกภัยน้ำหนุนแม่น้ำเจ้าพระยา & น้ำเหนือไหลหลาก (Chao Phraya River Inundation)",
+    "riverLevelM": 0.42,
+    "floodStatus": "น้ำหนุนแม่น้ำเจ้าพระยาและน้ำเหนือไหลหลาก",
+    "recommendedAction": "ยกสิ่งของขึ้นที่สูง เคลื่อนย้ายผู้ป่วยติดเตียงตามแผน B"
+  },
+  "timeline": {
+    "currentIndex": 0,
+    "currentStep": {
+      "time": "20:00",
+      "minutes": 0,
+      "title": "ตรวจพบระดับน้ำเริ่มสูงขึ้น",
+      "desc": "เซนเซอร์ตรวจวัดได้ 0.42 ม. ฝนตกปานกลาง 35 มม./ชม. น้ำเริ่มเอ่อริมตลิ่ง"
+    },
+    "steps": [
+      {
+        "time": "20:00",
+        "minutes": 0,
+        "title": "ตรวจพบระดับน้ำเริ่มสูงขึ้น",
+        "desc": "เซนเซอร์ตรวจวัดได้ 0.42 ม. ฝนตกปานกลาง 35 มม./ชม. น้ำเริ่มเอ่อริมตลิ่ง"
+      },
+      {
+        "time": "20:10",
+        "minutes": 10,
+        "title": "AI Flood Forecast & Preparation Window",
+        "desc": "AI คาดการณ์น้ำแตะ 1.00 ม. เวลา 22:00 น. เริ่มนับถอยหลัง 2 ชั่วโมง พร้อมเช็กลิสต์ 4 ด้าน"
+      },
+      {
+        "time": "20:15",
+        "minutes": 15,
+        "title": "Zone C ลุ่มต่ำปรับเป็นความเสี่ยงสูง",
+        "desc": "พื้นที่ลุ่มต่ำ Zone C ปรับเป็นระดับความเสี่ยงสูง AI วิเคราะห์: แอ่งรับน้ำ + ฝนสะสม + ท่อระบายคอขวด"
+      },
+      {
+        "time": "20:20",
+        "minutes": 20,
+        "title": "สถานการณ์วิกฤต: บ้าน A-012",
+        "desc": "ตรวจพบยายสมจิตร (82 ปี, ติดเตียง) ออกซิเจนสำรองเหลือ 90 นาที น้ำท่วมซอย 35 ซม. รถพยาบาลเข้าไม่ได้"
+      },
+      {
+        "time": "20:22",
+        "minutes": 22,
+        "title": "AI เสนอ 3 แผนการช่วยเหลือ",
+        "desc": "AI วิเคราะห์เส้นทางและเปรียบเทียบ Plan A (15%), Plan B (92% แนะนำ), Plan C (38%)"
+      },
+      {
+        "time": "20:23",
+        "minutes": 23,
+        "title": "เจ้าหน้าที่อนุมัติ Plan B & ออก Task #A-012",
+        "desc": "ผู้บัญชาการกดอนุมัติ Plan B ระบบส่งใบงานมอบหมายทีม Community Team 02 เคลื่อนย้ายผ่านสะพานไม้"
+      },
+      {
+        "time": "20:30",
+        "minutes": 30,
+        "title": "ทีมถึงพื้นที่ & ส่ง Field Report",
+        "desc": "ทีม 02 ถึงบ้าน A-012 รายงานระดับน้ำจริง 45 ซม. ตรวจพบสะพานไม้ทางแยก 2 จมน้ำ"
+      },
+      {
+        "time": "20:32",
+        "minutes": 32,
+        "title": "การปรับเปลี่ยนเส้นทาง: สลับใช้ทางเลี่ยงยกระดับ",
+        "desc": "ระบบตัดสะพานไม้ที่จมน้ำและคำนวณเส้นทางเลี่ยงผ่านหน้าศูนย์ชุมชน นำส่งผู้ป่วยต่อรถ EMS สำเร็จ"
+      }
+    ]
+  },
+  "hydrology": {
+    "currentTime": "20:00",
+    "waterLevelMeters": 0.42,
+    "rateOfRisePerHour": 0.32,
+    "rainfallMmPerHour": 35,
+    "forecastLevel2200": 1,
+    "preparationRemainingMinutes": 120,
+    "alleyDepthA012Cm": 27
+  },
+  "routing": {
+    "plans": [
+      {
+        "id": "PLAN_A",
+        "title": "Plan A: รถพยาบาลเข้าตรง (Direct Ambulance)",
+        "feasibilityScore": 15,
+        "status": "rejected",
+        "reasoningTh": "ตรอกซอยหน้าบ้านกว้างเพียง 1.4 ม. (รถพยาบาลต้องการ 3.0 ม.) และระดับน้ำท่วม 35 ซม. เกินท่อไอเสีย",
+        "riskFactors": [
+          "Alley Width Bottleneck",
+          "Tailpipe Submersion Risk"
+        ],
+        "recommended": false
+      },
+      {
+        "id": "PLAN_B",
+        "title": "Plan B: ชุมชนผลัดเปลี่ยนส่งต่อ (Community Stretcher Relay)",
+        "feasibilityScore": 92,
+        "status": "recommended",
+        "reasoningTh": "เส้นทางแนะนำ: ทีมชุมชนใช้เปลสนามเดินบนสะพานไม้ยกสูง ไปยังจุด Medical Point B (135 ม., 5 นาที)",
+        "recommended": true,
+        "route": {
+          "pathNodeIds": [],
+          "pathNodeNames": [],
+          "totalDistanceMeters": 0,
+          "estimatedMinutes": 0,
+          "passable": false,
+          "blockageReason": "ไม่มีเส้นทางที่ปลอดภัยผ่านระดับน้ำท่วมปัจจุบัน",
+          "waypoints3D": []
+        },
+        "isDynamicReplanned": false
+      },
+      {
+        "id": "PLAN_C",
+        "title": "Plan C: เคลื่อนย้ายทางเรือริมตลิ่ง (River Boat Evacuation)",
+        "feasibilityScore": 38,
+        "status": "rejected",
+        "reasoningTh": "กระแสน้ำเชี่ยว 2.1 ม./วินาที คลื่นซัดจากเรือด่วน และระดับน้ำเหนือตลิ่งทำให้เทียบท่าไม่ปลอดภัย",
+        "riskFactors": [
+          "High River Velocity",
+          "Wave Surges",
+          "Lack of Oxygen Bracket on Boat"
+        ],
+        "recommended": false
+      }
+    ],
+    "bestPlan": {
+      "id": "PLAN_B",
+      "title": "Plan B: ชุมชนผลัดเปลี่ยนส่งต่อ (Community Stretcher Relay)",
+      "feasibilityScore": 92,
+      "status": "recommended",
+      "reasoningTh": "เส้นทางแนะนำ: ทีมชุมชนใช้เปลสนามเดินบนสะพานไม้ยกสูง ไปยังจุด Medical Point B (135 ม., 5 นาที)",
+      "recommended": true,
+      "route": {
+        "pathNodeIds": [],
+        "pathNodeNames": [],
+        "totalDistanceMeters": 0,
+        "estimatedMinutes": 0,
+        "passable": false,
+        "blockageReason": "ไม่มีเส้นทางที่ปลอดภัยผ่านระดับน้ำท่วมปัจจุบัน",
+        "waypoints3D": []
+      },
+      "isDynamicReplanned": false
+    },
+    "isBoardwalkSubmerged": false,
+    "isReplanned": false,
+    "activePlanApproved": false
+  },
+  "activeTask": null,
+  "households": [
+    {
+      "id": "h-01",
+      "code": "A-001",
+      "title": "บ้านริมคลอง 1",
+      "address": "12/1 ซอยวัดเทวราชกุญชร",
+      "zone": "Zone A",
+      "coord_x": -77,
+      "coord_y": -3,
+      "coord_z": 0,
+      "house_type": "House_Type_A_Gable",
+      "floor_elevation": 0.55,
+      "alley_elevation": 0.15,
+      "digital_access": "online",
+      "area_risk": "watch",
+      "access_status": "confirmed_safe",
+      "special_notes": "บ้านชั้นเดียวพื้นปูน",
+      "current_water_depth_cm": 27,
+      "residents": [
+        {
+          "id": "res-01",
+          "household_code": "A-001",
+          "name": "นายประเสริฐ สุขสวัสดิ์",
+          "age": 68,
+          "is_bedridden": 0,
+          "requires_oxygen": 0,
+          "oxygen_reserve_mins": 0,
+          "mobility_constraint": "เดินช้า"
+        }
+      ]
+    },
+    {
+      "id": "h-02",
+      "code": "A-002",
+      "title": "บ้านเรือนไทยยกพื้น",
+      "address": "12/2 ซอยวัดเทวราชกุญชร",
+      "zone": "Zone A",
+      "coord_x": -77,
+      "coord_y": 32,
+      "coord_z": 0,
+      "house_type": "House_Type_D_Raised_Timber",
+      "floor_elevation": 1.65,
+      "alley_elevation": 0.15,
+      "digital_access": "phone_only",
+      "area_risk": "watch",
+      "access_status": "confirmed_safe",
+      "special_notes": "ใต้ถุนสูง 1.65 ม. รอดพ้นน้ำท่วม",
+      "current_water_depth_cm": 27,
+      "residents": [
+        {
+          "id": "res-02",
+          "household_code": "A-002",
+          "name": "นางทองย้อย พุ่มพวง",
+          "age": 75,
+          "is_bedridden": 0,
+          "requires_oxygen": 0,
+          "oxygen_reserve_mins": 0,
+          "mobility_constraint": "ผู้สูงอายุ ไม่มีมือถือ"
+        }
+      ]
+    },
+    {
+      "id": "h-03",
+      "code": "A-003",
+      "title": "บ้านปั้นหยาซอย 1",
+      "address": "14 ซอยวัดเทวราชกุญชร",
+      "zone": "Zone A",
+      "coord_x": -77,
+      "coord_y": 52,
+      "coord_z": 0,
+      "house_type": "House_Type_B_Hip",
+      "floor_elevation": 0.55,
+      "alley_elevation": 0.15,
+      "digital_access": "online",
+      "area_risk": "watch",
+      "access_status": "confirmed_safe",
+      "special_notes": "",
+      "current_water_depth_cm": 27,
+      "residents": []
+    },
+    {
+      "id": "h-04",
+      "code": "A-004",
+      "title": "บ้านสองชั้นริมเหนือ",
+      "address": "16 ซอยวัดเทวราชกุญชร",
+      "zone": "Zone A",
+      "coord_x": -77,
+      "coord_y": 78,
+      "coord_z": 0,
+      "house_type": "House_Type_C_Two_Storey",
+      "floor_elevation": 0.55,
+      "alley_elevation": 0.2,
+      "digital_access": "online",
+      "area_risk": "normal",
+      "access_status": "confirmed_safe",
+      "special_notes": "",
+      "current_water_depth_cm": 22,
+      "residents": []
+    },
+    {
+      "id": "h-05",
+      "code": "A-005",
+      "title": "บ้านปั้นหยาซอย 2",
+      "address": "18 ซอยวัดเทวราชกุญชร",
+      "zone": "Zone B",
+      "coord_x": -29,
+      "coord_y": -4,
+      "coord_z": 0,
+      "house_type": "House_Type_B_Hip",
+      "floor_elevation": 0.55,
+      "alley_elevation": 0.1,
+      "digital_access": "online",
+      "area_risk": "watch",
+      "access_status": "confirmed_safe",
+      "special_notes": "",
+      "current_water_depth_cm": 32,
+      "residents": []
+    },
+    {
+      "id": "h-06",
+      "code": "A-006",
+      "title": "บ้านสองชั้นซอยกลาง",
+      "address": "20 ซอยวัดเทวราชกุญชร",
+      "zone": "Zone B",
+      "coord_x": -28,
+      "coord_y": 23,
+      "coord_z": 0,
+      "house_type": "House_Type_C_Two_Storey",
+      "floor_elevation": 0.55,
+      "alley_elevation": 0.1,
+      "digital_access": "online",
+      "area_risk": "watch",
+      "access_status": "confirmed_safe",
+      "special_notes": "",
+      "current_water_depth_cm": 32,
+      "residents": []
+    },
+    {
+      "id": "h-07",
+      "code": "A-007",
+      "title": "บ้านไม้ใต้ถุนสูงซอย 2",
+      "address": "22 ซอยวัดเทวราชกุญชร",
+      "zone": "Zone B",
+      "coord_x": -27,
+      "coord_y": 44,
+      "coord_z": 0,
+      "house_type": "House_Type_D_Raised_Timber",
+      "floor_elevation": 1.65,
+      "alley_elevation": 0.12,
+      "digital_access": "phone_only",
+      "area_risk": "watch",
+      "access_status": "confirmed_safe",
+      "special_notes": "",
+      "current_water_depth_cm": 30,
+      "residents": []
+    },
+    {
+      "id": "h-08",
+      "code": "A-008",
+      "title": "บ้านจั่วซอยตะวันออก 1",
+      "address": "24 ซอยวัดเทวราชกุญชร",
+      "zone": "Zone C",
+      "coord_x": -5,
+      "coord_y": -3,
+      "coord_z": 0,
+      "house_type": "House_Type_A_Gable",
+      "floor_elevation": 0.55,
+      "alley_elevation": 0.08,
+      "digital_access": "online",
+      "area_risk": "high_risk",
+      "access_status": "followup_needed",
+      "special_notes": "พื้นที่ต่ำ",
+      "current_water_depth_cm": 34,
+      "residents": [
+        {
+          "id": "res-08",
+          "household_code": "A-008",
+          "name": "นายสมาน อินทรชัย",
+          "age": 71,
+          "is_bedridden": 0,
+          "requires_oxygen": 0,
+          "oxygen_reserve_mins": 0,
+          "mobility_constraint": "โรคเกาต์"
+        }
+      ]
+    },
+    {
+      "id": "h-09",
+      "code": "A-009",
+      "title": "บ้านไม้ใต้ถุนสูงริมคู",
+      "address": "26 ซอยวัดเทวราชกุญชร",
+      "zone": "Zone C",
+      "coord_x": -5,
+      "coord_y": 23,
+      "coord_z": 0,
+      "house_type": "House_Type_D_Raised_Timber",
+      "floor_elevation": 1.65,
+      "alley_elevation": 0.08,
+      "digital_access": "online",
+      "area_risk": "high_risk",
+      "access_status": "confirmed_safe",
+      "special_notes": "",
+      "current_water_depth_cm": 34,
+      "residents": []
+    },
+    {
+      "id": "h-10",
+      "code": "A-010",
+      "title": "บ้านปั้นหยาซอยตะวันออก 2",
+      "address": "28 ซอยวัดเทวราชกุญชร",
+      "zone": "Zone C",
+      "coord_x": -4,
+      "coord_y": 44,
+      "coord_z": 0,
+      "house_type": "House_Type_B_Hip",
+      "floor_elevation": 0.55,
+      "alley_elevation": 0.09,
+      "digital_access": "online",
+      "area_risk": "high_risk",
+      "access_status": "followup_needed",
+      "special_notes": "",
+      "current_water_depth_cm": 33,
+      "residents": []
+    },
+    {
+      "id": "h-11",
+      "code": "A-011",
+      "title": "บ้านจั่วซอยเหนือ",
+      "address": "30 ซอยวัดเทวราชกุญชร",
+      "zone": "Zone D",
+      "coord_x": -32,
+      "coord_y": 79,
+      "coord_z": 0,
+      "house_type": "House_Type_A_Gable",
+      "floor_elevation": 0.55,
+      "alley_elevation": 0.22,
+      "digital_access": "online",
+      "area_risk": "normal",
+      "access_status": "confirmed_safe",
+      "special_notes": "",
+      "current_water_depth_cm": 20,
+      "residents": []
+    },
+    {
+      "id": "h-12",
+      "code": "A-012",
+      "title": "บ้านยายสมจิตร (ผู้ป่วยติดเตียง)",
+      "address": "32/1 ซอยวัดเทวราชกุญชร (หลังตลาดเก่า)",
+      "zone": "Zone C",
+      "coord_x": -7,
+      "coord_y": 80,
+      "coord_z": 0,
+      "house_type": "House_Type_C_Two_Storey",
+      "floor_elevation": 0.55,
+      "alley_elevation": 0.05,
+      "digital_access": "no_phone_offline",
+      "area_risk": "critical",
+      "access_status": "critical_help_needed",
+      "special_notes": "ผู้ป่วยติดเตียง ออกซิเจนสำรองเหลือ 90 นาที น้ำท่วมซอยหน้าบ้าน 35 ซม.",
+      "current_water_depth_cm": 37,
+      "residents": [
+        {
+          "id": "res-12",
+          "household_code": "A-012",
+          "name": "นางสมจิตร รัตนประสิทธิ์",
+          "age": 82,
+          "is_bedridden": 1,
+          "requires_oxygen": 1,
+          "oxygen_reserve_mins": 90,
+          "mobility_constraint": "ติดเตียง เคลื่อนย้ายด้วยเปลสนามเท่านั้น"
+        },
+        {
+          "id": "res-12-carer",
+          "household_code": "A-012",
+          "name": "นางกรรณิการ์ รัตนประสิทธิ์ (บุตรสาว)",
+          "age": 56,
+          "is_bedridden": 0,
+          "requires_oxygen": 0,
+          "oxygen_reserve_mins": 0,
+          "mobility_constraint": "ผู้ดูแลหลัก"
+        }
+      ]
+    },
+    {
+      "id": "h-13",
+      "code": "A-013",
+      "title": "บ้านปั้นหยาซอยเหนือตะวันออก",
+      "address": "34 ซอยวัดเทวราชกุญชร",
+      "zone": "Zone D",
+      "coord_x": 22,
+      "coord_y": 80,
+      "coord_z": 0,
+      "house_type": "House_Type_B_Hip",
+      "floor_elevation": 0.55,
+      "alley_elevation": 0.2,
+      "digital_access": "online",
+      "area_risk": "normal",
+      "access_status": "confirmed_safe",
+      "special_notes": "",
+      "current_water_depth_cm": 22,
+      "residents": []
+    },
+    {
+      "id": "h-14",
+      "code": "A-014",
+      "title": "บ้านไม้ใต้ถุนสูงฝั่งใต้",
+      "address": "36 ซอยวัดเทวราชกุญชร",
+      "zone": "Zone B",
+      "coord_x": -77,
+      "coord_y": -58,
+      "coord_z": 0,
+      "house_type": "House_Type_D_Raised_Timber",
+      "floor_elevation": 1.65,
+      "alley_elevation": 0.14,
+      "digital_access": "phone_only",
+      "area_risk": "watch",
+      "access_status": "confirmed_safe",
+      "special_notes": "",
+      "current_water_depth_cm": 28,
+      "residents": []
+    },
+    {
+      "id": "h-15",
+      "code": "A-015",
+      "title": "บ้านจั่วฝั่งใต้กลาง",
+      "address": "38 ซอยวัดเทวราชกุญชร",
+      "zone": "Zone B",
+      "coord_x": -53,
+      "coord_y": -58,
+      "coord_z": 0,
+      "house_type": "House_Type_A_Gable",
+      "floor_elevation": 0.55,
+      "alley_elevation": 0.12,
+      "digital_access": "online",
+      "area_risk": "watch",
+      "access_status": "followup_needed",
+      "special_notes": "",
+      "current_water_depth_cm": 30,
+      "residents": []
+    },
+    {
+      "id": "h-16",
+      "code": "A-016",
+      "title": "บ้านสองชั้นหัวมุมใต้",
+      "address": "40 ซอยวัดเทวราชกุญชร",
+      "zone": "Zone B",
+      "coord_x": -26,
+      "coord_y": -60,
+      "coord_z": 0,
+      "house_type": "House_Type_C_Two_Storey",
+      "floor_elevation": 0.55,
+      "alley_elevation": 0.15,
+      "digital_access": "online",
+      "area_risk": "normal",
+      "access_status": "confirmed_safe",
+      "special_notes": "",
+      "current_water_depth_cm": 27,
+      "residents": []
+    }
+  ],
+  "checklist": [
+    {
+      "id": "p1",
+      "category": "people",
+      "title": "เคาะประตูบ้าน A-012 (ยายสมจิตร - ติดเตียง)",
+      "is_done": 1,
+      "completed_at": "20:05",
+      "completed_by": "ทีมชุมชน 01"
+    },
+    {
+      "id": "p2",
+      "category": "people",
+      "title": "แจ้งเตือน 3 ครัวเรือนไม่มีสมาร์ตโฟน (A-002, A-007, A-014)",
+      "is_done": 0,
+      "completed_at": null,
+      "completed_by": null
+    },
+    {
+      "id": "a1",
+      "category": "area",
+      "title": "ตรวจสอบสะพานไม้ยกสูงทางแยก 2 (ระดับน้ำ +0.25 ม.)",
+      "is_done": 1,
+      "completed_at": "20:08",
+      "completed_by": "ทีมช่างชุมชน"
+    },
+    {
+      "id": "r1",
+      "category": "resource",
+      "title": "จัดเตรียมเปลสนาม & ถังออกซิเจนสำรอง 1 ถัง ณ ศูนย์ชุมชน",
+      "is_done": 1,
+      "completed_at": "20:12",
+      "completed_by": "Community Team 02"
+    },
+    {
+      "id": "pl1",
+      "category": "plan",
+      "title": "ประสานงานจุดส่งต่อรถพยาบาล EMS วชิรพยาบาล ณ Medical Point B",
+      "is_done": 0,
+      "completed_at": null,
+      "completed_by": null
+    }
+  ],
+  "residents": [
+    {
+      "id": "res-12",
+      "household_code": "A-012",
+      "name": "นางสมจิตร รัตนประสิทธิ์",
+      "age": 82,
+      "is_bedridden": 1,
+      "requires_oxygen": 1,
+      "oxygen_reserve_mins": 90,
+      "mobility_constraint": "ติดเตียง เคลื่อนย้ายด้วยเปลสนามเท่านั้น"
+    },
+    {
+      "id": "res-12-carer",
+      "household_code": "A-012",
+      "name": "นางกรรณิการ์ รัตนประสิทธิ์ (บุตรสาว)",
+      "age": 56,
+      "is_bedridden": 0,
+      "requires_oxygen": 0,
+      "oxygen_reserve_mins": 0,
+      "mobility_constraint": "ผู้ดูแลหลัก"
+    },
+    {
+      "id": "res-01",
+      "household_code": "A-001",
+      "name": "นายประเสริฐ สุขสวัสดิ์",
+      "age": 68,
+      "is_bedridden": 0,
+      "requires_oxygen": 0,
+      "oxygen_reserve_mins": 0,
+      "mobility_constraint": "เดินช้า"
+    },
+    {
+      "id": "res-02",
+      "household_code": "A-002",
+      "name": "นางทองย้อย พุ่มพวง",
+      "age": 75,
+      "is_bedridden": 0,
+      "requires_oxygen": 0,
+      "oxygen_reserve_mins": 0,
+      "mobility_constraint": "ผู้สูงอายุ ไม่มีมือถือ"
+    },
+    {
+      "id": "res-08",
+      "household_code": "A-008",
+      "name": "นายสมาน อินทรชัย",
+      "age": 71,
+      "is_bedridden": 0,
+      "requires_oxygen": 0,
+      "oxygen_reserve_mins": 0,
+      "mobility_constraint": "โรคเกาต์"
+    }
+  ],
+  "incidents": [
+    {
+      "id": "inc-001",
+      "code": "INC-2024-001",
+      "category": "BEDRIDDEN_PATIENT",
+      "severity": "critical",
+      "status": "responding",
+      "reported_at": "20:20",
+      "location_name": "บ้าน A-012 หลังตลาดเก่า",
+      "target_household": "A-012",
+      "description": "ผู้ป่วยติดเตียง ออกซิเจนเหลือ 90 นาที น้ำท่วมซอย 35 ซม.",
+      "current_water_depth_cm": 35,
+      "recommended_plan_id": "PLAN_B",
+      "approved_plan_id": "PLAN_B"
+    },
+    {
+      "id": "inc-002",
+      "code": "INC-2024-002",
+      "category": "DRAINAGE_BOTTLENECK",
+      "severity": "high",
+      "status": "open",
+      "reported_at": "20:15",
+      "location_name": "ตรอกสะพานไม้ทางแยก 2",
+      "target_household": null,
+      "description": "มีเศษกิ่งไม้และขยะติดคอขวดสะพานไม้ น้ำเริ่มเอ่อล้นแผ่นไม้กระดาน",
+      "current_water_depth_cm": 28,
+      "recommended_plan_id": null,
+      "approved_plan_id": null
+    },
+    {
+      "id": "inc-003",
+      "code": "INC-2024-003",
+      "category": "NO_PHONE_HOUSEHOLD",
+      "severity": "medium",
+      "status": "in_progress",
+      "reported_at": "20:05",
+      "location_name": "บ้าน A-002, A-007, A-014",
+      "target_household": "A-002",
+      "description": "ส่งทีมเคาะประตูแจ้งเตือน 3 หลังคาเรือนที่ไม่มีสมาร์ตโฟน",
+      "current_water_depth_cm": 15,
+      "recommended_plan_id": null,
+      "approved_plan_id": null
+    },
+    {
+      "id": "inc-004",
+      "code": "INC-2024-004",
+      "category": "SHELTER_CAPACITY",
+      "severity": "watch",
+      "status": "open",
+      "reported_at": "20:00",
+      "location_name": "ศาลาการเปรียญ Shelter A",
+      "target_household": null,
+      "description": "ความจุรับได้ 100 คน ปัจจุบันมีผู้เข้าพักแล้ว 82 คน คงเหลือ 18 ที่นั่ง",
+      "current_water_depth_cm": 0,
+      "recommended_plan_id": null,
+      "approved_plan_id": null
+    }
+  ],
+  "tasks": [
+    {
+      "id": "task-a012",
+      "code": "TASK #A-012",
+      "incident_id": "inc-001",
+      "priority": "critical",
+      "title": "เคลื่อนย้ายผู้ป่วยติดเตียงบ้าน A-012 (ยายสมจิตร)",
+      "mission_objective": "ใช้เปลสนามเดินเท้าบนสะพานไม้ยกสูง นำผู้ป่วยและถังออกซิเจนสำรองมายังจุดส่งต่อการแพทย์ Medical Point B",
+      "target_household": "A-012",
+      "assigned_team": "Community Team 02",
+      "destination_point": "จุดส่งต่อการแพทย์ B (หน้าวัดเทวราชกุญชร)",
+      "status": "accepted",
+      "created_at": "20:23",
+      "accepted_at": "20:24",
+      "arrived_at": null,
+      "completed_at": null
+    }
+  ],
+  "aiExplanation": {
+    "headlineTh": "วิกฤตเร่งด่วน: ต้องการการเคลื่อนย้ายผ่านเส้นทาง Community Relay ทันที",
+    "factorsTh": [
+      "อัตราการเพิ่มของระดับน้ำสูงผิดปกติ (+0.32 ม./ชม.) จากอิทธิพลน้ำทะเลหนุน",
+      "ระดับความสูงหน้าบ้านต่ำเพียง 0.05 ม. (เป็นแอ่งคอขวดรับน้ำ)",
+      "มีผู้ป่วยติดเตียงที่ไม่สามารถเคลื่อนย้ายได้ด้วยตนเอง",
+      "ขีดจำกัดเวลาวิกฤต: ออกซิเจนสำรองเหลือประมาณ 90 นาที",
+      "ครัวเรือนไม่มีสมาร์ตโฟน/ช่องทางออนไลน์ ต้องใช้การตรวจทางกายภาพและเสียงตามสาย"
+    ],
+    "recommendationTh": "แนะนำให้ผู้บัญชาการอนุมัติ Plan B สั่งการ Community Team 02 เคลื่อนย้ายทันที"
+  }
+}

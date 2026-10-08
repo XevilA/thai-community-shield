@@ -1,0 +1,31 @@
+{
+  "name": "@community-shield/app",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/index.tsx",
+  "scripts": {
+    "dev": "expo start --web",
+    "web": "expo start --web",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "build:web": "expo export -p web",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@community-shield/shared": "workspace:*",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-native": "0.74.5",
+    "react-native-web": "~0.19.10",
+    "expo": "~51.0.28",
+    "expo-status-bar": "~1.12.1",
+    "three": "^0.165.0",
+    "@types/three": "^0.165.0",
+    "lucide-react-native": "^0.395.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.0",
+    "@types/react": "~18.2.79",
+    "typescript": "~5.3.3"
+  }
+}

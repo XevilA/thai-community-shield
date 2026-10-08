@@ -1,0 +1,66 @@
+{
+  "name": "Community Shield — ระบบบริหารจัดการภัยพิบัติชุมชนวัดเทวราชกุญชร",
+  "short_name": "CommunityShield",
+  "description": "ระบบบัญชาการและเผชิญเหตุอุทกภัย สึนามิ และอัคคีภัย ชุมชนวัดเทวราชกุญชร เขตดุสิต Real-time 3D Digital Twin รองรับการทำงานออฟไลน์ 100% บนระบบปฏิบัติการ Android",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "id": "org.communityshield.app",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#0a0e17",
+  "theme_color": "#0071E3",
+  "lang": "th",
+  "dir": "ltr",
+  "categories": ["utilities", "weather", "lifestyle", "productivity"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "🚨 แจ้งเหตุฉุกเฉิน (SOS)",
+      "short_name": "SOS ฉุกเฉิน",
+      "description": "ส่งพิกัดและสัญญาณขอความช่วยเหลือเร่งด่วน",
+      "url": "/?action=sos",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "🌊 คลื่นยักษ์สึนามิ",
+      "short_name": "สึนามิ",
+      "description": "เปิดแบบจำลองคลื่นยักษ์สึนามิและการอพยพแนวตั้ง",
+      "url": "/?disaster=tsunami",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "🔥 อัคคีภัยชุมชน",
+      "short_name": "ไฟไหม้",
+      "description": "เปิดแบบจำลองเพลิงไหม้และเส้นทางเหนือลม",
+      "url": "/?disaster=wildfire",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "📋 ทะเบียนประชาชน",
+      "short_name": "ทะเบียน",
+      "description": "ค้นหาและอัปเดตสถานะความปลอดภัยหลังคาเรือน",
+      "url": "/?mode=citizen",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

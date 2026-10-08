@@ -1,0 +1,3418 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#F5F5F7" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="ประชาอารักษ์" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
+  <title>ระบบบริหารจัดการอุทกภัยชุมชนวัดเทวราชกุญชร — Community Shield</title>
+  
+  <!-- Local Offline 3D Vendor Libraries -->
+  <script src="/vendor/three.min.js"></script>
+  <script src="/vendor/GLTFLoader.js"></script>
+  <script src="/vendor/OrbitControls.js"></script>
+
+  <style>
+    :root {
+      /* Apple Safe Area Insets */
+      --sat: env(safe-area-inset-top, 0px);
+      --sab: env(safe-area-inset-bottom, 0px);
+      --sal: env(safe-area-inset-left, 0px);
+      --sar: env(safe-area-inset-right, 0px);
+
+      /* Apple Light Theme Default */
+      --bg-canvas: #F5F5F7;
+      --bg-ambient: radial-gradient(ellipse at 50% 0%, #FFFFFF 0%, #F5F5F7 80%);
+      --surface-glass: rgba(255, 255, 255, 0.88);
+      --surface-card: rgba(255, 255, 255, 0.94);
+      --surface-inset: #F8FAFC;
+      --border-subtle: rgba(0, 0, 0, 0.08);
+      --border-focus: rgba(0, 0, 0, 0.16);
+      --border-highlight: rgba(255, 255, 255, 0.95);
+      
+      --apple-blue: #0071E3;
+      --apple-blue-surface: rgba(0, 113, 227, 0.08);
+      --apple-blue-border: rgba(0, 113, 227, 0.22);
+      
+      --apple-red: #D70015;
+      --apple-red-surface: rgba(215, 0, 21, 0.08);
+      --apple-red-border: rgba(215, 0, 21, 0.22);
+      
+      --apple-amber: #C96800;
+      --apple-amber-surface: rgba(201, 104, 0, 0.08);
+      --apple-amber-border: rgba(201, 104, 0, 0.22);
+      
+      --apple-green: #1E8E3E;
+      --apple-green-surface: rgba(30, 142, 62, 0.08);
+      --apple-green-border: rgba(30, 142, 62, 0.22);
+      
+      --text-primary: #1D1D1F;
+      --text-secondary: #6E6E73;
+      --text-tertiary: #86868B;
+      
+      --shadow-ambient: 0 4px 20px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+      --shadow-overlay: 0 12px 36px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04);
+      --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Sarabun", "Helvetica Neue", sans-serif;
+    }
+
+    [data-theme="dark"] {
+      --bg-canvas: #0A0D14;
+      --bg-ambient: radial-gradient(circle at 50% 0%, rgba(30, 45, 70, 0.18), transparent 65%);
+      --surface-glass: rgba(18, 23, 34, 0.78);
+      --surface-card: rgba(25, 32, 46, 0.65);
+      --surface-inset: rgba(11, 15, 23, 0.85);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(255, 255, 255, 0.16);
+      --border-highlight: rgba(255, 255, 255, 0.12);
+      
+      --apple-blue: #0A84FF;
+      --apple-blue-surface: rgba(10, 132, 255, 0.12);
+      --apple-blue-border: rgba(10, 132, 255, 0.28);
+      
+      --apple-red: #FF453A;
+      --apple-red-surface: rgba(255, 69, 58, 0.10);
+      --apple-red-border: rgba(255, 69, 58, 0.25);
+      
+      --apple-amber: #FF9F0A;
+      --apple-amber-surface: rgba(255, 159, 10, 0.10);
+      --apple-amber-border: rgba(255, 159, 10, 0.25);
+      
+      --apple-green: #30D158;
+      --apple-green-surface: rgba(48, 209, 88, 0.10);
+      --apple-green-border: rgba(48, 209, 88, 0.25);
+      
+      --text-primary: #FFFFFF;
+      --text-secondary: #94A3B8;
+      --text-tertiary: #64748B;
+      --shadow-ambient: 0 4px 20px rgba(0, 0, 0, 0.35);
+      --shadow-overlay: 0 16px 40px rgba(0, 0, 0, 0.55);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-stack);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      background-color: var(--bg-canvas);
+      background-image: var(--bg-ambient);
+      color: var(--text-primary);
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.45;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    button, input, select, textarea, .check-row, .house-box, .step-node, .cam-btn, .seg-btn {
+      touch-action: manipulation;
+    }
+
+    button:active, .check-row:active, .house-box:active, .step-node:active {
+      transform: scale(0.98);
+    }
+
+    .icon {
+      width: 14px;
+      height: 14px;
+      display: inline-block;
+      vertical-align: middle;
+      fill: currentColor;
+    }
+
+    /* Navigation Bar */
+    header {
+      background: var(--surface-glass);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      transition: all 0.3s ease;
+    }
+
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .emblem-box {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(180deg, var(--apple-blue-surface), rgba(0, 113, 227, 0.02));
+      border: 1px solid var(--apple-blue-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 1px 0 var(--border-highlight);
+    }
+
+    .brand-title {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-primary);
+    }
+
+    .brand-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 5px;
+      background: var(--apple-blue-surface);
+      color: var(--apple-blue);
+      border: 1px solid var(--apple-blue-border);
+      letter-spacing: 0.02em;
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 1px;
+    }
+
+    .header-center {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-capsule {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      padding: 5px 14px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 500;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--apple-green);
+      box-shadow: 0 0 0 3px rgba(30, 142, 62, 0.2);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-emergency {
+      background: var(--apple-red-surface);
+      border: 1px solid var(--apple-red-border);
+      color: var(--apple-red);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-emergency:hover {
+      background: var(--apple-red);
+      color: #FFF;
+    }
+
+    .segmented-control {
+      display: flex;
+      background: rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 2px;
+    }
+
+    .seg-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .seg-btn.active {
+      background: #FFFFFF;
+      color: var(--text-primary);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    [data-theme="dark"] .seg-btn.active {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .theme-toggle-btn {
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      border-radius: 8px;
+      padding: 6px 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+    .theme-toggle-btn:hover {
+      background: rgba(0, 0, 0, 0.08);
+    }
+
+    .emergency-label-mobile, .seg-label-mobile {
+      display: none;
+    }
+    .emergency-label-desktop, .seg-label-desktop, .reset-label-desktop {
+      display: inline;
+    }
+
+    /* Replanning Notification Banner */
+    #replanning-banner {
+      display: none;
+      background: var(--apple-red-surface);
+      border: 1px solid var(--apple-red-border);
+      border-radius: 14px;
+      margin: 14px 20px 0;
+      padding: 14px 18px;
+      align-items: center;
+      gap: 14px;
+      box-shadow: var(--shadow-ambient);
+    }
+    .banner-icon-box {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: rgba(215, 0, 21, 0.15);
+      border: 1px solid var(--apple-red-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--apple-red);
+      flex-shrink: 0;
+    }
+    .banner-content {
+      flex: 1;
+      min-width: 0;
+      overflow-wrap: break-word;
+    }
+    .banner-content h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--apple-red);
+      letter-spacing: -0.01em;
+      word-break: break-word;
+    }
+    .banner-content p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+      word-break: break-word;
+    }
+
+    /* Timeline Stepper */
+    .stepper-panel {
+      background: var(--surface-glass);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 10px 20px 12px;
+      transition: all 0.3s ease;
+    }
+
+    .stepper-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .stepper-index {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--apple-blue);
+    }
+
+    .stepper-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 1px;
+      color: var(--text-primary);
+    }
+
+    .stepper-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-step {
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      padding: 5px 12px;
+      border-radius: 7px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    }
+    .btn-step:hover:not(:disabled) {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    .btn-step.primary {
+      background: var(--apple-blue);
+      border-color: var(--apple-blue);
+      color: #FFFFFF;
+    }
+    .btn-step.primary:hover:not(:disabled) {
+      background: #005bb5;
+    }
+    .btn-step:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .stepper-track {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .step-node {
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 9px;
+      padding: 7px 11px;
+      min-width: 125px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s ease;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    }
+    .step-node:hover {
+      border-color: var(--border-focus);
+    }
+    .step-node.active {
+      background: #FFFFFF;
+      border-color: var(--apple-blue);
+      box-shadow: 0 2px 8px rgba(0, 113, 227, 0.15);
+    }
+    [data-theme="dark"] .step-node.active {
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: none;
+    }
+    .step-node.critical {
+      border-color: var(--apple-red-border);
+    }
+
+    .step-node-top {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .step-bullet {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--text-tertiary);
+    }
+    .step-node.active .step-bullet {
+      background: var(--apple-blue);
+    }
+    .step-node.critical .step-bullet {
+      background: var(--apple-red);
+    }
+    .step-node-text {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      margin-top: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .step-node.active .step-node-text {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    /* Main Content Area */
+    main {
+      flex: 1;
+      padding: 18px 20px;
+    }
+
+    .layout-grid {
+      display: grid;
+      grid-template-columns: 1.18fr 0.82fr;
+      gap: 16px;
+    }
+    @media (max-width: 1024px) {
+      .layout-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Apple Glass Panels */
+    .glass-panel {
+      background: var(--surface-glass);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-ambient);
+      transition: all 0.3s ease;
+    }
+    .glass-panel:last-child {
+      margin-bottom: 0;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .panel-title {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+    }
+
+    .panel-caption {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 1px;
+    }
+
+    /* 3D Viewport Box */
+    #viewport-3d-box {
+      position: relative;
+      width: 100%;
+      height: 480px;
+      background: #D4DFE8;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.08);
+    }
+    [data-theme="dark"] #loading-3d {
+      background: rgba(20, 25, 35, 0.95) !important;
+      border-color: rgba(255, 255, 255, 0.12) !important;
+    }
+    [data-theme="dark"] #viewport-3d-box {
+      background: #070B14;
+    }
+    #canvas-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .hud-overlay {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .hud-card {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(24px) saturate(190%);
+      -webkit-backdrop-filter: blur(24px) saturate(190%);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 10px 14px;
+      text-align: right;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    [data-theme="dark"] .hud-card {
+      background: rgba(15, 20, 30, 0.88);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.40);
+    }
+
+    .hud-label {
+      font-size: 10px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-weight: 600;
+    }
+
+    .hud-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+    }
+
+    .hud-subvalue {
+      font-size: 11px;
+      color: var(--apple-amber);
+      font-weight: 600;
+      margin-top: 1px;
+    }
+
+    .hud-status-pill {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 5px;
+      margin-top: 4px;
+      letter-spacing: 0.02em;
+    }
+
+    .camera-toolbar, .camera-cluster {
+      display: flex;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(24px) saturate(190%);
+      -webkit-backdrop-filter: blur(24px) saturate(190%);
+      border: 1px solid var(--border-subtle);
+      border-radius: 9px;
+      padding: 3px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      gap: 2px;
+      z-index: 10;
+    }
+    .camera-toolbar {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+    }
+    [data-theme="dark"] .camera-toolbar, [data-theme="dark"] .camera-cluster {
+      background: rgba(15, 20, 30, 0.88);
+    }
+
+    .cam-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 6px 11px;
+      border-radius: 7px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+    }
+    .cam-btn:hover {
+      color: var(--text-primary);
+      background: rgba(0, 0, 0, 0.05);
+    }
+    .cam-btn.active {
+      background: #FFFFFF;
+      color: var(--apple-blue);
+      font-weight: 600;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    }
+    [data-theme="dark"] .cam-btn.active {
+      background: rgba(255, 255, 255, 0.14);
+      color: #FFFFFF;
+    }
+
+    .map-legend {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 10px;
+      display: flex;
+      gap: 12px;
+      z-index: 10;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+    [data-theme="dark"] .map-legend {
+      background: rgba(15, 20, 30, 0.82);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .legend-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+    }
+
+    /* Dual Water Chart */
+    #chart-canvas {
+      width: 100%;
+      height: 140px;
+      background: var(--surface-card);
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* Preparation Window Box */
+    .prep-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    }
+
+    .timer-ring {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid var(--apple-blue-border);
+      border-top-color: var(--apple-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--apple-blue);
+      flex-shrink: 0;
+    }
+
+    .prep-countdown {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+
+    .checklist-container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .check-row {
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    }
+    .check-row:hover {
+      border-color: var(--border-focus);
+    }
+    .check-row.done {
+      opacity: 0.55;
+      text-decoration: line-through;
+    }
+
+    .check-tick {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 1.5px solid var(--text-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .check-row.done .check-tick {
+      background: var(--apple-green);
+      border-color: var(--apple-green);
+      color: #FFFFFF;
+    }
+
+    /* Decision Matrix & Plans */
+    .incident-panel {
+      background: var(--apple-red-surface);
+      border: 1px solid var(--apple-red-border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .incident-badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--apple-red);
+    }
+
+    .incident-headline {
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 2px;
+      color: var(--apple-red);
+    }
+
+    .incident-details {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 3px;
+      line-height: 1.45;
+    }
+
+    .plan-item {
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 10px;
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    }
+    .plan-item.recommended {
+      background: var(--apple-blue-surface);
+      border-color: var(--apple-blue-border);
+      box-shadow: 0 4px 18px rgba(0, 113, 227, 0.08);
+    }
+    .plan-item.approved {
+      border-color: var(--apple-green-border);
+      background: var(--apple-green-surface);
+    }
+
+    .plan-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .plan-title-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .plan-badge-tag {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--apple-blue);
+      color: #FFF;
+      letter-spacing: 0.02em;
+    }
+
+    .plan-score-badge {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--apple-green);
+      letter-spacing: -0.02em;
+    }
+    .plan-score-badge.low {
+      color: var(--apple-red);
+    }
+
+    .plan-description {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 5px;
+      line-height: 1.45;
+    }
+
+    .btn-approve {
+      width: 100%;
+      background: var(--apple-blue);
+      border: none;
+      color: #FFF;
+      padding: 9px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 10px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .btn-approve:hover {
+      background: #005bb5;
+    }
+
+    /* Households Matrix */
+    .households-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 8px;
+      max-height: 220px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .house-box {
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 11px;
+      transition: all 0.15s ease;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    }
+    .house-box:hover {
+      border-color: var(--border-focus);
+    }
+    .house-box.critical {
+      border-color: var(--apple-red-border);
+      background: var(--apple-red-surface);
+    }
+
+    .house-code {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--apple-blue);
+    }
+
+    .house-title {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .house-tags {
+      display: flex;
+      gap: 4px;
+      margin-top: 5px;
+      flex-wrap: wrap;
+    }
+
+    .tag-subtle {
+      font-size: 9px;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    /* Mobile Field Mode */
+    #mobile-view {
+      display: none;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .field-card {
+      background: var(--surface-glass);
+      backdrop-filter: blur(28px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: var(--shadow-ambient);
+    }
+
+    .field-btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #FFF;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    .field-btn.primary {
+      background: var(--apple-blue);
+    }
+    .field-btn.danger {
+      background: var(--apple-red);
+    }
+
+    /* Modals & Apple Bottom Sheet */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .modal-drag-handle {
+      display: none;
+      width: 38px;
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(0, 0, 0, 0.22);
+      margin: 0 auto 12px;
+    }
+    [data-theme="dark"] .modal-drag-handle {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .modal-dialog {
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 18px;
+      padding: 20px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: var(--shadow-overlay);
+      position: relative;
+    }
+
+    .modal-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-tertiary);
+      font-size: 20px;
+      line-height: 1;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease;
+    }
+    .modal-close-btn:hover {
+      background: rgba(0, 0, 0, 0.06);
+      color: var(--text-primary);
+    }
+
+    .input-field {
+      width: 100%;
+      background: var(--surface-inset);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 9px 12px;
+      color: var(--text-primary);
+      font-size: 13px;
+      outline: none;
+      transition: border 0.15s ease;
+    }
+    .input-field:focus {
+      border-color: var(--apple-blue);
+    }
+
+    /* Toast Notification System */
+    .toast-container {
+      position: fixed;
+      top: 64px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+    .toast-card {
+      background: var(--surface-panel);
+      backdrop-filter: blur(24px) saturate(190%);
+      -webkit-backdrop-filter: blur(24px) saturate(190%);
+      border: 1px solid var(--border-card);
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+      padding: 12px 16px;
+      min-width: 280px;
+      max-width: 380px;
+      pointer-events: auto;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      animation: toastIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(-10px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .toast-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .toast-desc {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+    .check-row {
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s ease, transform 0.12s ease;
+    }
+    .check-row:hover {
+      background: rgba(0, 113, 227, 0.06);
+      transform: translateX(2px);
+    }
+    .house-box {
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .house-box:hover {
+      border-color: var(--apple-blue);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 113, 227, 0.12);
+    }
+
+    /* Mobile-First Responsive Rules (Apple HIG Guidelines) */
+    @media (max-width: 768px) {
+      header {
+        padding: max(8px, calc(var(--sat) + 4px)) max(12px, var(--sar)) 8px max(12px, var(--sal));
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .brand-cluster {
+        gap: 8px;
+      }
+      .brand-subtitle {
+        display: none;
+      }
+      .brand-title {
+        font-size: 13px;
+        gap: 6px;
+      }
+      .brand-badge {
+        font-size: 9px;
+        padding: 1px 5px;
+      }
+      .emblem-box {
+        width: 32px;
+        height: 32px;
+      }
+      .status-capsule {
+        padding: 4px 10px;
+        font-size: 11px;
+      }
+      .status-label {
+        display: none;
+      }
+      .header-actions {
+        gap: 6px;
+      }
+      .btn-emergency {
+        padding: 6px 10px;
+        font-size: 11px;
+      }
+      .emergency-label-desktop {
+        display: none;
+      }
+      .emergency-label-mobile {
+        display: inline;
+        font-weight: 700;
+      }
+      .seg-btn {
+        padding: 6px 9px;
+        font-size: 11px;
+        gap: 4px;
+      }
+      .seg-label-desktop {
+        display: none;
+      }
+      .seg-label-mobile {
+        display: inline;
+      }
+      .reset-label-desktop {
+        display: none;
+      }
+      .btn-reset-top {
+        padding: 6px 8px;
+      }
+      .theme-toggle-btn {
+        padding: 6px 8px;
+      }
+
+      /* Replanning notification */
+      #replanning-banner {
+        margin: 8px 12px 0;
+        padding: 10px 14px;
+        border-radius: 12px;
+        gap: 10px;
+      }
+
+      /* Stepper */
+      .stepper-panel {
+        padding: 8px max(12px, var(--sar)) 10px max(12px, var(--sal));
+      }
+      .stepper-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .stepper-title {
+        font-size: 13px;
+      }
+      .stepper-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 6px;
+      }
+      .stepper-actions .btn-step {
+        justify-content: center;
+        min-height: 38px;
+        font-size: 11px;
+        padding: 5px 6px;
+        white-space: nowrap;
+      }
+
+      /* Main container */
+      main {
+        padding: 10px max(10px, var(--sar)) max(20px, var(--sab)) max(10px, var(--sal));
+      }
+      .glass-panel {
+        padding: 12px;
+        border-radius: 14px;
+        margin-bottom: 12px;
+      }
+
+      /* 3D Viewport on Mobile */
+      #viewport-3d-box {
+        height: clamp(250px, 38vh, 320px);
+        border-radius: 12px;
+      }
+      .camera-toolbar {
+        top: 8px;
+        left: 8px;
+        max-width: calc(100% - 16px);
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 2px;
+        gap: 2px;
+      }
+      .hud-overlay {
+        top: 48px;
+        right: 8px;
+        gap: 6px;
+        max-width: 180px;
+        width: auto;
+      }
+      .hud-card {
+        padding: 6px 10px;
+        border-radius: 9px;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+      .hud-value {
+        font-size: 15px;
+      }
+      .hud-subvalue {
+        font-size: 9.5px;
+      }
+      .hud-status-pill {
+        font-size: 8.5px;
+        padding: 2px 6px;
+        white-space: normal;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+        line-height: 1.25;
+        text-align: right;
+        display: inline-block;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+      .camera-cluster {
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 2px;
+        gap: 2px;
+      }
+      .cam-btn {
+        padding: 6px 8px;
+        font-size: 10px;
+        white-space: nowrap;
+        flex-shrink: 0;
+        min-height: 34px;
+      }
+      .map-legend {
+        bottom: 8px;
+        left: 8px;
+        right: 8px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        white-space: nowrap;
+        padding: 5px 8px;
+        gap: 10px;
+        font-size: 9px;
+        border-radius: 7px;
+      }
+
+      /* Dual Water Chart */
+      #chart-canvas {
+        height: 110px;
+      }
+
+      /* 16 Households Grid */
+      .households-grid {
+        grid-template-columns: repeat(2, 1fr);
+        max-height: 260px;
+        gap: 8px;
+      }
+      .house-box {
+        padding: 10px;
+        border-radius: 10px;
+        min-height: 52px;
+      }
+
+      /* Checklist */
+      .check-row {
+        padding: 10px 12px;
+        min-height: 44px;
+        font-size: 12px;
+        gap: 10px;
+      }
+      .check-tick {
+        width: 18px;
+        height: 18px;
+      }
+
+      /* AI Decision Buttons */
+      .btn-approve {
+        min-height: 44px;
+        padding: 11px;
+        font-size: 13px;
+        border-radius: 10px;
+      }
+
+      /* Mobile Field Responder View */
+      #mobile-view {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+      }
+      .field-card {
+        padding: 16px;
+        border-radius: 16px;
+      }
+      .field-btn {
+        min-height: 44px;
+        font-size: 13px;
+      }
+
+      /* Apple Native Bottom Sheet for Modals */
+      .modal-backdrop {
+        align-items: flex-end;
+        padding: 0;
+      }
+      .modal-dialog {
+        width: 100% !important;
+        max-width: 100% !important;
+        border-radius: 22px 22px 0 0 !important;
+        max-height: 88vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 14px 18px max(24px, calc(var(--sab) + 16px)) !important;
+        border-bottom: none;
+        box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.22);
+        animation: sheetUp 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      @keyframes sheetUp {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+      }
+      .modal-drag-handle {
+        display: block;
+      }
+      .input-field {
+        font-size: 16px; /* Prevents unwanted iOS Safari zoom */
+      }
+
+      /* Toasts on mobile */
+      .toast-container {
+        top: max(10px, calc(var(--sat) + 6px));
+        left: 12px;
+        right: 12px;
+      }
+      .toast-card {
+        min-width: 0;
+        width: 100%;
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header-center {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        margin-top: 2px;
+      }
+      .header-actions {
+        margin-left: auto;
+      }
+    }
+  </style>
+</head>
+<body data-theme="light">
+
+  <!-- Top Navigation Bar -->
+  <header>
+    <div class="brand-cluster">
+      <div class="emblem-box">
+        <svg class="icon" style="width:18px; height:18px; fill:var(--apple-blue);" viewBox="0 0 24 24">
+          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-title">
+          <span>COMMUNITY SHIELD</span>
+          <span class="brand-badge">ประชาอารักษ์</span>
+        </div>
+        <div class="brand-subtitle">ศูนย์บริหารจัดการอุทกภัย ชุมชนวัดเทวราชกุญชร เขตดุสิต</div>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <select id="disaster-mode-selector" onchange="changeDisasterMode(this.value)" style="padding:4px 8px; border-radius:6px; border:1px solid var(--border-subtle); background:var(--surface-card); color:var(--text-primary); font-size:12px; font-weight:600;">
+        <option value="flood">อุทกภัย (Flood)</option>
+        <option value="earthquake">แผ่นดินไหว (Earthquake)</option>
+        <option value="wildfire">ไฟป่า (Wildfire)</option>
+        <option value="tsunami">สึนามิ (Tsunami)</option>
+      </select>
+      <div class="status-capsule">
+        <div class="pulse-dot" id="live-dot"></div>
+        <span class="status-label" style="color:var(--text-secondary);">เวลาจำลอง:</span>
+        <span id="sim-clock-display" style="font-weight:600; color:var(--text-primary);">20:00 น.</span>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn-emergency" onclick="openModal('sos-modal')">
+        <svg class="icon" viewBox="0 0 24 24" style="fill:currentColor;">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        <span class="emergency-label-desktop">แจ้งเหตุฉุกเฉิน</span>
+        <span class="emergency-label-mobile">SOS</span>
+      </button>
+
+      <div class="segmented-control">
+        <button class="seg-btn active" id="tab-command" onclick="setAppMode('command')">
+          <svg class="icon" viewBox="0 0 24 24">
+            <path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/>
+          </svg>
+          <span class="seg-label-desktop">ศูนย์บัญชาการ</span>
+          <span class="seg-label-mobile">บัญชาการ</span>
+        </button>
+        <button class="seg-btn" id="tab-nurse" onclick="setAppMode('nurse')">
+          <svg class="icon" viewBox="0 0 24 24">
+            <path d="M19 3H5c-1.1 0-1.99.9-1.99 2L3 19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z"/>
+          </svg>
+          <span class="seg-label-desktop">พยาบาล</span>
+          <span class="seg-label-mobile">พยาบาล</span>
+        </button>
+        <button class="seg-btn" id="tab-citizen" onclick="setAppMode('citizen')">
+          <svg class="icon" viewBox="0 0 24 24">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+          <span class="seg-label-desktop">ประชาชน</span>
+          <span class="seg-label-mobile">ประชาชน</span>
+        </button>
+      </div>
+
+      <button class="btn-step btn-reset-top" onclick="resetDemo()" title="รีเซ็ตสถานการณ์จำลองเริ่มต้น">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        <span class="reset-label-desktop">รีเซ็ต</span>
+      </button>
+
+      <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()" title="สลับธีม สว่าง / มืด">
+        <svg class="icon" id="theme-icon" viewBox="0 0 24 24">
+          <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  
+  <!-- Citizen Registry Modal -->
+  <div class="modal-backdrop" id="citizen-registry-modal" onclick="if(event.target===this) closeModal('citizen-registry-modal')">
+    <div class="modal-dialog">
+      <div class="modal-drag-handle"></div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <h3 class="modal-title">ทะเบียนข้อมูลประชาชน (Citizen Registry)</h3>
+        <button class="modal-close-btn" onclick="closeModal('citizen-registry-modal')">×</button>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <input type="text" class="input-field" id="cit-house" placeholder="บ้านเลขที่ (เช่น A-012)" value="A-012">
+        <select class="input-field" id="cit-status">
+          <option value="confirmed_safe">ปกติ (Confirmed Safe)</option>
+          <option value="followup_needed">เฝ้าระวัง (Follow-up Needed)</option>
+          <option value="critical_help_needed" selected>วิกฤต (Critical Help Needed)</option>
+        </select>
+        <button class="btn-step primary" onclick="updateCitizenRegistry()" style="width:100%; justify-content:center; font-size:14px; padding:10px;">บันทึกข้อมูลลง SQLite</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nurse Triage Modal -->
+  <div class="modal-backdrop" id="nurse-triage-modal" onclick="if(event.target===this) closeModal('nurse-triage-modal')">
+    <div class="modal-dialog">
+      <div class="modal-drag-handle"></div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <h3 class="modal-title">ระบบคัดกรองพยาบาล (Nurse Triage)</h3>
+        <button class="modal-close-btn" onclick="closeModal('nurse-triage-modal')">×</button>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div class="incident-panel">
+          <div class="incident-badge">ผู้ป่วยวิกฤต: ยายสมจิตร</div>
+          <div class="incident-headline" style="color:#FFF;">ออกซิเจนเหลือ 90 นาที</div>
+          <p style="color:rgba(255,255,255,0.8); font-size:11px; margin-top:4px;">ระดับน้ำท่วมซอย 35 ซม. (รถพยาบาลเข้าไม่ได้)</p>
+        </div>
+        <button class="btn-step primary" onclick="approvePlanB()" style="width:100%; justify-content:center; font-size:14px; padding:10px;">อนุมัติแผน B: ทีมเปลสนาม</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dynamic Replanning Notification Banner -->
+  <div id="replanning-banner">
+    <div class="banner-icon-box">
+      <svg class="icon" style="width:18px; height:18px;" viewBox="0 0 24 24">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+      </svg>
+    </div>
+    <div class="banner-content">
+      <h4 id="replanning-title">การปรับเปลี่ยนเส้นทางฉุกเฉิน (Dynamic Replanning Active)</h4>
+      <p id="replanning-desc">ตรวจพบสะพานไม้ทางแยก 2 จมน้ำลึกเกินเกณฑ์ปลอดภัย ระบบได้สลับไปใช้เส้นทางเลี่ยงยกระดับผ่านหน้าศูนย์ชุมชน (Plaza Forecourt) เรียบร้อยแล้ว</p>
+    </div>
+  </div>
+
+  <!-- Timeline Stepper Bar -->
+  <div class="stepper-panel">
+    <div class="stepper-header">
+      <div>
+        <div class="stepper-index" id="step-tag-label">ขั้นตอนจำลองสถานการณ์ 1 จาก 8</div>
+        <div class="stepper-title" id="step-title-display">20:00 น. — ตรวจพบระดับน้ำเริ่มสูงขึ้น</div>
+      </div>
+      <div class="stepper-actions">
+        <button class="btn-step" id="play-btn" onclick="toggleAutoPlay()" title="เล่นแบบจำลองตามลำดับเวลาอัตโนมัติ">
+          <svg class="icon" id="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          <span id="play-text">เล่นจำลอง</span>
+        </button>
+        <button class="btn-step" id="prev-btn" onclick="prevStep()">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+          ก่อนหน้า
+        </button>
+        <button class="btn-step primary" id="next-btn" onclick="nextStep()">
+          ถัดไป
+          <svg class="icon" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="stepper-track" id="scrubber-container">
+      <!-- Injected via JavaScript -->
+    </div>
+  </div>
+
+  <!-- Main View Grid -->
+  <main>
+    <div id="command-view" class="layout-grid">
+      <!-- Left Column: 3D Simulation & Water Graph -->
+      <div>
+        <!-- 3D Interactive Viewport -->
+        <div class="glass-panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">ผังชุมชนจำลอง 3 มิติ (3D Spatial Simulation)</div>
+              <div class="panel-caption">โมเดลโครงสร้างจริง: thai_community_visible_low_areas.glb • ควบคุมมุมกล้องอิสระ</div>
+            </div>
+          </div>
+
+          <div id="viewport-3d-box">
+            <div id="canvas-container"></div>
+<div id="loading-3d" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); z-index:15; background:rgba(255, 255, 255, 0.95); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); padding:16px 24px; border-radius:14px; box-shadow:0 12px 36px rgba(0,0,0,0.15); border:1px solid rgba(0,0,0,0.08); text-align:center; min-width:220px; max-width:85%; pointer-events:none;">
+              <div style="font-weight:600; font-size:13px; color:var(--text-primary); margin-bottom:4px;">กำลังโหลดแบบจำลอง 3 มิติ</div>
+              <div id="loading-progress-text" style="font-size:12px; color:var(--text-secondary); margin-bottom:8px;">กำลังเชื่อมต่อโมเดลชุมชน...</div>
+              <div style="width:100%; height:5px; background:rgba(0,0,0,0.08); border-radius:3px; overflow:hidden;">
+                <div id="loading-progress-bar" style="width:5%; height:100%; background:var(--apple-blue, #0071e3); border-radius:3px; transition:width 0.2s ease;"></div>
+              </div>
+            </div>
+
+            <div class="camera-toolbar">
+              <button class="cam-btn active" id="btn-cam-iso" onclick="setCameraView('iso')">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                ภาพรวม 3D
+              </button>
+              <button class="cam-btn" id="btn-cam-a012" onclick="setCameraView('a012')">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0013 3.06V1h-2v2.06A8.994 8.994 0 003.06 11H1v2h2.06A8.994 8.994 0 0011 20.94V23h2v-2.06A8.994 8.994 0 0020.94 13H23v-2h-2.06z"/></svg>
+                โฟกัส A-012
+              </button>
+              <button class="cam-btn" id="btn-cam-boardwalk" onclick="setCameraView('boardwalk')">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+                สะพานไม้ J2
+              </button>
+              <button class="cam-btn" id="btn-cam-top" onclick="setCameraView('top')">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M3 3v18h18V3H3zm16 16H5V5h14v14z"/></svg>
+                มุมสูง
+              </button>
+            </div>
+
+            <div class="hud-overlay">
+              <div class="hud-card">
+                <div class="hud-label">ระดับน้ำเจ้าพระยา</div>
+                <div class="hud-value" id="water-gauge-val">0.42 m</div>
+                <div class="hud-subvalue" id="alley-gauge-sub">ซอยหน้าบ้าน A-012: 5 ซม.</div>
+                <div>
+                  <span class="hud-status-pill" id="flood-status-pill" style="background:var(--apple-green-surface); color:var(--apple-green); border:1px solid var(--apple-green-border);">
+                    ปกติ (ระดับน้ำยังอยู่ในตลิ่ง)
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="map-legend">
+              <div class="legend-item"><div class="legend-indicator" style="background:#D70015;"></div>บ้าน A-012 (ผู้ป่วยติดเตียง)</div>
+              <div class="legend-item"><div class="legend-indicator" style="background:#0071E3;"></div>จุดส่งต่อการแพทย์ B</div>
+              <div class="legend-item"><div class="legend-indicator" style="background:#1E8E3E;"></div>เส้นทางเลี่ยงยกระดับ</div>
+              <div class="legend-item"><div class="legend-indicator" style="background:#8C5224;"></div>สะพานไม้ยกสูง</div>
+              <div class="legend-item"><div class="legend-indicator" style="background:#0284C7;"></div>น้ำท่วมขังจำลอง</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dual Water Level Graph -->
+        <div class="glass-panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">ระดับน้ำตรวจวัดจริง & แบบจำลองคาดการณ์ (Water Level & Forecast)</div>
+              <div class="panel-caption">ค่าเซนเซอร์จริง (Actual) เทียบกับแบบจำลอง AI คาดการณ์ต่อเนื่องถึงเกณฑ์วิกฤต 1.00 ม.</div>
+            </div>
+            <div>
+              <span class="brand-badge" id="rate-of-rise-tag" style="background:var(--apple-amber-surface); color:var(--apple-amber); border-color:var(--apple-amber-border);">
+                +0.17 ม. / 30 นาที
+              </span>
+            </div>
+          </div>
+
+          <canvas id="chart-canvas"></canvas>
+        </div>
+
+        <!-- 16 Households Dual Status Board -->
+        <div class="glass-panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">ทะเบียนและสถานะความเสี่ยง 16 หลังคาเรือน (Dual Status Matrix)</div>
+              <div class="panel-caption">แยกการประเมินระดับภัยพื้นที่ (น้ำท่วมขัง) กับสถานะความพร้อมของแต่ละครัวเรือน</div>
+            </div>
+            <span class="brand-badge" style="background:rgba(0,0,0,0.04); color:var(--text-secondary); border-color:var(--border-subtle);">16 ครัวเรือน</span>
+          </div>
+
+          <div class="households-grid" id="households-grid">
+            <!-- Populated via JavaScript -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Preparation Window, Incidents & AI Decisions -->
+      <div>
+        <!-- Preparation Window Countdown & Checklist -->
+        <div class="glass-panel">
+          <div class="prep-card">
+            <div class="timer-ring">
+              <svg class="icon" style="width:20px; height:20px;" viewBox="0 0 24 24">
+                <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+              </svg>
+            </div>
+            <div>
+              <div style="font-size:10px; color:var(--apple-blue); font-weight:700; letter-spacing:0.04em;">ช่วงเวลาเตรียมการ (PREPARATION WINDOW)</div>
+              <div class="prep-countdown" id="prep-time-val">เหลือเวลาประมาณ 2 ชั่วโมง 0 นาที</div>
+              <div style="font-size:11px; color:var(--text-secondary); margin-top:1px;">คาดการณ์ระดับน้ำแตะ 1.00 ม. เวลา 22:00 น. ดำเนินการ Checklist เชิงรุก</div>
+            </div>
+          </div>
+
+          <div class="checklist-container" id="prep-checklist-box">
+            <!-- Populated via JavaScript -->
+          </div>
+        </div>
+
+        <!-- AI 3-Plan Recommendation & Decision Panel -->
+        <div class="glass-panel">
+          <div class="incident-panel" id="inc-alert-box">
+            <div class="incident-badge">สถานการณ์วิกฤตเร่งด่วน — บ้าน A-012</div>
+            <div class="incident-headline">ผู้ป่วยติดเตียง (ยายสมจิตร 82 ปี) ทางเดินน้ำท่วมขัง 35 ซม.</div>
+            <div class="incident-details">
+              ออกซิเจนสำรองเหลือประมาณ 90 นาที • ตรอกแคบรถพยาบาลเข้าไม่ได้ • ต้องการการสนับสนุนเคลื่อนย้ายทันที
+            </div>
+          </div>
+
+          <!-- AI Plans -->
+          <div id="plans-container">
+            <!-- Populated via JavaScript -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. MOBILE FIELD RESPONDER VIEW -->
+    <div id="mobile-view">
+      <div class="field-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <span class="brand-badge" style="background:var(--apple-red-surface); color:var(--apple-red); border-color:var(--apple-red-border);">ภารกิจเร่งด่วน (PRIORITY 1)</span>
+          <span style="font-size:12px; color:var(--apple-blue); font-weight:700;" id="mobile-task-code">TASK #A-012</span>
+        </div>
+
+        <h3 style="font-size:15px; font-weight:600; letter-spacing:-0.01em;" id="mobile-task-title">เคลื่อนย้ายผู้ป่วยติดเตียงบ้าน A-012 (ยายสมจิตร)</h3>
+        <p style="font-size:11px; color:var(--text-secondary); margin:6px 0 14px; line-height:1.5;" id="mobile-task-mission">
+          ใช้เปลสนามเดินเท้าบนสะพานไม้ยกสูง นำผู้ป่วยและถังออกซิเจนมายังจุดส่งต่อ Medical Point B
+        </p>
+
+        <div style="background:var(--surface-card); border:1px solid var(--border-subtle); border-radius:10px; padding:12px; font-size:11px; margin-bottom:14px; line-height:1.7;">
+          <div><span style="color:var(--text-tertiary);">ผู้ประสบภัย:</span> นางสมจิตร (ยายสมจิตร อายุ 82 ปี)</div>
+          <div><span style="color:var(--text-tertiary);">เงื่อนไขวิกฤต:</span> <span style="color:var(--apple-red); font-weight:600;">ออกซิเจนสำรองเหลือ ≈ 70 นาที</span></div>
+          <div><span style="color:var(--text-tertiary);">จุดรับผู้ป่วย:</span> บ้าน A-012 (ตรอกหลังตลาด)</div>
+          <div><span style="color:var(--text-tertiary);">จุดส่งต่อ:</span> <span style="color:var(--apple-blue); font-weight:600;">จุดส่งต่อการแพทย์ B (หน้าสุขศาลา/วัดเทวราช)</span></div>
+        </div>
+
+        <div id="mobile-task-actions" style="display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; gap:8px;">
+            <button class="btn-step primary" id="btn-mobile-arrive" onclick="confirmArrival()" style="flex:1;">
+              1. ยืนยันถึงพื้นที่ A-012
+            </button>
+            <button class="field-btn danger" id="btn-mobile-report" onclick="openModal('report-modal')" style="flex:1;">
+              2. รายงานสภาพน้ำหน้างาน
+            </button>
+          </div>
+          <button class="btn-approve" id="btn-mobile-complete" onclick="completeMission()" style="width:100%;">
+            3. ส่งมอบและนำส่งผู้ป่วยสำเร็จ (ภารกิจลุล่วง)
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Field Report Modal -->
+  <div class="modal-backdrop" id="report-modal">
+    <div class="modal-dialog">
+      <div class="modal-drag-handle"></div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div class="modal-title">รายงานสภาพน้ำหน้างาน (Field Report)</div>
+        <button class="modal-close-btn" onclick="closeModal('report-modal')">×</button>
+      </div>
+      <div style="display:flex; gap:6px; margin-bottom:12px;">
+        <button type="button" class="btn-step" style="font-size:10px; padding:4px 8px;" onclick="setReportPreset(20, false)">ระดับน้ำ 20 ซม. (สะพานปกติ)</button>
+        <button type="button" class="btn-step" style="font-size:10px; padding:4px 8px;" onclick="setReportPreset(45, true)">วิกฤต 45 ซม. (สะพานจมน้ำ)</button>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="display:block; font-size:11px; color:var(--text-secondary); margin-bottom:4px;">ระดับน้ำจริงที่วัดได้ในตรอก (เซนติเมตร)</label>
+        <input type="number" id="report-depth" class="input-field" value="45" />
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer;">
+          <input type="checkbox" id="report-bridge-submerged" checked style="accent-color:var(--apple-red);" />
+          <span>ตรวจพบสะพานไม้ทางแยก 2 จมน้ำ / แผ่นไม้ลอยไม่ปลอดภัย</span>
+        </label>
+      </div>
+      <button class="btn-approve" onclick="submitFieldReport()">ส่งรายงานสถานการณ์หน้างาน</button>
+    </div>
+  </div>
+
+  <!-- Citizen SOS Modal -->
+  <div class="modal-backdrop" id="sos-modal">
+    <div class="modal-dialog">
+      <div class="modal-drag-handle"></div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div class="modal-title">แจ้งเหตุฉุกเฉิน / ร้องเรียนปัญหา (Citizen SOS)</div>
+        <button class="modal-close-btn" onclick="closeModal('sos-modal')">×</button>
+      </div>
+      <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px;">
+        <button type="button" class="btn-step" style="font-size:10px; padding:3px 7px;" onclick="setSosPreset('ยายม่อมอยู่บ้าน C-04 ขาเจ็บเดินไม่ไหว น้ำเข้าใต้ถุนบ้านแล้ว ขอคนมาช่วยยกของหนีน้ำหน่อย', 'บ้าน C-04 ซอยเทวราช 3')">ยายม่อม ซอย 3</button>
+        <button type="button" class="btn-step" style="font-size:10px; padding:3px 7px;" onclick="setSosPreset('น้ำดันเข้าท่อระบายน้ำ ซอย 2 เริ่มเอ่อล้นเข้าทางเดินหน้าบ้าน', 'ชุมชนวัดเทวราชกุญชร ซอย 2')">น้ำดันเข้าท่อ ซอย 2</button>
+        <button type="button" class="btn-step" style="font-size:10px; padding:3px 7px;" onclick="setSosPreset('ผู้สูงอายุต้องการย้ายขึ้นชั้น 2 ด่วน บันไดชันขึ้นเองไม่ได้', 'บ้าน A-008 ซอยเทวราช 1')">ขอย้ายขึ้นชั้น 2 บ้าน A-008</button>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="display:block; font-size:11px; color:var(--text-secondary); margin-bottom:4px;">ข้อความเสียงหรือข้อความแจ้งเหตุ</label>
+        <textarea id="sos-text" class="input-field" rows="3">ยายม่อมอยู่บ้าน C-04 ขาเจ็บเดินไม่ไหว น้ำเข้าใต้ถุนบ้านแล้ว ขอคนมาช่วยยกของหนีน้ำหน่อย</textarea>
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="display:block; font-size:11px; color:var(--text-secondary); margin-bottom:4px;">พิกัด / บ้านเลขที่</label>
+        <input type="text" id="sos-loc" class="input-field" value="บ้าน C-04 ซอยเทวราช 3" />
+      </div>
+      <button class="btn-approve" onclick="submitSos()">บันทึกข้อมูลแจ้งเหตุ</button>
+    </div>
+  </div>
+
+  <!-- Household Inspector Modal -->
+  <div class="modal-backdrop" id="household-modal">
+    <div class="modal-dialog" style="max-width:520px;">
+      <div class="modal-drag-handle"></div>
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+        <div>
+          <div class="modal-title" id="hh-modal-title">ข้อมูลครัวเรือน A-012</div>
+          <div style="font-size:11px; color:var(--text-secondary);" id="hh-modal-addr">32/1 ซอยวัดเทวราชกุญชร (หลังตลาดเก่า)</div>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('household-modal')">×</button>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
+        <div style="background:var(--surface-card); border:1px solid var(--border-subtle); border-radius:8px; padding:10px;">
+          <div style="font-size:10px; color:var(--text-tertiary);">ระดับน้ำหน้าบ้านปัจจุบัน</div>
+          <div style="font-size:16px; font-weight:700; color:var(--text-primary);" id="hh-modal-water">35 ซม.</div>
+          <div style="font-size:10px; color:var(--text-secondary);" id="hh-modal-risk">ความเสี่ยง: วิกฤต</div>
+        </div>
+        <div style="background:var(--surface-card); border:1px solid var(--border-subtle); border-radius:8px; padding:10px;">
+          <div style="font-size:10px; color:var(--text-tertiary);">การเข้าถึงระบบสื่อสาร</div>
+          <div style="font-size:13px; font-weight:600; color:var(--apple-amber);" id="hh-modal-digital">ไม่มีโทรศัพท์ (ออฟไลน์)</div>
+          <div style="font-size:10px; color:var(--text-secondary);" id="hh-modal-type">แบบบ้าน: สองชั้นไม้ครึ่งปูน</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <div style="font-size:11px; font-weight:600; color:var(--text-primary); margin-bottom:6px;">รายชื่อและสถานะลูกบ้านในทะเบียน</div>
+        <div id="hh-modal-residents" style="display:flex; flex-direction:column; gap:6px;">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+      <div style="font-size:11px; font-weight:600; color:var(--text-primary); margin-bottom:8px;">คำสั่งการและบันทึกข้อมูลหน้างาน</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;">
+        <button class="btn-step" onclick="updateHouseholdSafetyCurrent('confirmed_safe', 'watch')">
+          ✓ บันทึก: ปลอดภัยแล้ว
+        </button>
+        <button class="btn-step" style="border-color:var(--apple-red-border); color:var(--apple-red);" onclick="updateHouseholdSafetyCurrent('critical_help_needed', 'critical')">
+          ⚠ บันทึก: ต้องการช่วยด่วน
+        </button>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn-step primary" onclick="dispatchDoorKnockCurrent()" style="flex:1;">
+          ส่งทีมสำรวจ/เคาะประตู (Task)
+        </button>
+        <button class="btn-step" onclick="focusCurrentHousehold3D()" style="flex:1;">
+          บินกล้องโฟกัส 3D
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Plan A Analysis Modal -->
+  <div class="modal-backdrop" id="modal-plan-a">
+    <div class="modal-dialog" style="max-width:500px;">
+      <div class="modal-drag-handle"></div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <div class="modal-title">วิเคราะห์ข้อจำกัด Plan A: รถพยาบาลเข้าตรอกตรง</div>
+        <button class="modal-close-btn" onclick="closeModal('modal-plan-a')">×</button>
+      </div>
+      <div style="font-size:11px; line-height:1.6; color:var(--text-secondary); margin-bottom:14px;">
+        ระบบ AI Safety Engine คำนวณความเสี่ยงทางกายภาพและวิศวกรรมจราจรสำหรับการนำรถพยาบาล EMS เข้าตรอกซอยเหนือ:
+      </div>
+      <div style="background:var(--apple-red-surface); border:1px solid var(--apple-red-border); border-radius:8px; padding:12px; margin-bottom:14px; font-size:11px; line-height:1.7;">
+        <div><strong style="color:var(--apple-red);">❌ ความกว้างช่องทาง (Clearance Deficit):</strong> ความกว้างตัวรถ 2.20 ม. เทียบความกว้างตรอก 1.40 ม. ติดแนวเสาไฟและชายคาบ้าน A-008 ไม่สามารถผ่านได้จริง</div>
+        <div><strong style="color:var(--apple-red);">❌ ระดับน้ำท่วมขัง (Exhaust Flooding):</strong> ซอยลุ่มต่ำน้ำท่วมขัง 35 ซม. สูงเกินเกณฑ์ระดับท่อไอเสียปลอดภัยของรถพยาบาล (25 ซม.) เสี่ยงเครื่องยนต์ดับกีดขวางเส้นทาง</div>
+        <div><strong>คะแนนความเป็นไปได้:</strong> <span style="color:var(--apple-red); font-weight:700;">15% (ระบบปฏิเสธการใช้งาน)</span></div>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:8px;">
+        <button class="btn-step" onclick="closeModal('modal-plan-a'); setCameraView('iso');">กลับมุมมองรวม 3D</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Plan C Analysis Modal -->
+  <div class="modal-backdrop" id="modal-plan-c">
+    <div class="modal-dialog" style="max-width:500px;">
+      <div class="modal-drag-handle"></div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <div class="modal-title">วิเคราะห์ข้อจำกัด Plan C: อพยพทางเรือริมแม่น้ำเจ้าพระยา</div>
+        <button class="modal-close-btn" onclick="closeModal('modal-plan-c')">×</button>
+      </div>
+      <div style="font-size:11px; line-height:1.6; color:var(--text-secondary); margin-bottom:14px;">
+        ระบบ AI Hydrology Model คำนวณความเสี่ยงอุทกศาสตร์และการนำเรือกู้ภัยเข้าเทียบท่า:
+      </div>
+      <div style="background:var(--apple-amber-surface); border:1px solid var(--apple-amber-border); border-radius:8px; padding:12px; margin-bottom:14px; font-size:11px; line-height:1.7;">
+        <div><strong style="color:var(--apple-amber);">⚠ กระแสน้ำเชี่ยว (High Water Velocity):</strong> ความเร็วกระแสน้ำ 2.1 ม./วินาที เกินเกณฑ์ปลอดภัยสำหรับเรือท้องแบนขนย้ายผู้ป่วยติดเตียง (เกณฑ์ปลอดภัย ≤ 1.2 ม./วินาที)</div>
+        <div><strong style="color:var(--apple-amber);">⚠ เวลาในการปฏิบัติการ (Operation Latency):</strong> ต้องใช้เวลานำเรือเข้าเทียบและผูกทุ่น 45 นาที ซึ่งเสี่ยงเกินขอบเขตออกซิเจนสำรอง 90 นาทีของผู้ป่วย</div>
+        <div><strong>คะแนนความเป็นไปได้:</strong> <span style="color:var(--apple-amber); font-weight:700;">38% (แผนสำรองขั้นวิกฤตเท่านั้น)</span></div>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:8px;">
+        <button class="btn-step" onclick="closeModal('modal-plan-c'); setCameraView('iso');">กลับมุมมองรวม 3D</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Apple Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script>
+    var state = null;
+    window.state = null;
+    var currentAppMode = 'command';
+    window.currentAppMode = currentAppMode;
+    var currentTheme = 'light';
+    window.currentTheme = currentTheme;
+
+    // Three.js instances and simulation objects
+    let scene, camera, renderer, controls;
+    let canalWaterMesh, canalWaterGeo, canalWaterMat;
+    let floodWaterMesh, floodWaterGeo, floodWaterMat;
+    let routeGroup = null;
+    let boardwalkGroup = null;
+    let boardwalkBadge = null;
+    let waterGaugeGroup = null;
+    let waterGaugeFloat = null;
+    let waterGaugeSpriteObj = null;
+    let pulseRings = [];
+    let currentCanalY = -0.55;
+    let targetCanalY = -0.55;
+    let currentFloodY = -0.20;
+    let targetFloodY = -0.20;
+    let targetCamPos = null;
+    let targetControlsTarget = null;
+    let currentCamView = 'iso';
+    let photonMesh = null;
+    let activeCurve = null;
+
+    function toggleTheme() {
+      currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+      window.currentTheme = currentTheme;
+      document.body.setAttribute('data-theme', currentTheme);
+      
+      const themeIcon = document.getElementById('theme-icon');
+      if (currentTheme === 'light') {
+        themeIcon.innerHTML = '<path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/>';
+        if (scene) scene.background = new THREE.Color('#D4DFE8');
+      } else {
+        themeIcon.innerHTML = '<path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/>';
+        if (scene) scene.background = new THREE.Color('#070B14');
+      }
+      renderChart();
+    }
+
+    // High-Resolution Retina Floating Canvas Sprite Billboard
+    function createBadgeSprite(title, subtitle, badgeColor) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1024;
+      canvas.height = 260;
+      const ctx = canvas.getContext('2d');
+
+      function draw() {
+        ctx.clearRect(0, 0, 1024, 260);
+
+        // Crisp solid rounded pill background (white with colored border)
+        const r = 36;
+        const x = 12, y = 12, w = 1000, h = 236;
+
+        ctx.fillStyle = '#FFFFFF';
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.arcTo(x + w, y, x + w, y + h, r);
+        ctx.arcTo(x + w, y + h, x, y + h, r);
+        ctx.arcTo(x, y + h, x, y, r);
+        ctx.arcTo(x, y, x + w, y, r);
+        ctx.closePath();
+        ctx.fill();
+
+        // 6px crisp border
+        ctx.strokeStyle = badgeColor;
+        ctx.lineWidth = 7;
+        ctx.stroke();
+
+        // Left indicator gem
+        ctx.fillStyle = badgeColor;
+        ctx.beginPath();
+        ctx.arc(75, 130, 26, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#FFFFFF';
+        ctx.beginPath();
+        ctx.arc(75, 130, 11, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Title
+        ctx.fillStyle = '#0F172A';
+        ctx.font = 'bold 44px -apple-system, BlinkMacSystemFont, Sarabun, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(title, 125, 92);
+
+        // Subtitle
+        ctx.fillStyle = '#475569';
+        ctx.font = '32px -apple-system, BlinkMacSystemFont, Sarabun, sans-serif';
+        ctx.fillText(subtitle, 125, 168);
+      }
+
+      draw();
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.minFilter = THREE.LinearFilter;
+      const mat = new THREE.SpriteMaterial({ map: texture, depthTest: false, depthWrite: false, toneMapped: false });
+      const sprite = new THREE.Sprite(mat);
+      sprite.scale.set(22, 5.6, 1);
+      return { sprite, canvas, ctx, texture, update: (t, s, col) => {
+        title = t; subtitle = s; if (col) badgeColor = col;
+        draw();
+        texture.needsUpdate = true;
+      }};
+    }
+
+    // Concentric Animated Ground Pulse Ring
+    function createGroundPulseRing(x, z, color) {
+      const group = new THREE.Group();
+      const geo = new THREE.RingGeometry(0.8, 1.3, 32);
+      geo.rotateX(-Math.PI / 2);
+      const mat = new THREE.MeshBasicMaterial({
+        color,
+        transparent: true,
+        opacity: 0.7,
+        side: THREE.DoubleSide,
+      });
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.position.set(0, 0.05, 0);
+      group.add(mesh);
+      group.position.set(x, 0, z);
+      scene.add(group);
+      pulseRings.push({ group, mesh, mat, baseScale: 1.0, phase: Math.random() * Math.PI });
+      return group;
+    }
+
+    // Apple-Design Sleek 3D Floating Pin
+    function createApplePin(x, z, title, subtitle, color) {
+      const pinGroup = new THREE.Group();
+
+      // 1. Sleek hairline stainless tether rod
+      const rodGeo = new THREE.CylinderGeometry(0.06, 0.06, 8.5, 8);
+      const rodMat = new THREE.MeshStandardMaterial({
+        color: 0x8E8E93,
+        metalness: 0.85,
+        roughness: 0.15,
+      });
+      const rod = new THREE.Mesh(rodGeo, rodMat);
+      rod.position.y = 4.25;
+      rod.castShadow = true;
+      pinGroup.add(rod);
+
+      // 2. Glowing indicator orb at top
+      const orbGeo = new THREE.SphereGeometry(0.65, 16, 16);
+      const orbMat = new THREE.MeshStandardMaterial({
+        color,
+        emissive: color,
+        emissiveIntensity: 0.8,
+        roughness: 0.1,
+      });
+      const orb = new THREE.Mesh(orbGeo, orbMat);
+      orb.position.y = 8.6;
+      pinGroup.add(orb);
+
+      // 3. Floating Retina canvas badge
+      const badgeObj = createBadgeSprite(title, subtitle, color);
+      badgeObj.sprite.position.y = 11.2;
+      pinGroup.add(badgeObj.sprite);
+
+      pinGroup.position.set(x, 0, z);
+      scene.add(pinGroup);
+
+      // Ground pulse ring
+      createGroundPulseRing(x, z, color);
+      return { pinGroup, badgeObj };
+    }
+
+    // 3D Water Gauge Pole (เสาวัดระดับน้ำชุมชน)
+    function initWaterGaugePole() {
+      waterGaugeGroup = new THREE.Group();
+
+      // Footing
+      const baseGeo = new THREE.CylinderGeometry(0.5, 0.6, 0.15, 16);
+      const baseMat = new THREE.MeshStandardMaterial({ color: 0x4A5568, roughness: 0.7 });
+      const baseMesh = new THREE.Mesh(baseGeo, baseMat);
+      baseMesh.position.y = 0.075;
+      baseMesh.receiveShadow = true;
+      waterGaugeGroup.add(baseMesh);
+
+      // Striped measuring mast (3.2m tall)
+      const mastGeo = new THREE.CylinderGeometry(0.12, 0.12, 3.2, 16);
+      
+      // Generate authentic Thai Department of Disaster Prevention striped texture
+      const stripeCanvas = document.createElement('canvas');
+      stripeCanvas.width = 64;
+      stripeCanvas.height = 256;
+      const sCtx = stripeCanvas.getContext('2d');
+      const colors = ['#D70015', '#FFFFFF', '#D70015', '#FFFFFF', '#F59E0B', '#1E293B', '#F59E0B', '#1E293B'];
+      const bandH = 256 / colors.length;
+      colors.forEach((c, idx) => {
+        sCtx.fillStyle = c;
+        sCtx.fillRect(0, idx * bandH, 64, bandH);
+      });
+      const stripeTexture = new THREE.CanvasTexture(stripeCanvas);
+      const mastMat = new THREE.MeshStandardMaterial({
+        map: stripeTexture,
+        roughness: 0.35,
+        metalness: 0.2,
+      });
+      const mast = new THREE.Mesh(mastGeo, mastMat);
+      mast.position.y = 1.6;
+      mast.castShadow = true;
+      waterGaugeGroup.add(mast);
+
+      // Water float ring (Torus)
+      const floatGeo = new THREE.TorusGeometry(0.24, 0.07, 12, 24);
+      floatGeo.rotateX(Math.PI / 2);
+      const floatMat = new THREE.MeshStandardMaterial({
+        color: 0x00E5FF,
+        emissive: 0x0088AA,
+        emissiveIntensity: 0.7,
+        roughness: 0.2,
+      });
+      waterGaugeFloat = new THREE.Mesh(floatGeo, floatMat);
+      waterGaugeFloat.position.y = 0.15;
+      waterGaugeGroup.add(waterGaugeFloat);
+
+      // Gauge Billboard
+      waterGaugeSpriteObj = createBadgeSprite('ระดับน้ำหน้าบ้าน A-012', 'ระดับน้ำ: 5 ซม. (ปกติ)', '#1E8E3E');
+      waterGaugeSpriteObj.sprite.position.y = 4.2;
+      waterGaugeGroup.add(waterGaugeSpriteObj.sprite);
+
+      // Positioned right in the flooded alley outside House A-012
+      waterGaugeGroup.position.set(-9.5, 0, -78);
+      scene.add(waterGaugeGroup);
+    }
+
+    // 3D Raised Wooden Boardwalk (สะพานไม้ยกสูงชั่วคราว Zone C)
+    function initBoardwalkMesh() {
+      boardwalkGroup = new THREE.Group();
+      const woodMat = new THREE.MeshStandardMaterial({
+        color: 0x8C5224, // Warm weathered teak
+        roughness: 0.85,
+        metalness: 0.05,
+      });
+      const postMat = new THREE.MeshStandardMaterial({
+        color: 0x5C3517,
+        roughness: 0.90,
+      });
+
+      const deckElevation = 0.38; // Deck height above ground
+
+      // Segment 1: from [-7, 0, -60] to [8, 0, -60] (length 15m)
+      const dx1 = 15;
+      const numPlanks1 = 30;
+      for (let i = 0; i <= numPlanks1; i++) {
+        const x = -7 + (i / numPlanks1) * dx1;
+        const plank = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.05, 1.8), woodMat);
+        plank.position.set(x, deckElevation, -60);
+        plank.castShadow = true;
+        plank.receiveShadow = true;
+        boardwalkGroup.add(plank);
+
+        // Stilt pilings every 2.5m
+        if (i % 5 === 0) {
+          const postL = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, deckElevation, 8), postMat);
+          postL.position.set(x, deckElevation / 2, -60 - 0.8);
+          postL.castShadow = true;
+          boardwalkGroup.add(postL);
+
+          const postR = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, deckElevation, 8), postMat);
+          postR.position.set(x, deckElevation / 2, -60 + 0.8);
+          postR.castShadow = true;
+          boardwalkGroup.add(postR);
+        }
+      }
+
+      // Segment 2: from [8, 0, -60] to [20, 0, -58] (length 12.2m)
+      const numPlanks2 = 24;
+      for (let i = 0; i <= numPlanks2; i++) {
+        const frac = i / numPlanks2;
+        const x = 8 + frac * 12;
+        const z = -60 + frac * 2;
+        const plank = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.05, 1.8), woodMat);
+        plank.position.set(x, deckElevation, z);
+        plank.castShadow = true;
+        plank.receiveShadow = true;
+        boardwalkGroup.add(plank);
+
+        if (i % 6 === 0) {
+          const postL = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, deckElevation, 8), postMat);
+          postL.position.set(x, deckElevation / 2, z - 0.8);
+          boardwalkGroup.add(postL);
+
+          const postR = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, deckElevation, 8), postMat);
+          postR.position.set(x, deckElevation / 2, z + 0.8);
+          boardwalkGroup.add(postR);
+        }
+      }
+
+      // Floating status badge above Boardwalk J2
+      boardwalkBadge = createBadgeSprite('สะพานไม้ยกสูง Zone C', 'ระดับสะพาน: +38 ซม. (ผ่านได้)', '#1E8E3E');
+      boardwalkBadge.sprite.position.set(8, 3.2, -60);
+      boardwalkGroup.add(boardwalkBadge.sprite);
+
+      scene.add(boardwalkGroup);
+    }
+
+    // Dynamic Piecewise 3D Water Elevations for Canal and Flood Basin
+    function calculate3DWaterLevels(riverLevelMeters) {
+      if (riverLevelMeters <= 0.42) {
+        return { canalY: -0.55, floodY: -0.20 };
+      }
+      if (riverLevelMeters <= 0.50) {
+        const u = (riverLevelMeters - 0.42) / (0.50 - 0.42);
+        return {
+          canalY: -0.55 + u * (-0.18 - (-0.55)),
+          floodY: -0.20 + u * (0.12 - (-0.20))
+        };
+      }
+      if (riverLevelMeters <= 0.52) {
+        const u = (riverLevelMeters - 0.50) / (0.52 - 0.50);
+        return {
+          canalY: -0.18 + u * (-0.03 - (-0.18)),
+          floodY: 0.12 + u * (0.30 - 0.12)
+        };
+      }
+      if (riverLevelMeters <= 0.58) {
+        const u = (riverLevelMeters - 0.52) / (0.58 - 0.52);
+        return {
+          canalY: -0.03 + u * (0.18 - (-0.03)),
+          floodY: 0.30 + u * (0.45 - 0.30)
+        };
+      }
+      const excess = riverLevelMeters - 0.58;
+      return {
+        canalY: 0.18 + excess * 0.7,
+        floodY: 0.45 + excess * 0.7
+      };
+    }
+
+    // 1. Initialize 3D Engine with High-Contrast Architectural Lighting & PBR
+    function init3D() {
+      try {
+        const container = document.getElementById('canvas-container');
+        if (!container) return;
+
+        const w = container.clientWidth || 800;
+        const h = container.clientHeight || 500;
+
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(currentTheme === 'dark' ? '#070B14' : '#D4DFE8');
+
+        camera = new THREE.PerspectiveCamera(40, w / h, 1, 1000);
+        // High-angle architectural isometric perspective framing the whole community
+        camera.position.set(62, 70, 85);
+
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      
+      // Professional Tone Mapping & Soft Shadows
+      if (THREE.sRGBEncoding) renderer.outputEncoding = THREE.sRGBEncoding;
+      if (THREE.ACESFilmicToneMapping) {
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.0;
+      }
+      
+      renderer.shadowMap.enabled = true;
+      if (THREE.PCFSoftShadowMap) renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      container.appendChild(renderer.domElement);
+
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.06;
+      controls.maxPolarAngle = Math.PI / 2 - 0.05;
+      controls.target.set(5, 0, -20);
+
+      // 1. Natural Sky Hemisphere Light with Slate Ground (Creates rich architectural AO)
+      const hemiLight = new THREE.HemisphereLight(0xffffff, 0x475569, 0.45);
+      hemiLight.position.set(0, 100, 0);
+      scene.add(hemiLight);
+
+      // 2. Directional Sunlight casting crisp building shadows
+      const sun = new THREE.DirectionalLight(0xfffaed, 0.85);
+      sun.position.set(70, 110, 65);
+      sun.castShadow = true;
+      sun.shadow.mapSize.width = 2048;
+      sun.shadow.mapSize.height = 2048;
+      sun.shadow.camera.near = 10;
+      sun.shadow.camera.far = 300;
+      sun.shadow.camera.left = -110;
+      sun.shadow.camera.right = 110;
+      sun.shadow.camera.top = 110;
+      sun.shadow.camera.bottom = -110;
+      sun.shadow.bias = -0.0003;
+      scene.add(sun);
+
+      // 3. Facade Soft Fill Light
+      const fillLight = new THREE.DirectionalLight(0xbfdbfe, 0.25);
+      fillLight.position.set(-60, 45, -70);
+      scene.add(fillLight);
+
+      // 4A. Dedicated Canal Water Mesh (Fits inside the canal channel X: 62.6 to 79.4, Z: -95 to 95)
+      canalWaterGeo = new THREE.PlaneGeometry(16.6, 192, 16, 48);
+      canalWaterGeo.rotateX(-Math.PI / 2);
+      canalWaterMat = new THREE.MeshStandardMaterial({
+        color: 0x6e5c47, // Realistic muddy brown river water
+        roughness: 0.12,
+        metalness: 0.20,
+        transparent: true,
+        opacity: 0.88,
+        side: THREE.DoubleSide,
+      });
+      canalWaterMesh = new THREE.Mesh(canalWaterGeo, canalWaterMat);
+      canalWaterMesh.position.set(71.0, -0.55, 0);
+      canalWaterMesh.receiveShadow = true;
+      scene.add(canalWaterMesh);
+
+      // 4B. Dedicated Community Flood Water Mesh (Zone C depression & alleyway around House A-012)
+      floodWaterGeo = new THREE.PlaneGeometry(68, 56, 24, 24);
+      floodWaterGeo.rotateX(-Math.PI / 2);
+      floodWaterMat = new THREE.MeshStandardMaterial({
+        color: 0x7b6852, // Realistic muddy flood water
+        roughness: 0.15,
+        metalness: 0.10,
+        transparent: true,
+        opacity: 0.80,
+        side: THREE.DoubleSide,
+        depthWrite: false,
+      });
+      floodWaterMesh = new THREE.Mesh(floodWaterGeo, floodWaterMat);
+      floodWaterMesh.position.set(-7.0, -0.20, -68.0);
+      floodWaterMesh.receiveShadow = true;
+      scene.add(floodWaterMesh);
+
+      // Material tuning function for high-contrast, Apple HIG architectural rendering
+      function tuneMeshMaterial(child) {
+        if (!child.isMesh) return;
+        child.castShadow = true;
+        child.receiveShadow = true;
+
+        const n = (child.name || '').toLowerCase();
+        const mats = Array.isArray(child.material) ? child.material : [child.material];
+
+        mats.forEach((m, idx) => {
+          if (!m) return;
+          const mName = (m.name || '').toLowerCase();
+
+          let color = null;
+          if (mName.includes('ground') || n.includes('terrain') || n.includes('ground') || n.includes('low_area')) {
+            color = 0x5a784e; // Natural rich grass lawn
+          } else if (mName.includes('earth') || n.includes('dirt') || mName.includes('dirt')) {
+            color = 0x483a2d; // Thai fertile earth
+          } else if (mName.includes('grass')) {
+            color = 0x517346; // Vibrant lawn
+          } else if (mName.includes('road_asphalt') || n.includes('road_main') || n.includes('road_sec')) {
+            color = 0x2c353d; // Crisp dark slate asphalt
+          } else if (mName.includes('road_paint') || mName.includes('center_line')) {
+            color = 0xf8fafc; // Bright white lane marking
+          } else if (mName.includes('concrete') || n.includes('curb') || n.includes('alley')) {
+            color = 0xbcc7cf; // Clear concrete border
+          } else if (mName.includes('paving') || n.includes('footpath') || n.includes('path')) {
+            color = 0xd0d8de; // Walkway paving
+          } else if (mName.includes('canal_bank')) {
+            color = 0x64748b; // Stone canal wall
+          } else if (mName.includes('timber') || (n.includes('house_0') && n.includes('stilt'))) {
+            color = 0x854d0e; // Teak stilt structure
+          } else if (mName.includes('roof_red') || mName.includes('roof_terracotta')) {
+            color = 0xb84b28; // Terracotta roof tiles
+          } else if (mName.includes('roof_green')) {
+            color = 0x15803d; // Traditional glazed green roof
+          } else if (mName.includes('roof_slate')) {
+            color = 0x334155; // Slate grey roof
+          } else if (mName.includes('wall_white') || mName.includes('wall_cream')) {
+            color = 0xf8fafc; // Clean white walls
+          } else if (mName.includes('wall_peach')) {
+            color = 0xfdba74; // Peach walls
+          } else if (mName.includes('wall_blue')) {
+            color = 0x93c5fd; // Blue walls
+          } else if (mName.includes('wall_sage')) {
+            color = 0x86efac; // Sage walls
+          } else if (mName.includes('leaves') || n.includes('bush') || n.includes('tree')) {
+            color = 0x1e6b34; // Tropical green canopy
+          } else if (mName.includes('water') || n === 'water_canal') {
+            child.visible = false;
+            return;
+          }
+
+          if (color === null) color = 0x8a9ba8; // Darker fallback
+          if (color !== null) {
+            m.color = new THREE.Color(color);
+            m.side = THREE.DoubleSide;
+            // Keep original transparent, opacity, alphaTest, map, etc.
+          }
+        });
+      }
+
+      // 5. Load Real Community Model with rich architectural Lambertian palette
+      const loader = new THREE.GLTFLoader();
+      loader.load(
+        '/model.glb',
+        (gltf) => {
+          const progressText = document.getElementById('loading-progress-text');
+          const progressBar = document.getElementById('loading-progress-bar');
+          if (progressText) progressText.innerText = 'โหลดสำเร็จ 100% — กำลังจัดวางผัง...';
+          if (progressBar) progressBar.style.width = '100%';
+
+          const model = gltf.scene;
+          model.traverse((child) => {
+            if (child.isLight) {
+              child.visible = false;
+              child.intensity = 0;
+            }
+            tuneMeshMaterial(child);
+          });
+          scene.add(model);
+          console.log('Community 3D model loaded!');
+          const loaderEl = document.getElementById('loading-3d');
+          setTimeout(() => {
+            if (loaderEl) loaderEl.style.display = 'none';
+            window.dispatchEvent(new Event('resize'));
+          }, 350);
+        },
+        (xhr) => {
+          const progressText = document.getElementById('loading-progress-text');
+          const progressBar = document.getElementById('loading-progress-bar');
+          if (!progressText || !progressBar) return;
+
+          let percent = 0;
+          let loadedMB = (xhr.loaded / (1024 * 1024)).toFixed(1);
+          if (xhr.lengthComputable && xhr.total > 0) {
+            percent = Math.min(99, Math.round((xhr.loaded / xhr.total) * 100));
+            let totalMB = (xhr.total / (1024 * 1024)).toFixed(1);
+            progressText.innerText = `ดาวน์โหลด ${percent}% (${loadedMB}/${totalMB} MB)`;
+          } else {
+            // Brotli compressed stream (~1.8 MB)
+            percent = Math.min(98, Math.round((xhr.loaded / 1850000) * 100));
+            progressText.innerText = `ดาวน์โหลด ${percent}% (${loadedMB} MB)...`;
+          }
+          progressBar.style.width = `${Math.max(5, percent)}%`;
+          if (percent >= 98) {
+            progressText.innerText = 'กำลังประมวลผลโมเดล 3D ในหน่วยความจำ...';
+          }
+        },
+        (err) => {
+          console.error('Error loading model.glb:', err);
+          const loaderEl = document.getElementById('loading-3d');
+          if (loaderEl) {
+            loaderEl.innerHTML = '<div style="color:var(--apple-red,#ef4444); font-size:12px; font-weight:600;">ดาวน์โหลดไม่สำเร็จ (Timeout)<br><button onclick="location.reload()" style="margin-top:8px; padding:4px 12px; border-radius:6px; border:none; background:#0071e3; color:#fff; cursor:pointer; font-size:11px;">แตะเพื่อโหลดใหม่</button></div>';
+          }
+        }
+      );
+
+      // 6. Initialize Dedicated 3D Systems
+      initWaterGaugePole();
+      initBoardwalkMesh();
+
+      // 7. Sleek Apple-Design Floating Pins
+      // House A-012 at [-7, 0, -80]
+      createApplePin(-7, -80, 'บ้าน A-012 (ยายสมจิตร 82 ปี)', 'ผู้ป่วยติดเตียง • ออกซิเจนสำรอง', 0xd70015);
+      // Medical Point B at [28, 0, 35]
+      createApplePin(28, 35, 'จุดส่งต่อการแพทย์ B', 'ลานวัดเทวราชกุญชร (จุดเทียบรถ EMS)', 0x0071e3);
+      // Shelter A at [37, 0, -18]
+      createApplePin(37, -18, 'ศูนย์พักพิง Shelter A', 'อาคารศูนย์ชุมชนวัดเทวราชฯ', 0x1e8e3e);
+
+      // Animation Loop
+      function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+
+        // Smooth camera glide
+        if (targetCamPos && targetControlsTarget) {
+          camera.position.lerp(targetCamPos, 0.08);
+          controls.target.lerp(targetControlsTarget, 0.08);
+          if (camera.position.distanceTo(targetCamPos) < 0.2) {
+            targetCamPos = null;
+            targetControlsTarget = null;
+          }
+        }
+
+        // Smooth dynamic flood and canal water rise
+        const riverLevel = state?.hydrology?.waterLevelMeters || 0.42;
+        const levels = calculate3DWaterLevels(riverLevel);
+        targetCanalY = levels.canalY;
+        targetFloodY = levels.floodY;
+        currentCanalY += (targetCanalY - currentCanalY) * 0.055;
+        currentFloodY += (targetFloodY - currentFloodY) * 0.055;
+
+        const t = performance.now() * 0.002;
+
+        if (canalWaterMesh) {
+          canalWaterMesh.position.y = currentCanalY;
+          
+        // Disaster Animation Logic
+        const disasterMode = state?.disasterMode || 'flood';
+        if (disasterMode === 'earthquake') {
+            const shake = Math.sin(t * 15) * 0.15;
+            camera.position.x += shake;
+            camera.position.z += shake;
+        } else if (disasterMode === 'wildfire') {
+            scene.background = new THREE.Color('#3b1a0d');
+            scene.fog = new THREE.FogExp2('#3b1a0d', 0.015);
+        } else if (disasterMode === 'tsunami') {
+            targetCanalY = 4.5;
+            targetFloodY = 4.5;
+        } else {
+            scene.background = new THREE.Color(currentTheme === 'dark' ? '#070B14' : '#D4DFE8');
+            scene.fog = null;
+        }
+    
+          // Longitudinal flowing waves along canal
+          const cPos = canalWaterGeo.attributes.position;
+          for (let i = 0; i < cPos.count; i++) {
+            const z = cPos.getZ(i);
+            const x = cPos.getX(i);
+            const wave = Math.sin(z * 0.25 + t * 3.5) * 0.06 + Math.cos(x * 0.55 + t * 2.0) * 0.04;
+            cPos.setY(i, wave);
+          }
+          cPos.needsUpdate = true;
+          canalWaterGeo.computeVertexNormals();
+        }
+
+        if (floodWaterMesh) {
+          floodWaterMesh.position.y = currentFloodY;
+          // Fluid ripples across flood basin when water is at or above ground
+          if (currentFloodY > -0.05) {
+            const fPos = floodWaterGeo.attributes.position;
+            for (let i = 0; i < fPos.count; i++) {
+              const x = fPos.getX(i);
+              const z = fPos.getZ(i);
+              const wave = Math.sin((x + z) * 0.22 + t * 2.0) * 0.016 + Math.cos(x * 0.35 - t * 2.2) * 0.014;
+              fPos.setY(i, wave);
+            }
+            fPos.needsUpdate = true;
+            floodWaterGeo.computeVertexNormals();
+          }
+        }
+
+        // Water Gauge Float update (floats on surface of flood water in alley)
+        if (waterGaugeFloat) {
+          waterGaugeFloat.position.y = Math.max(0.12, currentFloodY + 0.02);
+        }
+
+        // Animate ground pulse rings
+        const tRing = performance.now() * 0.003;
+        pulseRings.forEach((pr) => {
+          const s = 1.0 + Math.sin(tRing + pr.phase) * 0.45;
+          pr.group.scale.set(s, 1, s);
+          pr.mat.opacity = 0.75 - (s - 1.0) * 0.8;
+        });
+
+        // Animate route traveling photon
+        if (photonMesh && activeCurve) {
+          const u = (performance.now() * 0.00035) % 1.0;
+          const pt = activeCurve.getPointAt(u);
+          photonMesh.position.copy(pt);
+        }
+
+        // Update boardwalk submerged warning status
+        if (boardwalkBadge) {
+          if (currentFloodY >= 0.38) {
+            boardwalkBadge.update('⛔ สะพานไม้จมน้ำ 45 ซม.', 'เส้นทางตัดขาด • แผ่นไม้ลอยตัว', '#D70015');
+          } else {
+            const clearance = Math.max(0, Math.round((0.38 - Math.max(0, currentFloodY)) * 100));
+            boardwalkBadge.update('สะพานไม้ยกสูง Zone C', `ระดับสะพาน: +38 ซม. (พ้นน้ำ ${clearance} ซม.)`, '#1E8E3E');
+          }
+        }
+
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+      });
+    } catch (err) {
+      console.warn('init3D warning:', err);
+    }
+  }
+
+    // Elevated 3D Evacuation Route Ribbon & Waypoint Markers
+    function update3DRouteLine(waypoints) {
+      if (routeGroup) scene.remove(routeGroup);
+      if (!waypoints || waypoints.length < 2) return;
+
+      routeGroup = new THREE.Group();
+      const isReplan = state?.isReplanningActive;
+      const color = isReplan ? 0x30d158 : 0x0071e3;
+      const emissive = isReplan ? 0x1e8e3e : 0x005bb5;
+
+      // Elevated points hovering safely 0.70m above ground & flood water
+      const points = waypoints.map((p) => new THREE.Vector3(p.x, 0.70, p.z));
+      activeCurve = new THREE.CatmullRomCurve3(points);
+
+      // 3D Illuminated Tube
+      const tubeGeo = new THREE.TubeGeometry(activeCurve, 64, 0.32, 8, false);
+      const tubeMat = new THREE.MeshStandardMaterial({
+        color,
+        emissive,
+        emissiveIntensity: 0.85,
+        roughness: 0.15,
+        metalness: 0.10,
+      });
+      const tubeMesh = new THREE.Mesh(tubeGeo, tubeMat);
+      tubeMesh.castShadow = true;
+      routeGroup.add(tubeMesh);
+
+      // Glowing waypoint beads at each turn
+      const beadGeo = new THREE.SphereGeometry(0.55, 16, 16);
+      const beadMat = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        emissive: color,
+        emissiveIntensity: 0.9,
+      });
+      points.forEach((pt) => {
+        const bead = new THREE.Mesh(beadGeo, beadMat);
+        bead.position.copy(pt);
+        routeGroup.add(bead);
+      });
+
+      // Traveling light photon
+      const photonGeo = new THREE.SphereGeometry(0.65, 16, 16);
+      const photonMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      photonMesh = new THREE.Mesh(photonGeo, photonMat);
+      routeGroup.add(photonMesh);
+
+      // If Dynamic Replanning is active, also render the severed boardwalk path in red dashed style
+      if (isReplan) {
+        const severedPts = [
+          new THREE.Vector3(-7, 0.70, -60),
+          new THREE.Vector3(8, 0.70, -60),
+          new THREE.Vector3(20, 0.70, -58),
+        ];
+        const severedGeo = new THREE.BufferGeometry().setFromPoints(severedPts);
+        const severedMat = new THREE.LineDashedMaterial({
+          color: 0xd70015,
+          dashSize: 1.2,
+          gapSize: 0.8,
+        });
+        const severedLine = new THREE.Line(severedGeo, severedMat);
+        severedLine.computeLineDistances();
+        routeGroup.add(severedLine);
+      }
+
+      scene.add(routeGroup);
+    }
+
+    // Smooth Camera Navigation
+    function setCameraView(view) {
+      currentCamView = view;
+      ['iso', 'a012', 'boardwalk', 'top'].forEach((v) => {
+        const btn = document.getElementById(`btn-cam-${v}`);
+        if (btn) btn.classList.toggle('active', v === view);
+      });
+
+      if (view === 'iso') {
+        targetCamPos = new THREE.Vector3(62, 70, 85);
+        targetControlsTarget = new THREE.Vector3(5, 0, -20);
+      } else if (view === 'a012') {
+        // Dramatic focus directly on House A-012, water gauge, stilt foundation
+        targetCamPos = new THREE.Vector3(14, 16, -56);
+        targetControlsTarget = new THREE.Vector3(-7, 2, -80);
+      } else if (view === 'boardwalk') {
+        // Close focus on Boardwalk J2 where flood water rises and submerges the walkway
+        targetCamPos = new THREE.Vector3(26, 14, -40);
+        targetControlsTarget = new THREE.Vector3(8, 2, -60);
+      } else if (view === 'top') {
+        // Top-down tactical GIS map
+        targetCamPos = new THREE.Vector3(0, 160, -15);
+        targetControlsTarget = new THREE.Vector3(0, 0, -15);
+      }
+    }
+
+    // 2. Render 2D Chart
+    // Dual-Line Chart (Apple HIG Style)
+    function renderChart(level, forecast, threshold) {
+      if (level === undefined && typeof state !== 'undefined' && state.hydrology) {
+        level = state.hydrology.waterLevelMeters || 0;
+        forecast = state.hydrology.forecastLevel2200 || 1.0;
+        threshold = 0.70;
+      }
+      level = level || 0;
+      forecast = forecast || 1.0;
+      threshold = threshold || 0.70;
+      const canvas = document.getElementById('chart-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      
+      // Handle HiDPI displays
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+      
+      const w = rect.width;
+      const h = rect.height;
+      const padding = 20;
+      
+      ctx.clearRect(0, 0, w, h);
+      
+      const maxVal = Math.max(1.5, forecast + 0.2, level + 0.2, threshold + 0.2);
+      
+      function getY(val) {
+        return h - padding - ((val / maxVal) * (h - padding * 2));
+      }
+      
+      // Draw Threshold Line (Red)
+      const thY = getY(threshold);
+      ctx.strokeStyle = 'rgba(215, 0, 21, 0.8)';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(padding, thY);
+      ctx.lineTo(w - padding, thY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      
+      // Draw Actual Level Line (Green)
+      ctx.strokeStyle = '#1E8E3E';
+      ctx.lineWidth = 3;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.beginPath();
+      ctx.moveTo(padding, getY(0.42)); // Start
+      ctx.lineTo(w/2 - 10, getY(level)); // Current
+      ctx.stroke();
+      
+      // Draw Forecast Level Line (Orange)
+      ctx.strokeStyle = '#F59E0B';
+      ctx.lineWidth = 3;
+      ctx.setLineDash([6, 4]);
+      ctx.beginPath();
+      ctx.moveTo(w/2 - 10, getY(level));
+      ctx.lineTo(w - padding, getY(forecast));
+      ctx.stroke();
+      ctx.setLineDash([]);
+      
+      // Draw Current Point
+      ctx.fillStyle = '#1E8E3E';
+      ctx.beginPath();
+      ctx.arc(w/2 - 10, getY(level), 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#FFF';
+      ctx.beginPath();
+      ctx.arc(w/2 - 10, getY(level), 2, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Draw Labels
+      ctx.fillStyle = currentTheme === 'dark' ? '#FFF' : '#1D1D1F';
+      ctx.font = '600 11px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Actual: ' + level.toFixed(2) + 'm', w/2 - 10, getY(level) - 10);
+      ctx.fillStyle = '#F59E0B';
+      ctx.fillText('Forecast: ' + forecast.toFixed(2) + 'm', w - padding - 20, getY(forecast) - 10);
+      ctx.fillStyle = '#D70015';
+      ctx.textAlign = 'left';
+      ctx.fillText('Threshold', padding, thY - 5);
+    }
+
+    // 3. Render Whole Application
+    function renderApp() {
+      if (!state) return;
+
+      // Clock & Header
+      document.getElementById('sim-clock-display').innerText = `${state.timeline.currentStep.time} น.`;
+      document.getElementById('step-tag-label').innerText = `ขั้นตอนจำลองสถานการณ์ ${state.timeline.currentIndex + 1} จาก ${state.timeline.steps.length}`;
+      document.getElementById('step-title-display').innerText = `${state.timeline.currentStep.time} น. — ${state.timeline.currentStep.title}`;
+
+      // Water Gauge
+      document.getElementById('water-gauge-val').innerText = `${state.hydrology.waterLevelMeters.toFixed(2)} m`;
+      document.getElementById('alley-gauge-sub').innerText = `ซอยหน้าบ้าน A-012: ${state.hydrology.alleyDepthA012Cm} ซม.`;
+      document.getElementById('rate-of-rise-tag').innerText = `+${state.hydrology.rateOfRisePerHour} ม. / ชม.`;
+
+      // Update Flood Status Pill & 3D Gauge Billboard
+      const floodPill = document.getElementById('flood-status-pill');
+      const depth = state.hydrology.alleyDepthA012Cm;
+      if (floodPill) {
+        if (depth < 10) {
+          floodPill.style.background = 'var(--apple-green-surface)';
+          floodPill.style.color = 'var(--apple-green)';
+          floodPill.style.borderColor = 'var(--apple-green-border)';
+          floodPill.innerText = 'ปกติ (ระดับน้ำยังอยู่ในตลิ่ง)';
+        } else if (depth < 30) {
+          floodPill.style.background = 'var(--apple-amber-surface)';
+          floodPill.style.color = 'var(--apple-amber)';
+          floodPill.style.borderColor = 'var(--apple-amber-border)';
+          floodPill.innerText = `เฝ้าระวัง (น้ำท่วมซอย ${depth} ซม.)`;
+        } else {
+          floodPill.style.background = 'var(--apple-red-surface)';
+          floodPill.style.color = 'var(--apple-red)';
+          floodPill.style.borderColor = 'var(--apple-red-border)';
+          floodPill.innerText = state.isReplanningActive
+            ? `วิกฤต: สะพานไม้จมน้ำ (ตรอกท่วม ${depth} ซม.)`
+            : `วิกฤต (น้ำท่วมซอย ${depth} ซม. - เปลสนามลุยน้ำ)`;
+        }
+      }
+
+      if (waterGaugeSpriteObj) {
+        if (depth < 10) {
+          waterGaugeSpriteObj.update('ระดับน้ำหน้าบ้าน A-012', `ระดับน้ำ: ${depth} ซม. (ปกติ)`, '#1E8E3E');
+        } else if (depth < 30) {
+          waterGaugeSpriteObj.update('ระดับน้ำหน้าบ้าน A-012', `ระดับน้ำ: ${depth} ซม. (เฝ้าระวัง)`, '#C96800');
+        } else {
+          waterGaugeSpriteObj.update('ระดับน้ำหน้าบ้าน A-012', `ระดับน้ำ: ${depth} ซม. (วิกฤต)`, '#D70015');
+        }
+      }
+
+      // Replanning banner
+      const repBanner = document.getElementById('replanning-banner');
+      if (state.isReplanningActive) {
+        repBanner.style.display = 'flex';
+        document.getElementById('replanning-desc').innerText = state.replanningReasonTh;
+        document.getElementById('live-dot').style.background = 'var(--apple-red)';
+      } else {
+        repBanner.style.display = 'none';
+        document.getElementById('live-dot').style.background = 'var(--apple-green)';
+      }
+
+      // Stepper
+      const scrubber = document.getElementById('scrubber-container');
+      scrubber.innerHTML = state.timeline.steps
+        .map((s, idx) => {
+          const isActive = idx === state.timeline.currentIndex;
+          const isCritical = s.time >= '20:20';
+          return `
+            <div class="step-node ${isActive ? 'active' : ''} ${isCritical ? 'critical' : ''}" onclick="setStep(${idx})">
+              <div class="step-node-top">
+                <div class="step-bullet"></div>
+                ${s.time}
+              </div>
+              <div class="step-node-text">${s.title}</div>
+            </div>
+          `;
+        })
+        .join('');
+
+      document.getElementById('prev-btn').disabled = state.timeline.currentIndex === 0;
+      document.getElementById('next-btn').disabled = state.timeline.currentIndex === state.timeline.steps.length - 1;
+
+      // Preparation Window
+      const rem = Math.max(0, 120 - state.timeline.currentStep.minutes);
+      document.getElementById('prep-time-val').innerText = `เหลือเวลาประมาณ ${Math.floor(rem / 60)} ชม. ${rem % 60} นาที`;
+
+      const checklistItems = state.checklist || [];
+      document.getElementById('prep-checklist-box').innerHTML = checklistItems
+        .map(
+          (c) => `
+          <div class="check-row ${c.is_done ? 'done' : ''}" onclick="toggleChecklistItem('${c.id}')" title="คลิกเพื่อสลับสถานะดำเนินการ">
+            <div class="check-tick">${c.is_done ? '✓' : ''}</div>
+            <div style="flex:1;">
+              <div style="font-weight:600; font-size:11px;">${c.title}</div>
+              ${c.completed_at ? `<div style="font-size:10px; color:var(--apple-green); margin-top:2px;">เสร็จสิ้นเมื่อ ${c.completed_at} น. • ${c.completed_by || 'เจ้าหน้าที่'}</div>` : '<div style="font-size:10px; color:var(--text-tertiary); margin-top:2px;">รอดำเนินการ (คลิกเพื่อบันทึก)</div>'}
+            </div>
+          </div>
+        `
+        )
+        .join('');
+
+      // AI Plans
+      const p = state.plans;
+      document.getElementById('plans-container').innerHTML = `
+        <div class="plan-item recommended ${state.isPlanApproved ? 'approved' : ''}">
+          <div class="plan-header">
+            <div>
+              <span class="plan-badge-tag">แนะนำสำหรับสถานการณ์นี้</span>
+              <div class="plan-title-text" style="margin-top:4px;">${p.planB.titleTh}</div>
+            </div>
+            <div class="plan-score-badge">${p.planB.feasibilityScore}%</div>
+          </div>
+          <div class="plan-description">${p.planB.reason}</div>
+          ${
+            !state.isPlanApproved
+              ? `<button class="btn-approve" onclick="approvePlan()">อนุมัติแผนปฏิบัติการ Plan B (มอบหมายทีม Community Team 02)</button>`
+              : `<div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+                   <div style="font-size:11px; color:var(--apple-green); font-weight:600;">✓ แผนได้รับการอนุมัติแล้ว (TASK #A-012 กำลังดำเนินการ)</div>
+                   <button class="btn-step" onclick="resetPlanApproval()" style="font-size:10px; padding:3px 8px;">รีเซ็ตการอนุมัติ</button>
+                 </div>`
+          }
+        </div>
+
+        <div class="plan-item">
+          <div class="plan-header">
+            <div class="plan-title-text">${p.planA.titleTh}</div>
+            <div class="plan-score-badge low">${p.planA.feasibilityScore}%</div>
+          </div>
+          <div class="plan-description" style="color:var(--apple-red);">${p.planA.reason}</div>
+          <button class="btn-step" onclick="inspectPlanA()" style="margin-top:8px; width:100%; font-size:11px;">
+            ตรวจสอบข้อจำกัดรถพยาบาล (Simulate Plan A)
+          </button>
+        </div>
+
+        <div class="plan-item">
+          <div class="plan-header">
+            <div class="plan-title-text">${p.planC.titleTh}</div>
+            <div class="plan-score-badge low">${p.planC.feasibilityScore}%</div>
+          </div>
+          <div class="plan-description">${p.planC.reason}</div>
+          <button class="btn-step" onclick="inspectPlanC()" style="margin-top:8px; width:100%; font-size:11px;">
+            ตรวจสอบความพร้อมทางเรือ (Simulate Plan C)
+          </button>
+        </div>
+      `;
+
+      // Households Matrix
+      document.getElementById('households-grid').innerHTML = state.households
+        .map((h) => {
+          const isCrit = h.access_status === 'critical_help_needed';
+          const areaBg = h.area_risk === 'critical' ? 'var(--apple-red-surface)' : h.area_risk === 'high_risk' ? 'var(--apple-amber-surface)' : 'rgba(0,0,0,0.03)';
+          const areaColor = h.area_risk === 'critical' ? 'var(--apple-red)' : h.area_risk === 'high_risk' ? 'var(--apple-amber)' : 'var(--text-secondary)';
+          const depthBadge = h.currentAlleyDepthCm > 0
+            ? `<span class="tag-subtle" style="background:var(--apple-blue-surface); color:var(--apple-blue);">น้ำท่วม ${h.currentAlleyDepthCm} ซม.</span>`
+            : `<span class="tag-subtle" style="background:var(--apple-green-surface); color:var(--apple-green);">พื้นแห้ง</span>`;
+          return `
+            <div class="house-box ${isCrit ? 'critical' : ''}" onclick="inspectHousehold('${h.code}')" title="คลิกเพื่อตรวจสอบข้อมูลลูกบ้านและจัดการภารกิจ">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="house-code">${h.code}</span>
+                ${h.digital_access === 'no_phone_offline' ? '<span class="tag-subtle" style="background:var(--apple-amber-surface); color:var(--apple-amber);">ไม่มีระบบสื่อสาร</span>' : ''}
+              </div>
+              <div class="house-title">${h.title}</div>
+              <div class="house-tags">
+                <span class="tag-subtle" style="background:${areaBg}; color:${areaColor};">${h.area_risk}</span>
+                ${depthBadge}
+              </div>
+            </div>
+          `;
+        })
+        .join('');
+
+      // Mobile View Task Updates
+      const activeTask = state.activeTask;
+      if (activeTask) {
+        const codeEl = document.getElementById('mobile-task-code');
+        const titleEl = document.getElementById('mobile-task-title');
+        const missionEl = document.getElementById('mobile-task-mission');
+        if (codeEl) codeEl.innerText = `${activeTask.code} [${activeTask.status.toUpperCase()}]`;
+        if (titleEl) titleEl.innerText = activeTask.title;
+        if (missionEl) missionEl.innerText = activeTask.mission_objective;
+      }
+
+      if (state.activeRoute && state.activeRoute.waypoints3D) {
+        update3DRouteLine(state.activeRoute.waypoints3D);
+      }
+
+      renderChart();
+    }
+
+    // Handlers & Interactive Actions
+    function showToast(title, message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const toast = document.createElement('div');
+      toast.className = 'toast-card';
+      const iconSvg = type === 'success'
+        ? '<svg class="icon" style="fill:var(--apple-green); width:18px; height:18px; flex-shrink:0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>'
+        : type === 'danger'
+        ? '<svg class="icon" style="fill:var(--apple-red); width:18px; height:18px; flex-shrink:0;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>'
+        : '<svg class="icon" style="fill:var(--apple-blue); width:18px; height:18px; flex-shrink:0;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>';
+      toast.innerHTML = `
+        ${iconSvg}
+        <div style="flex:1;">
+          <div class="toast-title">${title}</div>
+          <div class="toast-desc">${message}</div>
+        </div>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-8px) scale(0.96)';
+        setTimeout(() => toast.remove(), 320);
+      }, 3500);
+    }
+
+    async function fetchState() {
+      try {
+        const res = await fetch('/api/state');
+        state = await res.json();
+        window.state = state;
+        renderApp();
+      } catch (err) {
+        console.error('Fetch state error:', err);
+      }
+    }
+
+    async function setStep(idx) {
+      await fetch('/api/step', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ stepIndex: idx }),
+      });
+      fetchState();
+    }
+
+    function nextStep() {
+      if (state && state.timeline.currentIndex < state.timeline.steps.length - 1) {
+        setStep(state.timeline.currentIndex + 1);
+      }
+    }
+
+    function prevStep() {
+      if (state && state.timeline.currentIndex > 0) {
+        setStep(state.timeline.currentIndex - 1);
+      }
+    }
+
+    let autoPlayTimer = null;
+    function toggleAutoPlay() {
+      if (autoPlayTimer) {
+        clearInterval(autoPlayTimer);
+        autoPlayTimer = null;
+        document.getElementById('play-text').innerText = 'เล่นจำลอง';
+        document.getElementById('play-icon').innerHTML = '<path d="M8 5v14l11-7z"/>';
+        showToast('หยุดเล่นจำลอง', 'หยุดการเดินเวลาอัตโนมัติ', 'info');
+      } else {
+        document.getElementById('play-text').innerText = 'หยุดชั่วคราว';
+        document.getElementById('play-icon').innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+        showToast('เริ่มเล่นจำลอง', 'ระบบกำลังจำลองลำดับเหตุการณ์ต่อเนื่องทุก 4 วินาที', 'info');
+        autoPlayTimer = setInterval(() => {
+          if (state && state.timeline.currentIndex < state.timeline.steps.length - 1) {
+            setStep(state.timeline.currentIndex + 1);
+          } else {
+            toggleAutoPlay();
+          }
+        }, 4000);
+      }
+    }
+
+    function setAppMode(mode) {
+      currentAppMode = mode;
+      document.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+      const tabEl = document.getElementById('tab-' + mode);
+      if (tabEl) tabEl.classList.add('active');
+
+      const cmdView = document.getElementById('command-view');
+      const mobView = document.getElementById('mobile-view');
+      if (mode === 'command') {
+        if (cmdView) cmdView.style.display = 'grid';
+        if (mobView) mobView.style.display = 'none';
+        renderApp();
+      } else if (mode === 'mobile') {
+        if (cmdView) cmdView.style.display = 'none';
+        if (mobView) mobView.style.display = 'block';
+      } else if (mode === 'nurse') {
+        openModal('nurse-triage-modal');
+      } else if (mode === 'citizen') {
+        openModal('citizen-registry-modal');
+      }
+    }
+    
+    async function updateCitizenRegistry() {
+      const code = document.getElementById('cit-house').value;
+      const access = document.getElementById('cit-status').value;
+      try {
+        const res = await fetch(API_BASE + '/api/household/status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code: code, access_status: access })
+        });
+        if(res.ok) {
+          closeModal('citizen-registry-modal');
+        }
+      } catch (err) {}
+    }
+    
+    async function approvePlanB() {
+      try {
+        const res = await fetch(API_BASE + '/api/approve-plan', { method: 'POST' });
+        if(res.ok) {
+          closeModal('nurse-triage-modal');
+        }
+      } catch (err) {}
+    }
+  
+    async function resetDemo() {
+      if (autoPlayTimer) toggleAutoPlay();
+      try {
+        const res = await fetch('/api/reset-demo', { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+          state = data.state;
+          setCameraView('iso');
+          renderApp();
+          showToast('รีเซ็ตระบบแล้ว', 'รีเซ็ตสถานการณ์กลับสู่เวลา 20:00 น. เริ่มต้นเรียบร้อย', 'info');
+        }
+      } catch (err) {
+        console.error('Reset demo error:', err);
+      }
+    }
+
+    async function toggleChecklistItem(id) {
+      try {
+        const res = await fetch('/api/checklist/toggle', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          state = data.state;
+          renderApp();
+          showToast('อัปเดตเช็กลิสต์แล้ว', `รายการ ${id.toUpperCase()} บันทึกลง SQLite เรียบร้อยแล้ว`, 'success');
+        }
+      } catch (err) {
+        console.error('Toggle checklist error:', err);
+      }
+    }
+
+    let currentInspectedCode = null;
+    let houseHighlightMarker = null;
+
+    function inspectHousehold(code) {
+      currentInspectedCode = code;
+      const h = (state.households || []).find((x) => x.code === code);
+      if (!h) return;
+
+      const targetX = h.coord_x;
+      const targetZ = -h.coord_y;
+      targetControlsTarget = new THREE.Vector3(targetX, 2, targetZ);
+      targetCamPos = new THREE.Vector3(targetX + 18, 20, targetZ + 22);
+
+      if (!houseHighlightMarker && scene) {
+        const ringGeo = new THREE.RingGeometry(3.5, 4.2, 32);
+        ringGeo.rotateX(-Math.PI / 2);
+        const ringMat = new THREE.MeshBasicMaterial({ color: 0x0071e3, side: THREE.DoubleSide });
+        houseHighlightMarker = new THREE.Mesh(ringGeo, ringMat);
+        scene.add(houseHighlightMarker);
+      }
+      if (houseHighlightMarker) {
+        houseHighlightMarker.position.set(targetX, 0.4, targetZ);
+        houseHighlightMarker.visible = true;
+      }
+
+      document.getElementById('hh-modal-title').innerText = `${h.code}: ${h.title}`;
+      document.getElementById('hh-modal-addr').innerText = `${h.zone} • ${h.address}`;
+      document.getElementById('hh-modal-water').innerText = h.currentAlleyDepthCm > 0 ? `${h.currentAlleyDepthCm} ซม.` : 'พื้นแห้ง (0 ซม.)';
+      document.getElementById('hh-modal-risk').innerText = `ความเสี่ยง: ${h.area_risk} (สถานะ: ${h.access_status})`;
+      document.getElementById('hh-modal-digital').innerText = h.digital_access === 'online' ? 'สมาร์ตโฟน/ออนไลน์' : h.digital_access === 'phone_only' ? 'โทรศัพท์ปุ่มกด' : 'ไม่มีระบบสื่อสาร (ออฟไลน์)';
+      document.getElementById('hh-modal-type').innerText = `แบบบ้าน: ${h.house_type}`;
+
+      const resBox = document.getElementById('hh-modal-residents');
+      const residents = h.residents || [];
+      if (residents.length > 0) {
+        resBox.innerHTML = residents.map((r) => `
+          <div style="background:var(--surface-inset); border:1px solid var(--border-subtle); border-radius:6px; padding:8px; font-size:11px;">
+            <div style="font-weight:600; color:var(--text-primary);">${r.name} (${r.age} ปี)</div>
+            <div style="color:var(--text-secondary); margin-top:2px;">
+              ${r.is_bedridden ? '<span style="color:var(--apple-red); font-weight:600;">[ผู้ป่วยติดเตียง] </span>' : ''}
+              ${r.requires_oxygen ? `<span style="color:var(--apple-amber); font-weight:600;">[ใช้ออกซิเจน - สำรอง ${r.oxygen_reserve_mins} นาที] </span>` : ''}
+              ${r.mobility_constraint || 'สามารถเดินได้ปกติ'}
+            </div>
+          </div>
+        `).join('');
+      } else {
+        resBox.innerHTML = `
+          <div style="background:var(--surface-inset); border:1px solid var(--border-subtle); border-radius:6px; padding:8px; font-size:11px; color:var(--text-secondary);">
+            สมาชิกในครัวเรือน 3 ท่าน • ไม่มีผู้ป่วยติดเตียง • สภาพร่างกายพร้อมอพยพตามลำดับ
+          </div>
+        `;
+      }
+
+      openModal('household-modal');
+    }
+
+    async function updateHouseholdSafetyCurrent(accessStatus, areaRisk) {
+      if (!currentInspectedCode) return;
+      try {
+        const res = await fetch('/api/household/status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code: currentInspectedCode, access_status: accessStatus, area_risk: areaRisk }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          state = data.state;
+          renderApp();
+          closeModal('household-modal');
+          showToast('บันทึกสถานะครัวเรือนสำเร็จ', `อัปเดตสถานะ ${currentInspectedCode} เป็น "${accessStatus}" ลง SQLite เรียบร้อย`, 'success');
+        }
+      } catch (err) {
+        console.error('Update household status error:', err);
+      }
+    }
+
+    async function dispatchDoorKnockCurrent() {
+      if (!currentInspectedCode) return;
+      try {
+        const res = await fetch('/api/household/dispatch', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code: currentInspectedCode, team: 'Community Team 01', reason: `เคาะประตูสำรวจความปลอดภัยและส่งสิ่งของจำเป็นแก่บ้าน ${currentInspectedCode}` }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          state = data.state;
+          renderApp();
+          closeModal('household-modal');
+          showToast('ออกใบงานสำเร็จ', `สร้างภารกิจ ${data.taskCode} มอบหมายทีม Community Team 01 ลง SQLite แล้ว`, 'success');
+        }
+      } catch (err) {
+        console.error('Dispatch door-knock error:', err);
+      }
+    }
+
+    function focusCurrentHousehold3D() {
+      closeModal('household-modal');
+      const h = (state.households || []).find((x) => x.code === currentInspectedCode);
+      if (h) {
+        targetControlsTarget = new THREE.Vector3(h.coord_x, 2, -h.coord_y);
+        targetCamPos = new THREE.Vector3(h.coord_x + 14, 15, -h.coord_y + 16);
+      }
+    }
+
+    function inspectPlanA() {
+      targetControlsTarget = new THREE.Vector3(-7, 2, -60);
+      targetCamPos = new THREE.Vector3(8, 14, -42);
+      openModal('modal-plan-a');
+    }
+
+    function inspectPlanC() {
+      targetControlsTarget = new THREE.Vector3(71, 2, 22);
+      targetCamPos = new THREE.Vector3(88, 22, 45);
+      openModal('modal-plan-c');
+    }
+
+    async function resetPlanApproval() {
+      try {
+        const res = await fetch('/api/plan/reset', { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+          state = data.state;
+          renderApp();
+          showToast('รีเซ็ตแผนสำเร็จ', 'รีเซ็ตสถานะการอนุมัติ Plan B เรียบร้อยแล้ว', 'info');
+        }
+      } catch (err) {
+        console.error('Reset plan error:', err);
+      }
+    }
+
+    async function approvePlan() {
+      await fetch('/api/approve-plan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ planId: 'PLAN_B' }),
+      });
+      showToast('อนุมัติ Plan B สำเร็จ', 'สร้าง TASK #A-012 มอบหมายทีม Community Team 02 ลง SQLite แล้ว', 'success');
+      fetchState();
+    }
+
+    async function confirmArrival() {
+      try {
+        const res = await fetch('/api/task/status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'arrived' }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          state = data.state;
+          renderApp();
+          showToast('ยืนยันถึงพื้นที่แล้ว', 'Community Team 02 ถึงบ้าน A-012 แล้ว บันทึกลง SQLite เรียบร้อย', 'success');
+        }
+      } catch (err) {
+        console.error('Confirm arrival error:', err);
+      }
+    }
+
+    async function completeMission() {
+      try {
+        const res = await fetch('/api/task/status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'completed' }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          state = data.state;
+          renderApp();
+          showToast('ภารกิจสำเร็จลุล่วง', 'ส่งมอบยายสมจิตรถึงจุดการแพทย์ B และส่งต่อรถ EMS เรียบร้อยแล้ว', 'success');
+        }
+      } catch (err) {
+        console.error('Complete mission error:', err);
+      }
+    }
+
+    function setReportPreset(depth, submerged) {
+      document.getElementById('report-depth').value = depth;
+      document.getElementById('report-bridge-submerged').checked = submerged;
+    }
+
+    function setSosPreset(text, loc) {
+      document.getElementById('sos-text').value = text;
+      document.getElementById('sos-loc').value = loc;
+    }
+
+    async function submitFieldReport() {
+      const depth = Number(document.getElementById('report-depth').value) || 45;
+      const isSub = document.getElementById('report-bridge-submerged').checked;
+
+      await fetch('/api/field-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ depthCm: depth, isBridgeSubmerged: isSub }),
+      });
+
+      closeModal('report-modal');
+      showToast('ส่งรายงานสภาพน้ำแล้ว', `บันทึกระดับน้ำ ${depth} ซม. และสถานะสะพานไม้ลง SQLite แล้ว`, 'success');
+      fetchState();
+    }
+
+    async function submitSos() {
+      const text = document.getElementById('sos-text').value;
+      const loc = document.getElementById('sos-loc').value;
+
+      const res = await fetch('/api/voice-sos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, location: loc }),
+      });
+      const data = await res.json();
+
+      closeModal('sos-modal');
+      showToast('แจ้งเหตุฉุกเฉินสำเร็จ', `บันทึกคำร้อง ${data.incCode || ''} ลงฐานข้อมูล SQLite เรียบร้อยแล้ว`, 'success');
+      fetchState();
+    }
+
+// Mode switched via primary setAppMode
+
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) modal.classList.add('show');
+    }
+
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) modal.classList.remove('show');
+    }
+
+    // Dismiss modal when tapping the backdrop outside sheet
+    document.addEventListener('click', (e) => {
+      if (e.target && e.target.classList && e.target.classList.contains('modal-backdrop')) {
+        e.target.classList.remove('show');
+      }
+    });
+
+    // WebSocket Real-time Bus with Serverless Fallback
+    let wsAttempts = 0;
+    let fallbackPollInterval = null;
+
+    function initWebSocket() {
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      try {
+        const ws = new WebSocket(`${protocol}//${window.location.host}/ws`);
+
+        ws.onopen = () => {
+          wsAttempts = 0;
+          if (fallbackPollInterval) {
+            clearInterval(fallbackPollInterval);
+            fallbackPollInterval = null;
+          }
+        };
+
+        ws.onmessage = (event) => {
+          try {
+            const payload = JSON.parse(event.data);
+            if (payload.event === 'STATE_UPDATED') {
+              state = payload.data;
+              window.state = state;
+              renderApp();
+            }
+          } catch (e) {
+            console.error('WS error:', e);
+          }
+        };
+
+        ws.onerror = () => {
+          wsAttempts++;
+        };
+
+        ws.onclose = () => {
+          if (wsAttempts >= 2) {
+            if (!fallbackPollInterval) {
+              fallbackPollInterval = setInterval(fetchState, 4000);
+            }
+          } else {
+            setTimeout(initWebSocket, 2500);
+          }
+        };
+      } catch {
+        if (!fallbackPollInterval) {
+          fallbackPollInterval = setInterval(fetchState, 4000);
+        }
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      init3D();
+      fetchState();
+      initWebSocket();
+
+      // Register Offline Service Worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').then((reg) => {
+            console.log('[Community Shield] Offline Service Worker registered:', reg.scope);
+          }).catch((err) => {
+            console.warn('[Community Shield] Service Worker registration:', err);
+          });
+        });
+      }
+    });
+  </script>
+</body>
+</html>
