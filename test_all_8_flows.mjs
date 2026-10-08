@@ -110,7 +110,7 @@ async function run() {
 
   // Capture Flow 1 Screenshot
   const shotFlow1 = await send('Page.captureScreenshot', { format: 'png' });
-  fs.writeFileSync('/Users/dotmini/.gemini/antigravity/brain/6283b7ce-2c0c-4e51-9a52-a438a372094f/flow1_hydrology_checklist_verified.png', Buffer.from(shotFlow1.data, 'base64'));
+  fs.writeFileSync('./test_screenshots/flow1_hydrology_checklist_verified.png', Buffer.from(shotFlow1.data, 'base64'));
   console.log('✅ Flow 1 verified & saved to flow1_hydrology_checklist_verified.png');
 
   // ==========================================
@@ -141,7 +141,7 @@ async function run() {
   // Wait for 3D water animation and capture Flow 2 Screenshot
   await new Promise((r) => setTimeout(r, 1200));
   const shotFlow2 = await send('Page.captureScreenshot', { format: 'png' });
-  fs.writeFileSync('/Users/dotmini/.gemini/antigravity/brain/6283b7ce-2c0c-4e51-9a52-a438a372094f/flow2_whatif_rain_3d_verified.png', Buffer.from(shotFlow2.data, 'base64'));
+  fs.writeFileSync('./test_screenshots/flow2_whatif_rain_3d_verified.png', Buffer.from(shotFlow2.data, 'base64'));
   console.log('✅ Flow 2 verified & saved to flow2_whatif_rain_3d_verified.png');
 
   // Reset What-If simulation
@@ -183,7 +183,7 @@ async function run() {
 
   // Capture Flow 3 Screenshot
   const shotFlow3 = await send('Page.captureScreenshot', { format: 'png' });
-  fs.writeFileSync('/Users/dotmini/.gemini/antigravity/brain/6283b7ce-2c0c-4e51-9a52-a438a372094f/flow3_doorknock_dispatch_verified.png', Buffer.from(shotFlow3.data, 'base64'));
+  fs.writeFileSync('./test_screenshots/flow3_doorknock_dispatch_verified.png', Buffer.from(shotFlow3.data, 'base64'));
   console.log('✅ Flow 3 verified & saved to flow3_doorknock_dispatch_verified.png');
 
   // Close drawer
@@ -219,7 +219,7 @@ async function run() {
   // Wait for 3D route animation and capture Flow 4 Screenshot
   await new Promise((r) => setTimeout(r, 800));
   const shotFlow4 = await send('Page.captureScreenshot', { format: 'png' });
-  fs.writeFileSync('/Users/dotmini/.gemini/antigravity/brain/6283b7ce-2c0c-4e51-9a52-a438a372094f/flow4_planB_approval_route_verified.png', Buffer.from(shotFlow4.data, 'base64'));
+  fs.writeFileSync('./test_screenshots/flow4_planB_approval_route_verified.png', Buffer.from(shotFlow4.data, 'base64'));
   console.log('✅ Flow 4 verified & saved to flow4_planB_approval_route_verified.png');
 
   // ==========================================
@@ -284,7 +284,7 @@ async function run() {
 
   // Capture Flow 6 Screenshot in Mobile View
   const shotFlow6 = await send('Page.captureScreenshot', { format: 'png' });
-  fs.writeFileSync('/Users/dotmini/.gemini/antigravity/brain/6283b7ce-2c0c-4e51-9a52-a438a372094f/flow6_dynamic_replanning_mobile_verified.png', Buffer.from(shotFlow6.data, 'base64'));
+  fs.writeFileSync('./test_screenshots/flow6_dynamic_replanning_mobile_verified.png', Buffer.from(shotFlow6.data, 'base64'));
   console.log('✅ Flow 6 verified & saved to flow6_dynamic_replanning_mobile_verified.png');
 
   // Complete Mission
@@ -337,7 +337,7 @@ async function run() {
   // Capture Wildfire Mode Screenshot
   await new Promise((r) => setTimeout(r, 1000));
   const shotWildfire = await send('Page.captureScreenshot', { format: 'png' });
-  fs.writeFileSync('/Users/dotmini/.gemini/antigravity/brain/6283b7ce-2c0c-4e51-9a52-a438a372094f/flow7_wildfire_mode_verified.png', Buffer.from(shotWildfire.data, 'base64'));
+  fs.writeFileSync('./test_screenshots/flow7_wildfire_mode_verified.png', Buffer.from(shotWildfire.data, 'base64'));
   console.log('✅ Flow 7 Wildfire verified & saved to flow7_wildfire_mode_verified.png');
 
   // Switch back to flood
@@ -391,7 +391,7 @@ async function run() {
 
   // Capture final verified state screenshot
   const shotFlow8 = await send('Page.captureScreenshot', { format: 'png' });
-  fs.writeFileSync('/Users/dotmini/.gemini/antigravity/brain/6283b7ce-2c0c-4e51-9a52-a438a372094f/flow8_offline_restored_verified.png', Buffer.from(shotFlow8.data, 'base64'));
+  fs.writeFileSync('./test_screenshots/flow8_offline_restored_verified.png', Buffer.from(shotFlow8.data, 'base64'));
   console.log('✅ Flow 8 verified & saved to flow8_offline_restored_verified.png');
 
   ws.close();
