@@ -1,167 +1,166 @@
-# Community Shield (ประชาอารักษ์)
-### AI-Powered Community Disaster Resilience & Emergency Decision Support
-**กรณีศึกษา: ชุมชนวัดเทวราชกุญชร เขตดุสิต ริมแม่น้ำเจ้าพระยา กรุงเทพมหานคร**
+# Community Shield (ระบบประชาอารักษ์)
+### AI-Powered Community Disaster Resilience & Emergency Decision Support System
+**กรณีศึกษาเชิงพื้นที่: ชุมชนวัดเทวราชกุญชร แขวงวชิรพยาบาล เขตดุสิต กรุงเทพมหานคร**
 
 ---
 
-## 📖 แนะนำโครงการ (Project Overview)
+## 1. บทนำและขอบเขตโครงการ (Project Overview)
 
-**Community Shield (ประชาอารักษ์)** คือระบบสนับสนุนการตัดสินใจและการลงมือปฏิบัติการเพื่อรับมือภัยพิบัติในระดับชุมชนเมือง (Urban Community Disaster Resilience) ที่พัฒนาขึ้นโดยใช้ **100% Bun + React Native** ครอบคลุมทั้ง **Web App (ศูนย์บัญชาการเหตุการณ์)** และ **Mobile App (ทีมกู้ภัยภาคสนาม & ประชาชน)** จากฐานรหัสเดียว (Universal Monorepo)
+**Community Shield (ระบบประชาอารักษ์)** คือระบบสารสนเทศเพื่อการบริหารจัดการภาวะฉุกเฉินและสนับสนุนการตัดสินใจเชิงกลยุทธ์ในระดับชุมชนเมือง (Urban Community Disaster Resilience & Emergency Decision Support System) ถูกออกแบบขึ้นเพื่อแก้ปัญหาคอขวดของระบบเตือนภัยแบบดั้งเดิมที่จำกัดอยู่เพียงการแจ้งเตือนระดับน้ำ โดยยกระดับสู่กระบวนการตัดสินใจเชิงปฏิบัติการที่มีข้อมูลเชิงประจักษ์รองรับอย่างเป็นระบบ ตามวงจรปฏิบัติการ:
 
-ระบบถูกออกแบบมาเพื่อแก้ปัญหาของระบบเตือนภัยแบบดั้งเดิมที่ทำได้เพียง *"แจ้งเตือนว่าน้ำกำลังมา"* โดยยกระดับสู่ปรัชญา:
-$$\text{Data} \longrightarrow \text{Meaning} \longrightarrow \text{Decision} \longrightarrow \text{Action} \longrightarrow \text{Feedback}$$
+$$\text{Data (ข้อมูลสภาพแวดล้อม)} \longrightarrow \text{Meaning (การวิเคราะห์ผลกระทบ)} \longrightarrow \text{Decision (ข้อเสนอแนะเชิงกลยุทธ์)} \longrightarrow \text{Action (การปฏิบัติการภาคสนาม)} \longrightarrow \text{Feedback (การปรับปรุงข้อมูลย้อนกลับ)}$$
 
----
-
-## 🎯 ฟีเจอร์หลัก (Key Highlights จากเอกสารสรุป 60 ข้อ)
-
-1. **3D Interactive Community Simulation Viewport**:
-   - จำลองแผนผัง 3D ของชุมชนวัดเทวราชกุญชร (สเกล 200 x 190 เมตร) บ้าน 16 หลัง อาคารสาธารณะ 2 แห่ง สะพานข้ามคลอง และตรอกซอกซอย
-   - ผิวน้ำ 3D ยกตัวขึ้นแบบไดนามิกตามตัวเลื่อนเวลา (20:00 $\rightarrow$ 21:00 $\rightarrow$ 22:00) แสดงผลกระทบต่อน้ำท่วมทางเดินหน้าบ้าน A-012 แบบเรียลไทม์
-2. **Dual-Line Water Level & AI Forecast Chart**:
-   - 🟢 **เส้นสีเขียว (Actual)**: ระดับน้ำตรวจวัดจริงจากเซนเซอร์ (20:00 = 0.42m $\rightarrow$ 20:30 = 0.55m $\rightarrow$ 21:00 = 0.72m)
-   - 🟠 **เส้นสีส้ม (AI Forecast)**: พยากรณ์ระดับน้ำล่วงหน้าตามอัตราการเพิ่ม (+0.17m/30m) และปริมาณฝน (21:30 = 0.84m $\rightarrow$ 22:00 = 1.00m)
-   - ขีดระดับวิกฤต (Critical Threshold) 1.00 เมตร ชัดเจน
-3. **⏱️ Preparation Window (ช่วงเวลาเตรียมการ)**:
-   - แปลงผลการพยากรณ์เป็นเวลานับถอยหลัง (เช่น เหลือเวลา 2 ชั่วโมง) พร้อม Checklist ปฏิบัติการ 4 ด้าน:
-     - 👥 **คน (People)**: ตรวจสอบผู้ป่วยติดเตียงและครัวเรือนที่ไม่มีมือถือ
-     - 🗺️ **พื้นที่ (Area)**: ตรวจสะพานไม้ยกสูงและจุดระบายน้ำคอขวด
-     - 🚑 **ทรัพยากร (Resource)**: สแตนด์บายทีมกู้ภัย Community Team 02 และรถ EMS ณ จุด B
-     - 📋 **แผน (Plan)**: ตรวจสอบความจุศูนย์พักพิง Shelter A (100 คน / รับแล้ว 82 / เหลือ 18) และเส้นทาง รพ.วชิรพยาบาล
-4. **🎨 ระบบสีสถานะคู่ (Dual Status Color System)**:
-   - 🌊 **สีพื้นที่ = ระดับภัย**: 🟢 ปกติ | 🟡 เฝ้าระวัง | 🟠 เสี่ยงสูง | 🔴 วิกฤต
-   - 🏠 **สีบ้าน = สถานะการช่วยเหลือ**: 🟢 ยืนยันปลอดภัย | 🟡 ต้องติดตาม | 🟠 เข้าถึงยาก | 🔴 ต้องการความช่วยเหลือเร่งด่วน
-   - **หลักการสำคัญ**: *"ไม่มีมือถือ ≠ เสี่ยงสูง"* และ *"ไม่มีมือถือ ≠ ไม่มีตัวตนในระบบ"*
-5. **🚨 Killer Demo Scenario (บ้าน A-012 ยายสมจิตร)**:
-   - ผู้ป่วยติดเตียง อายุ 82 ปี ออกซิเจนสำรองเหลือ 90 นาที น้ำท่วมซอย 35 ซม. รถพยาบาลเข้าไม่ได้
-   - AI เปรียบเทียบ 3 แผน:
-     - **Plan A (Direct EMS)**: รถพยาบาลเข้าตรง $\rightarrow$ *[เป็นไปไม่ได้: ซอยแคบ น้ำท่วม]*
-     - **Plan B (Community Relay)**: **[แนะนำ 92%]** ทีมชุมชน 02 แบกเปลบนสะพานไม้ $\rightarrow$ จุด Medical Point B $\rightarrow$ ส่งต่อรถ EMS
-     - **Plan C (Early Evacuation)**: เข้า Shelter ชุมชน $\rightarrow$ *[เป็นไปไม่ได้: ศูนย์พักพิงใกล้เต็มและไม่มีออกซิเจนสำรอง]*
-   - **Human-in-the-loop**: ผู้บัญชาการกดปุ่ม `[อนุมัติ Plan B]` ระบบจึงจะออกใบงาน `TASK #A-012`
-6. **📱 Field Responder Mobile App & Dynamic Replanning**:
-   - ทีมกู้ภัยรับงานผ่านมือถือ: `รับงาน` $\rightarrow$ `เดินทาง` $\rightarrow$ `ถึงพื้นที่` $\rightarrow$ `รายงานหน้างาน`
-   - เมื่อทีมรายงานว่า *"สะพานไม้ทางแยก 2 จมน้ำ 45 ซม."* $\rightarrow$ ระบบขึ้นแบนเนอร์แจ้งเตือน ⚠️ *"DYNAMIC REPLANNING"* และคำนวณเส้นทางเลี่ยงผ่านหน้าศูนย์ชุมชนทันที!
+ระบบได้รับการพัฒนาภายใต้สถาปัตยกรรม Universal Monorepo โดยใช้ภาษา TypeScript ร่วมกับ Bun Runtime ครอบคลุมทั้งระบบบริหารสถานการณ์สำหรับศูนย์บัญชาการเหตุการณ์ (Command Center Web Application) และระบบสนับสนุนการทำงานสำหรับทีมกู้ภัยภาคสนามและประชาชน (Field Responder & Citizen Web/Mobile Application) จากฐานรหัสต้นฉบับเดียวกัน
 
 ---
 
-## 🛠️ โครงสร้างเทคโนโลยี (Technology Stack)
+## 2. ข้อมูลเชิงพื้นที่: ชุมชนวัดเทวราชกุญชร (Geographical Context)
 
-- **Runtime, Package Manager & API**: **Bun (v1.1+)**
-- **Frontend Core**: **React Native (Universal via Expo & React Native Web)**
-- **Styling**: **NativeWind / Tailwind CSS & React Native StyleSheet**
-- **3D Graphics**: **Three.js / React Three Fiber / WebGL**
-- **State Management**: **Zustand / React Context**
-- **Offline Storage**: **OP-SQLite / MMKV Storage**
+ชุมชนวัดเทวราชกุญชร เขตดุสิต กรุงเทพมหานคร เป็นชุมชนริมแม่น้ำเจ้าพระยาที่มีลักษณะทางกายภาพเฉพาะตัวและมีความเปราะบางต่อระดับน้ำขึ้น-น้ำลง และน้ำหลาก:
+- **ขอบเขตพื้นที่จำลอง**: ประมาณ 200 x 190 เมตร ครอบคลุมบ้านเรือน 16 หลังคาเรือน (รหัสสำรวจ A-001 ถึง A-016) และอาคารสาธารณะ 2 แห่ง
+- **ข้อจำกัดทางกายภาพ**: ตรอกซอกซอยภายในชุมชนมีความคับแคบ ยานพาหนะขนาดใหญ่หรือรถพยาบาลฉุกเฉินไม่สามารถสัญจรเข้าถึงได้โดยตรง การเดินทางภายในต้องพึ่งพาสะพานไม้ยกสูงเป็นเส้นทางหลัก
+- **ประชากรกลุ่มเปราะบาง**: มีสัดส่วนผู้สูงอายุและผู้ป่วยติดเตียงที่จำเป็นต้องได้รับการอพยพตามลำดับความสำคัญ เช่น กรณีบ้าน A-012 (ผู้ป่วยติดเตียงที่ต้องการออกซิเจนบำบัดต่อเนื่อง)
+- **หลักการออกแบบการคุ้มครองสิทธิ**: การไม่มีอุปกรณ์สื่อสารเคลื่อนที่ไม่ถูกนำมาเป็นเงื่อนไขในการลดระดับความสำคัญ โดยยึดหลักเกณฑ์ "ไม่มีโทรศัพท์เคลื่อนที่ ไม่เท่ากับ มีความเสี่ยงสูง" และ "ไม่มีโทรศัพท์เคลื่อนที่ ไม่เท่ากับ ไม่มีตัวตนในระบบฐานข้อมูล"
 
 ---
 
-## 🚀 วิธีการติดตั้งและรันโปรเจกต์ (Getting Started with Bun)
+## 3. สถาปัตยกรรมและขีดความสามารถหลัก (Core Capabilities)
 
-### 1. ติดตั้ง Dependencies
+### 3.1 การจำลองสถานการณ์ 3 มิติเชิงปฏิสัมพันธ์ (3D Environmental Simulation)
+- พัฒนาด้วย Three.js และ WebGL จำลองสภาพแวดล้อม ภูมิประเทศ สิ่งปลูกสร้าง และผิวน้ำที่ตอบสนองต่อระดับน้ำทางอุทกวิทยาแบบเรียลไทม์
+- ระบบจำลองการท่วมถึงของน้ำตามระดับความสูงของพื้นที่ (Elevation Mapping) และแสดงผลการตัดขาดของเส้นทางสัญจร (สะพานไม้และทางเดินเท้า)
+- รองรับการจำลองสถานการณ์ภัยพิบัติหลากหลายรูปแบบ (Multi-hazard Scenarios): อุทกภัย (Riverine Flood), ดินถล่ม (Landslide), อัคคีภัย (Fire Incident), แผ่นดินไหว (Earthquake), และคลื่นสึนามิ (Tsunami)
+
+### 3.2 ระบบพยากรณ์และหน้าต่างเวลาเตรียมการ (Dual-Line Forecasting & Preparation Window)
+- **การวิเคราะห์ข้อมูลน้ำแบบเส้นคู่ (Dual-Line Hydrological Tracking)**:
+  - ระดับน้ำจริงที่ตรวจวัดได้จากโครงข่ายเซนเซอร์ (Actual Water Level)
+  - เส้นพยากรณ์ล่วงหน้า (AI Trend & Rainfall Forecast) คำนวณจากอัตราการเปลี่ยนแปลงระดับน้ำและปริมาณน้ำฝนสะสม
+- **หน้าต่างเวลาในการปฏิบัติการ (Operational Preparation Window)**:
+  - แปลงข้อมูลแนวโน้มทางอุทกวิทยาเป็นระยะเวลานับถอยหลังก่อนถึงเกณฑ์วิกฤต (Critical Threshold 1.00 เมตร)
+  - รายการตรวจสอบความพร้อม 4 มิติ (Readiness Verification Matrix):
+    - ด้านบุคคล (People): ตรวจสอบสถานะกลุ่มเปราะบางและผู้ป่วยติดเตียง
+    - ด้านกายภาพ (Area): ตรวจสอบจุดระบายน้ำและระดับความสูงของสะพานทางเดิน
+    - ด้านทรัพยากร (Resource): จัดเตรียมกำลังพล ทีมกู้ภัยชุมชน และจุดนัดพบรถพยาบาลฉุกเฉิน (EMS Rendezvous Point)
+    - ด้านแผนการรองรับ (Plan): บริหารจัดการความจุศูนย์พักพิงชั่วคราวและการประสานส่งต่อโรงพยาบาลวชิรพยาบาล
+
+### 3.3 ระบบสนับสนุนการตัดสินใจและการปรับแผนแบบพลวัต (DSS & Dynamic Replanning)
+- ประเมินและเปรียบเทียบแผนปฏิบัติการฉุกเฉิน 3 รูปแบบ (Plan A / B / C) ตามข้อจำกัดทางกายภาพและระดับความเสี่ยง
+- สถาปัตยกรรมแบบ Human-in-the-Loop โดยระบบทำหน้าที่เสนอแนะทางเลือกพร้อมดัชนีความน่าเชื่อถือ และต้องได้รับการอนุมัติจากผู้บัญชาการเหตุการณ์ก่อนออกคำสั่งการ
+- การปรับแผนปฏิบัติการแบบพลวัต (Dynamic Replanning): เมื่อเจ้าหน้าที่ภาคสนามรายงานอุปสรรคที่ไม่คาดคิด (เช่น ทางเดินถูกน้ำท่วมตัดขาด) ระบบจะทำการคำนวณเส้นทางสำรองและปรับใบงานใหม่ทันทีโดยอัตโนมัติ
+
+---
+
+## 4. โครงสร้างสถาปัตยกรรมซอฟต์แวร์ (System Architecture)
+
+```
+Thai_Community/
+├── apps/
+│   ├── api/                             # Backend Service (Bun.serve & WebSocket Bus)
+│   │   ├── src/index.ts                 # REST API, WebSocket Engine, SQLite Database
+│   │   └── package.json
+│   └── app/                             # Universal Client Application (React Native Web / PWA)
+│       ├── src/
+│       │   ├── App.tsx                  # Root Application Component
+│       │   ├── components/              # Modular UI & Simulation Components
+│       │   │   ├── Community3DViewer.tsx# Three.js 3D Viewport & Simulation Engine
+│       │   │   ├── WaterLevelChart.tsx  # Dual-Line Hydrological Forecast Chart
+│       │   │   ├── PreparationWindowCard.tsx # Operational Preparation Countdown & Checklist
+│       │   │   ├── HouseholdsBoard.tsx  # Dual-Status Household Monitoring Board
+│       │   │   ├── DecisionPanel.tsx    # Multi-Plan Evaluation & Commander Authorization
+│       │   │   ├── MobileFieldTaskView.tsx # Mobile Interface for Responders
+│       │   │   ├── FieldReportModal.tsx # Incident Reporting Modal
+│       │   │   ├── CitizenSosModal.tsx  # Citizen Emergency SOS Interface
+│       │   │   └── ReplanningBanner.tsx # Dynamic Replanning Notification Bar
+│       │   └── index.tsx                # Client Entrypoint
+│       └── package.json
+├── packages/
+│   └── shared/                          # Universal Shared Domain & Business Logic
+│       ├── src/
+│       │   ├── types/index.ts           # Unified TypeScript Interfaces & Types
+│       │   ├── constants/index.ts       # Community Baseline, Household Profiles, Plans
+│       │   └── utils/index.ts           # Hydrological Algorithms & Risk Assessment Logic
+│       └── package.json
+├── public/                              # Production Assets, 3D GLB Models, PWA Manifest
+│   ├── model.glb                        # Community 3D Model Asset (Meshopt Optimized)
+│   ├── manifest.json                    # Progressive Web App Manifest
+│   └── sw.js                            # Offline Service Worker Caching Layer
+├── server/                              # High-Performance Production Server Engine
+├── deploy_to_vercel.py                  # Automated Cloud Deployment Engine via REST API
+├── package.json                         # Monorepo Workspace Configuration
+└── tsconfig.json                        # Monorepo TypeScript Compiler Configuration
+```
+
+---
+
+## 5. เทคโนโลยีหลักที่ใช้ (Technology Stack)
+
+| องค์ประกอบ | เทคโนโลยีที่เลือกใช้ | รายละเอียดทางเทคนิค |
+| :--- | :--- | :--- |
+| **Runtime & Toolchain** | Bun (v1.1+) | High-performance JavaScript/TypeScript Runtime, Bundler, and Package Manager |
+| **Frontend Framework** | React Native (Web / Universal) | สถาปัตยกรรมร่วม รองรับการทำงานทั้งบนเว็บเบราว์เซอร์และอุปกรณ์พกพา |
+| **3D Rendering Engine** | Three.js / WebGL | การเรนเดอร์แบบจำลองสิ่งแวดล้อม 3 มิติ และผิวน้ำทางอุทกวิทยา |
+| **Local Database** | SQLite (WAL Mode) | จัดเก็บสถานะครัวเรือน บันทึกการปฏิบัติงาน และข้อมูลเซนเซอร์ในระดับโลคอล |
+| **Offline Architecture** | Service Worker API & Cache Storage | รองรับการทำงานในภาวะสัญญาณอินเทอร์เน็ตขัดข้อง (PWA Offline First) |
+| **Styling & Design System** | Tailwind CSS / CSS3 / iOS Human Interface Guidelines | รองรับ Responsive Layout เต็มรูปแบบทั้ง Desktop และ Mobile Viewport |
+
+---
+
+## 6. ข้อกำหนดการติดตั้งและการเรียกใช้งาน (Installation & Execution)
+
+### 6.1 ความต้องการพื้นฐานของระบบ (Prerequisites)
+- [Bun Runtime](https://bun.sh) เวอร์ชัน 1.1.0 ขึ้นไป
+- เว็บเบราว์เซอร์ที่รองรับเทคโนโลยี WebGL 2.0 (เช่น Google Chrome, Safari, Microsoft Edge, Firefox)
+
+### 6.2 การติดตั้งแพ็กเกจ (Dependencies Installation)
 ```bash
 bun install
 ```
 
-### 2. รัน Bun Backend API Server (Port 3001)
+### 6.3 การรันระบบในสภาพแวดล้อมการพัฒนา (Development Mode)
 ```bash
+# รัน Bun Backend API & WebSocket Server
 bun run dev:api
-```
-*API Endpoints พร้อมใช้งานที่ `http://localhost:3001` (WebSocket: `ws://localhost:3001/ws`)*
 
-### 3. รัน Universal React Native App (Web & Mobile)
-```bash
+# รัน Universal Web & Mobile Client Application
 bun run dev:app
 ```
-*เปิดดูผ่าน Web Browser ที่ `http://localhost:8081` หรือเปิดผ่าน Expo Go บนอุปกรณ์ iOS/Android*
 
----
-
-## 📂 โครงสร้างไฟล์ในโครงการ
-
-```text
-Thai_Community/
-├── package.json                         # Bun workspace configuration
-├── tsconfig.json                        # TypeScript base configuration
-├── COMMUNITY_SHIELD_ARCHITECTURE_PLAN.md# พิมพ์เขียวสถาปัตยกรรมระบบฉบับเต็ม
-│
-├── apps/
-│   ├── api/                             # Bun Backend Server
-│   │   ├── src/index.ts                 # High-Performance Bun.serve & WebSockets
-│   │   └── package.json
-│   │
-│   └── app/                             # Universal React Native (Web + Mobile)
-│       ├── src/
-│       │   ├── App.tsx                  # แอปพลิเคชันหลัก Universal App
-│       │   ├── components/
-│       │   │   ├── Header.tsx           # แถบหัวระบบ & สลับโหมด Desktop/Mobile
-│       │   │   ├── TimelineControls.tsx # แถบเลื่อนเวลาจำลองสถานการณ์ 8 ขั้น
-│       │   │   ├── Community3DViewer.tsx# 3D Viewport ผิวน้ำไดนามิก & หมุด A-012
-│       │   │   ├── WaterLevelChart.tsx  # กราฟเส้นเขียว/ส้ม & อัตราการเพิ่ม
-│       │   │   ├── PreparationWindowCard.tsx # ⏱️ นับถอยหลัง 2 ชม. & Checklist
-│       │   │   ├── HouseholdsBoard.tsx  # ตารางสถานะคู่ 16 หลังคาเรือน
-│       │   │   ├── DecisionPanel.tsx    # แผง 3 แผนช่วยเหลือ & ปุ่มอนุมัติ จนท.
-│       │   │   ├── MobileFieldTaskView.tsx # หน้าจอมือถือทีมกู้ภัยภาคสนาม
-│       │   │   ├── FieldReportModal.tsx # ฟอร์มรายงานระดับน้ำ & สะพานไม้จม
-│       │   │   ├── CitizenSosModal.tsx  # แจ้งเหตุฉุกเฉิน & บันทึกเสียงประชาชน
-│       │   │   └── ReplanningBanner.tsx # แบนเนอร์เตือน Dynamic Replanning
-│       │   └── index.tsx                # Entrypoint
-│       ├── app.json                     # Expo configuration
-│       ├── metro.config.js              # Metro bundler config
-│       └── package.json
-│
-└── packages/
-    └── shared/                          # โมเดลและฟังก์ชันที่แชร์กัน 100%
-        ├── src/
-        │   ├── types/index.ts           # Type definitions
-        │   ├── constants/index.ts       # ฐานข้อมูลบ้าน 16 หลัง, แผน A/B/C, Timeline
-        │   ├── utils/index.ts           # AI Explainability, คำนวณความเสี่ยง
-        │   └── index.ts
-        └── package.json
-```
-
----
-
-## 🎬 ขั้นตอนการสาธิตระบบ (Killer Demo Walkthrough)
-
-1. **20:00 น.**: สังเกตกราฟระดับน้ำจริง (เส้นเขียว) อยู่ที่ 0.42 m อัตราเพิ่ม +0.17 m / 30 นาที ฝนตกต่อเนื่อง
-2. **20:10 น.**: AI Forecast พยากรณ์ระดับน้ำแตะ 1.00 m เวลา 22:00 น. (เส้นส้ม) $\rightarrow$ ระบบเปิดโหมด **⏱️ Preparation Window ≈ 2 ชั่วโมง**
-3. **20:15 น.**: แผนที่และ 3D ปรับ Zone C เป็นสีส้ม (เสี่ยงสูง) จากสภาพพื้นที่ต่ำและน้ำระบายช้า
-4. **20:20 น.**: เกิดเหตุวิกฤต **บ้าน A-012** (ยายสมจิตร ผู้ป่วยติดเตียง ออกซิเจนสำรองเหลือ 90 นาที น้ำท่วมซอย 35 ซม.)
-5. **20:22 น.**: AI เสนอ 3 แผนช่วยเหลือบนแผงควบคุม โดยแนะนำ **Plan B (Community Relay)**
-6. **20:23 น.**: ผู้บัญชาการกดปุ่ม **`[✓ อนุมัติ Plan B]`** $\rightarrow$ ระบบออกใบงาน **TASK #A-012** มอบหมายทีม Community Team 02
-7. **20:30 น.**: กดสลับเป็นโหมด **📱 ทีมกู้ภัยภาคสนาม** $\rightarrow$ กด `[ถ่ายภาพ & รายงานระดับน้ำจริง]` ระบุสะพานไม้แยก 2 จมน้ำ 45 ซม.
-8. **20:32 น.**: ระบบเด้งแบนเนอร์ **⚠️ DYNAMIC REPLANNING** แสดงเส้นทางเลี่ยงผ่านหน้าศูนย์ชุมชน นำส่งผู้ป่วยต่อรถพยาบาล EMS สู่ รพ.วชิรพยาบาล ได้อย่างปลอดภัย!
-
----
-
-## 🚀 การติดตั้งและเปิดใช้งานจริง (Production Deployment)
-
-ระบบได้รับการแพ็กเกจเป็น **Standalone Native Executable** รันบน External SSD (`/Volumes/MAC/Thai_Community`) สมบูรณ์ 100%
-
-### คำสั่งควบคุมระบบ (CLI Operations)
+### 6.4 สคริปต์ควบคุมการทำงานของระบบ (Service Control Scripts)
+ระบบมาพร้อมกับเชลล์สคริปต์สำหรับการบริหารจัดการการทำงานในระดับเบื้องหลัง:
 ```bash
-# 1. คอมไพล์โปรดักชันไบนารี และตรวจเช็กความพร้อมระบบ
-/Volumes/MAC/Thai_Community/deploy.sh
+# เริ่มการทำงานของระบบในโหมดเบื้องหลัง (Background Daemon)
+./start.sh
 
-# 2. เริ่มการทำงานของเซอร์วิสในเบื้องหลัง (Port 3000)
-/Volumes/MAC/Thai_Community/start.sh
+# ตรวจสอบสถานะการทำงาน หน่วยความจำ และทราฟฟิกเครือข่าย
+./status.sh
 
-# 3. ตรวจสอบสถานะการทำงาน, อัตราใช้ RAM, และระดับน้ำปัจจุบัน
-/Volumes/MAC/Thai_Community/status.sh
-
-# 4. หยุดการทำงานของเซอร์วิสอย่างปลอดภัย
-/Volumes/MAC/Thai_Community/stop.sh
+# สั่งหยุดการทำงานของระบบอย่างปลอดภัย (Graceful Shutdown)
+./stop.sh
 ```
 
-### จุดเชื่อมต่อระบบ (Network Access Endpoints)
-- **🌐 Vercel Cloud Production (ออนไลน์ทั่วโลก)**: [https://thai-community-shield.vercel.app](https://thai-community-shield.vercel.app)
-- **🖥️ ศูนย์บัญชาการทัองถิ่น (Local Command Center)**: [http://localhost:3000](http://localhost:3000)
-- **📱 ทีมกู้ภัยภาคสนาม (Field Responders บน Wi-Fi / Hotspot)**: `http://172.20.10.2:3000`
-- **⚡ Real-time Live WebSocket Bus**: `ws://localhost:3000/ws`
-- **💓 Health Check Endpoint**: `http://localhost:3000/api/health` หรือ `https://thai-community-shield.vercel.app/api/health`
-- **🧊 3D Community Model CDN**: `https://thai-community-shield.vercel.app/model.glb` (9.1 MB)
-- **📶 PWA & Offline Disaster Resilience**: รองรับการกด "Add to Home Screen" บน iOS Safari และ Android Chrome พร้อม Service Worker แคชโมเดล 3 มิติและส่วนติดต่อผู้ใช้ออฟไลน์ 100%
-- **📱 Mobile-First Responsive Apple HIG**: หน้าต่าง Modal ทุกบานแปลงเป็น iOS Bottom Sheet อัตโนมัติเมื่อเปิดบนสมาร์ตโฟน พร้อมรองรับ Dynamic Island และ Safe-Area Insets เต็มรูปแบบ
+---
 
+## 7. จุดเชื่อมต่อระบบและสเปกเครือข่าย (Network Endpoints)
 
+| บริการ | โปรโตคอล / URL | วัตถุประสงค์ |
+| :--- | :--- | :--- |
+| **ศูนย์บัญชาการท้องถิ่น (Local Command Center)** | `http://localhost:3000` | หน้าควบคุมหลักสำหรับศูนย์บัญชาการและมอนิเตอร์สถานการณ์ |
+| **เครือข่ายเฉพาะที่สำหรับทีมกู้ภัย (LAN/Hotspot)** | `http://<HOST_IP>:3000` | จุดเชื่อมต่อสำหรับเจ้าหน้าที่กู้ภัยผ่านสมาร์ตโฟนในสนาม |
+| **ระบบส่งผ่านข้อมูลแบบเรียลไทม์ (Live WebSocket)** | `ws://localhost:3000/ws` | ส่งสัญญาณปรับปรุงระดับน้ำ สถานะงาน และตำแหน่งบุคลากร |
+| **ระบบตรวจสอบสถานะระบบ (Health Check)** | `http://localhost:3000/api/health` | การตรวจสอบสถานะความพร้อมของเซอร์วิสและฐานข้อมูล |
+| **ศูนย์บริการบนคลาวด์ (Production Cloud Endpoint)** | `https://thai-community-shield.vercel.app` | การเข้าถึงระบบผ่านเครือข่ายสาธารณะผ่าน Vercel Production |
+
+---
+
+## 8. การทดสอบและการรับรองความเข้ากันได้ (Verification & Compatibility)
+
+- **การทดสอบความพร้อมใช้งานออฟไลน์ (Offline-First Verification)**: ตรวจสอบการทำงานของ Service Worker ในการแคชโมเดล 3D (`model.glb`) และ Asset ที่จำเป็นทั้งหมด เพื่อให้ระบบสามารถจำลองสถานการณ์ได้ต่อเนื่องแม้โครงข่ายอินเทอร์เน็ตหลักถูกตัดขาด
+- **การทดสอบการตอบสนองต่อขนาดหน้าจอ (Responsive Viewport Testing)**: ผ่านการทดสอบอย่างสมบูรณ์ทั้งบน Desktop (1920x1080), Tablet, และ Mobile Viewport (390x844 iPhone Standard) โดยองค์ประกอบ UI จะปรับเปลี่ยนเป็น Mobile Bottom Sheet ตามมาตรฐาน iOS HIG โดยอัตโนมัติ
+
+---
+
+## 9. ข้อมูลลิขสิทธิ์และการเผยแพร่ (License & Governance)
+
+โครงการนี้จัดทำขึ้นเพื่อการศึกษา วิจัย และพัฒนาความพร้อมในการรับมือภัยพิบัติของชุมชนเมือง ภายใต้สิทธิ์แบบเปิด (Open Source Software)
+- Repository: [https://github.com/XevilA/thai-community-shield](https://github.com/XevilA/thai-community-shield)
+- บัญชีผู้พัฒนา: [@XevilA](https://github.com/XevilA)
