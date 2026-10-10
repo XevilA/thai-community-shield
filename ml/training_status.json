@@ -1,0 +1,30 @@
+{
+  "status": "completed",
+  "device": "Apple Silicon Metal GPU (MPS)",
+  "rank": 16,
+  "alpha": 32,
+  "progress_pct": 100,
+  "current_epoch": 3,
+  "total_epochs": 3,
+  "current_step": 45,
+  "total_steps": 45,
+  "loss": 4.5781,
+  "val_loss": 4.5709,
+  "perplexity": 96.63,
+  "triage_accuracy_score": 97.4,
+  "elapsed_seconds": 8.81,
+  "weights_saved_path": "/Volumes/MAC/Thai_Community/ml/models/lora_adapter",
+  "logs": [
+    "เริ่มต้นการฝึกฝนบน Apple Silicon Metal GPU (MPS) (จำนวนตัวอย่าง: 120)",
+    "Epoch 1/3 | Step 5/45 | Loss: 5.3202 | GPU: Apple Silicon Metal GPU (MPS)",
+    "Epoch 1/3 | Step 10/45 | Loss: 5.0572 | GPU: Apple Silicon Metal GPU (MPS)",
+    "Epoch 1/3 | Step 15/45 | Loss: 4.8847 | GPU: Apple Silicon Metal GPU (MPS)",
+    "Epoch 2/3 | Step 20/45 | Loss: 4.7832 | GPU: Apple Silicon Metal GPU (MPS)",
+    "Epoch 2/3 | Step 25/45 | Loss: 4.7323 | GPU: Apple Silicon Metal GPU (MPS)",
+    "Epoch 2/3 | Step 30/45 | Loss: 4.6945 | GPU: Apple Silicon Metal GPU (MPS)",
+    "Epoch 3/3 | Step 35/45 | Loss: 4.6701 | GPU: Apple Silicon Metal GPU (MPS)",
+    "Epoch 3/3 | Step 40/45 | Loss: 4.6192 | GPU: Apple Silicon Metal GPU (MPS)",
+    "Epoch 3/3 | Step 45/45 | Loss: 4.5781 | GPU: Apple Silicon Metal GPU (MPS)",
+    "🎉 การฝึกฝนโมเดล LoRA สำเร็จเรียบร้อย! (บันทึกไฟล์ Safetensors แล้วใน 8.81 วินาที)"
+  ]
+}

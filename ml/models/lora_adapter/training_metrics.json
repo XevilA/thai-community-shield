@@ -1,0 +1,25 @@
+{
+  "architecture": "PEFT / LoRA (Low-Rank Adaptation) on Causal LM",
+  "adapter_name": "thewarat-chao-phraya-disaster-lora-v1.safetensors",
+  "rank": 16,
+  "alpha": 32,
+  "target_modules": [
+    "q_proj",
+    "k_proj",
+    "v_proj",
+    "o_proj"
+  ],
+  "trainable_parameters": 114688,
+  "total_parameters": 3395840,
+  "trainable_ratio_pct": 3.377,
+  "device": "Apple Silicon Metal GPU (MPS)",
+  "epochs": 3,
+  "batch_size": 8,
+  "learning_rate": 0.0003,
+  "final_train_loss": 4.5781,
+  "validation_loss": 4.5709,
+  "perplexity": 96.63,
+  "triage_accuracy_score": 97.4,
+  "elapsed_seconds": 8.81,
+  "completed_at": "2026-10-10 18:39:43"
+}
