@@ -6,8 +6,7 @@
 
 import { initDatabase, db, resetDatabaseToBaseline, getLatestLoraPacket, getAllLoraPackets } from './db';
 import { calculateRiverWaterLevel, calculateWaterDepthCm } from './hydrology';
-import { findShortestPath, evaluateAllPlans } from './router';
-import { explainRiskAssessment, parseCitizenVoiceReport, LORA_AI_SPECS, getLoraAiModelSpecs, getLoraTrainingStatus, runLoraAiAnalysis, queryLoraAiCopilot } from './ai';
+import { explainRiskAssessment, parseCitizenVoiceReport, LORA_AI_SPECS, getLoraAiModelSpecs, runLoraAiAnalysis, queryLoraAiCopilot } from './ai';
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
@@ -857,45 +856,6 @@ const server = (Bun as any).serve({
         return json({
           success: true,
           model: getLoraAiModelSpecs()
-        });
-      }
-
-      if (url.pathname === '/api/lora/train' && req.method === 'POST') {
-        return (async () => {
-          const body = await req.json().catch(() => ({}));
-          const epochs = body.epochs || 3;
-          const batchSize = body.batchSize || 8;
-          const limitSamples = body.limitSamples || 120;
-          
-          try {
-            const proc = Bun.spawn([
-              "python3",
-              "/Volumes/MAC/Thai_Community/ml/train_lora.py",
-              "--epochs", String(epochs),
-              "--batch-size", String(batchSize),
-              "--limit-samples", String(limitSamples)
-            ], {
-              stdout: "pipe",
-              stderr: "pipe"
-            });
-
-            return json({
-              success: true,
-              message: "การฝึกสอน LoRA Adapter เริ่มต้นขึ้นแล้วบน Apple Silicon Metal GPU (MPS)",
-              pid: proc.pid,
-              epochs,
-              batchSize
-            });
-          } catch (err: any) {
-            return json({ success: false, error: String(err) }, 500);
-          }
-        })();
-      }
-
-      if (url.pathname === '/api/lora/train-status') {
-        return json({
-          success: true,
-          status: getLoraTrainingStatus()
         });
       }
 
