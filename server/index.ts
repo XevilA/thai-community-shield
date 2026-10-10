@@ -6,6 +6,7 @@
 
 import { initDatabase, db, resetDatabaseToBaseline, getLatestLoraPacket, getAllLoraPackets } from './db';
 import { calculateRiverWaterLevel, calculateWaterDepthCm } from './hydrology';
+import { findShortestPath, evaluateAllPlans } from './router';
 import { explainRiskAssessment, parseCitizenVoiceReport, LORA_AI_SPECS, getLoraAiModelSpecs, runLoraAiAnalysis, queryLoraAiCopilot } from './ai';
 import fs from 'fs';
 import path from 'path';
