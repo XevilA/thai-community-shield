@@ -4,7 +4,7 @@
  * Version: 1.1.0 (Zero-latency 3D, Cache-First for 3D/Vendor Assets)
  */
 
-const CACHE_NAME = 'community-shield-v1.3.0';
+const CACHE_NAME = 'community-shield-v1.4.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
