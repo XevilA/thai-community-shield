@@ -896,7 +896,9 @@ export default async function handler(req: any, res: any) {
           snrDb: latestLora ? latestLora.snr_db : 9.5
         },
         latestPacket: latestLora,
+        latest_packet: latestLora,
         packetHistory: liveLoraPackets.slice(0, 15),
+        recent_packets: liveLoraPackets.slice(0, 15),
         loraAiModel: LORA_AI_SPECS,
         loraAiAnalysis: runLoraAiAnalysis(latestLora, getSystemState())
       });

@@ -7180,39 +7180,42 @@
 
     function updateLoraModalUI(data) {
       if (!data) return;
-      const pkt = data.latest_packet;
+      const pkt = data.latest_packet || data.latestPacket;
       if (pkt) {
         const gwEl = document.getElementById('lora-gw-id');
-        if (gwEl) gwEl.innerText = pkt.gateway_id || 'GW-THEWARAT-BELF-01';
+        if (gwEl) gwEl.innerText = pkt.gateway_id || pkt.gatewayId || 'GW-THEWARAT-BELF-01';
 
         const rfQEl = document.getElementById('lora-rf-quality');
-        if (rfQEl) rfQEl.innerText = `RSSI: ${pkt.rssi_dbm} dBm | SNR: +${pkt.snr_db} dB`;
+        if (rfQEl) rfQEl.innerText = `RSSI: ${pkt.rssi_dbm ?? pkt.rssiDbm} dBm | SNR: +${pkt.snr_db ?? pkt.snrDb} dB`;
 
         const rfDetEl = document.getElementById('lora-rf-details');
-        if (rfDetEl) rfDetEl.innerText = `Freq: ${pkt.frequency_mhz} MHz | ${pkt.spreading_factor} / BW 125kHz`;
+        if (rfDetEl) rfDetEl.innerText = `Freq: ${pkt.frequency_mhz ?? pkt.frequencyMhz} MHz | ${pkt.spreading_factor ?? pkt.spreadingFactor} / BW 125kHz`;
 
         const batEl = document.getElementById('lora-battery-status');
-        if (batEl) batEl.innerText = `${pkt.battery_volts}V (${pkt.battery_pct}% คงเหลือ)`;
+        if (batEl) batEl.innerText = `${pkt.battery_volts ?? pkt.batteryVolts}V (${pkt.battery_pct ?? pkt.batteryPct}% คงเหลือ)`;
 
+        const waterLevel = pkt.water_level_m ?? pkt.waterLevelM ?? 0.42;
+        const tempVal = pkt.temp_c ?? pkt.tempC ?? 28.4;
         const waterEl = document.getElementById('lora-water-reading');
-        if (waterEl) waterEl.innerText = `+${pkt.water_level_m.toFixed(2)} ม. รทก. (${pkt.temp_c}°C)`;
+        if (waterEl) waterEl.innerText = `+${Number(waterLevel).toFixed(2)} ม. รทก. (${tempVal}°C)`;
 
         const timeEl = document.getElementById('lora-last-packet-time');
-        if (timeEl) timeEl.innerText = `อัปเดตล่าสุด: ${pkt.timestamp_time || 'เมื่อสักครู่'} (FCnt: #${pkt.f_cnt})`;
+        if (timeEl) timeEl.innerText = `อัปเดตล่าสุด: ${pkt.timestamp_time ?? pkt.timestampTime ?? 'เมื่อสักครู่'} (FCnt: #${pkt.f_cnt ?? pkt.fCnt ?? 1482})`;
 
         const hexEl = document.getElementById('lora-payload-hex');
-        if (hexEl) hexEl.innerText = pkt.raw_payload || '0167011C027301A403020058';
+        if (hexEl) hexEl.innerText = pkt.raw_payload ?? pkt.rawPayload ?? '0167011C027301A403020058';
 
         // Update header & HUD badges
         const hdrLabel = document.getElementById('hdr-lora-label-desktop');
-        if (hdrLabel) hdrLabel.innerText = `📡 LoRa: AS923 (${pkt.rssi_dbm}dBm)`;
+        if (hdrLabel) hdrLabel.innerText = `📡 LoRa: AS923 (${pkt.rssi_dbm ?? pkt.rssiDbm}dBm)`;
         const hudText = document.getElementById('lora-hud-text');
-        if (hudText) hudText.innerText = `📡 LoRa AS923: ${pkt.spreading_factor} | RSSI ${pkt.rssi_dbm} dBm | โหนดท่าน้ำ ➔ หอระฆัง`;
+        if (hudText) hudText.innerText = `📡 LoRa AS923: ${pkt.spreading_factor ?? pkt.spreadingFactor} | RSSI ${pkt.rssi_dbm ?? pkt.rssiDbm} dBm | โหนดท่าน้ำ ➔ หอระฆัง`;
       }
 
-      if (data.recent_packets) {
-        window._cachedLoraPackets = data.recent_packets;
-        renderLoraPacketsTable(data.recent_packets);
+      const packets = data.recent_packets || data.packetHistory;
+      if (packets) {
+        window._cachedLoraPackets = packets;
+        renderLoraPacketsTable(packets);
       }
       if (data.loraAiAnalysis) {
         updateLoraAiUI(data.loraAiAnalysis);
