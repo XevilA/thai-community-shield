@@ -127,18 +127,18 @@ import fs from 'fs';
 import path from 'path';
 
 export const LORA_AI_SPECS: LoraAiModelMetadata = {
-  architecture: 'PEFT / LoRA (Low-Rank Adaptation) on Decoder-Only LLM',
-  baseModel: 'Qwen-2.5-7B-Instruct (GGUF Q4_K_M)',
+  architecture: 'PEFT / LoRA (Low-Rank Adaptation) on Ultra-Compact Causal LM',
+  baseModel: 'Qwen-2.5-0.5B-Instruct (490M) / Edge Causal LM (3.39M params)',
   adapterName: 'thewarat-chao-phraya-disaster-lora-v1.safetensors',
   adapterRank: 16,
   adapterAlpha: 32,
-  targetModules: ['q_proj', 'k_proj', 'v_proj', 'o_proj', 'gate_proj', 'up_proj', 'down_proj'],
-  trainableParameters: 4194304,
-  adapterSizeBytes: 16777216,
+  targetModules: ['q_proj', 'k_proj', 'v_proj', 'o_proj'],
+  trainableParameters: 114688,
+  adapterSizeBytes: 462904,
   fineTuningDataset: '1,420 Thai Chao Phraya Flash Flood & Community Triage Scenarios (Wat Thewarat Kunchorn)',
-  quantization: 'INT4 (AWQ / Q4_K_M) + FP16 LoRA Adapters',
-  inferenceDevice: 'Local Apple Silicon Neural Engine / CPU (Offline Edge Zero-Cloud)',
-  latencyMs: 38,
+  quantization: 'FP16 LoRA Adapters (< 500 KB safetensors) + 4-bit NF4 Quantization',
+  inferenceDevice: 'Local Apple Silicon Metal GPU (MPS) / Offline Edge Zero-Cloud (<80MB RAM)',
+  latencyMs: 18,
   status: 'active_loaded'
 };
 

@@ -2834,8 +2834,8 @@
                   <span class="brand-badge" id="tsunami-live-phase-badge" style="background:#0284c7; color:#fff; border:none; padding:2px 8px;">ระยะที่ 1: น้ำลดผิดปกติ</span>
                 </div>
                 <div class="tsunami-ctrl-telemetry">
-                  <span id="tsunami-time-meter">⏱️ 00:00 / 01:15</span>
-                  <span id="tsunami-level-meter" style="color:#38bdf8;">ระดับน้ำ: -1.50 ม. รทก.</span>
+                  <span id="tsunami-time-meter">⏱️ 00:00 / 03:00</span>
+                  <span id="tsunami-level-meter" style="color:#38bdf8;">ระดับน้ำ: -1.80 ม. รทก.</span>
                   <span id="tsunami-speed-meter">ความเร็ว: 48 กม./ชม.</span>
                 </div>
               </div>
@@ -2843,19 +2843,19 @@
               <div class="tsunami-phases-strip">
                 <button class="tsunami-phase-btn active" id="btn-tsu-p1" onclick="jumpTsunamiPhase(1)">
                   <span>🌊 1. น้ำลดผิดปกติ</span>
-                  <span class="tsunami-phase-sub">-1.5 ม. รทก. (0-15s)</span>
+                  <span class="tsunami-phase-sub">-1.8 ม. รทก. (0-40s)</span>
                 </button>
                 <button class="tsunami-phase-btn" id="btn-tsu-p2" onclick="jumpTsunamiPhase(2)">
                   <span>🚨 2. กำแพงคลื่นซัด</span>
-                  <span class="tsunami-phase-sub">+4.8 ม. รทก. (15-35s)</span>
+                  <span class="tsunami-phase-sub">+4.8 ม. รทก. (40-90s)</span>
                 </button>
                 <button class="tsunami-phase-btn" id="btn-tsu-p3" onclick="jumpTsunamiPhase(3)">
                   <span>🏚️ 3. ท่วมมิดชั้น 1</span>
-                  <span class="tsunami-phase-sub">+4.2 ม. รทก. (35-55s)</span>
+                  <span class="tsunami-phase-sub">+4.3 ม. รทก. (90-145s)</span>
                 </button>
                 <button class="tsunami-phase-btn" id="btn-tsu-p4" onclick="jumpTsunamiPhase(4)">
                   <span>🔄 4. คลื่นระลอกสอง</span>
-                  <span class="tsunami-phase-sub">น้ำดูดย้อน (55-75s)</span>
+                  <span class="tsunami-phase-sub">น้ำดูดย้อน (145-180s)</span>
                 </button>
                 <button class="btn-step" id="btn-tsu-playpause" onclick="toggleTsunamiPlayPause()" style="font-size:11px; padding:6px 10px; background:rgba(255,255,255,0.15); color:#fff; border-color:rgba(255,255,255,0.25);">
                   ⏸️ หยุดวิเคราะห์
@@ -2957,18 +2957,18 @@
         <div class="glass-panel">
           <div class="panel-header" style="flex-wrap:wrap; gap:8px;">
             <div>
-              <div class="panel-title" id="chart-main-title">ระดับน้ำตรวจวัดจริง & แบบจำลอง AI คาดการณ์ — พ.ศ. 2569</div>
-              <div class="panel-caption" id="chart-main-caption">ค่าเซนเซอร์จริง (Actual) เทียบกับแบบจำลอง AI คาดการณ์ต่อเนื่องถึงเกณฑ์วิกฤต 1.00 ม.</div>
+              <div class="panel-title" id="chart-main-title">ระดับน้ำตรวจวัดจริง (พ.ศ. 2569) ซ้อนเปรียบเทียบสถิติปี พ.ศ. 2554 – 2567</div>
+              <div class="panel-caption" id="chart-main-caption">เทียบเคียงระดับน้ำจริงปี พ.ศ. 2569 กับสถิติมหาอุทกภัย พ.ศ. 2554, 2564, 2565, 2567 และระดับคันกั้นน้ำ</div>
             </div>
             <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
-              <button class="btn-step active" id="btn-chart-forecast" onclick="setChartMode('forecast')" style="font-size:11px; padding:4px 10px;">
-                📈 พยากรณ์วันนี้ (พ.ศ. 2569)
+              <button class="btn-step" id="btn-chart-forecast" onclick="setChartMode('forecast')" style="font-size:11px; padding:4px 10px;">
+                📈 พยากรณ์เดี่ยว (พ.ศ. 2569)
               </button>
-              <button class="btn-step" id="btn-chart-overlay" onclick="toggleHistoricalOverlay()" style="font-size:11px; padding:4px 10px;" title="ซ้อนเปรียบเทียบสถิติปี พ.ศ. 2554, 2564, 2565, 2567, 2569 บนกราฟพร้อมกัน">
-                📊 ซ้อนสถิติ พ.ศ. บนกราฟ
+              <button class="btn-step active" id="btn-chart-overlay" onclick="toggleHistoricalOverlay()" style="font-size:11px; padding:4px 10px; background:rgba(0, 113, 227, 0.2); color:#0071E3; border-color:#0071E3;" title="ซ้อนเปรียบเทียบสถิติปี พ.ศ. 2554, 2564, 2565, 2567, 2569 บนกราฟพร้อมกัน">
+                📊 ซ้อนสถิติ พ.ศ. บนกราฟ (เปิดอยู่)
               </button>
               <button class="btn-step" id="btn-chart-historical" onclick="setChartMode('historical')" style="font-size:11px; padding:4px 10px;">
-                📚 ย้อนหลังเปรียบเทียบปี พ.ศ. (2554-2567)
+                📚 แท่งเปรียบเทียบปี พ.ศ. (2554-2567)
               </button>
               <span class="brand-badge" id="rate-of-rise-tag" style="background:var(--apple-amber-surface); color:var(--apple-amber); border-color:var(--apple-amber-border);">
                 +0.17 ม. / 30 นาที
@@ -2998,7 +2998,7 @@
 
           <canvas id="chart-canvas" style="width:100%; height:195px;"></canvas>
           <div id="chart-summary-text" style="font-size:11px; color:var(--text-secondary); margin-top:8px; padding:6px 12px; background:rgba(0,0,0,0.02); border-radius:8px; border:1px solid var(--border-subtle); line-height:1.4;">
-            🟢 เส้นสีเขียว: ข้อมูลจริงตรวจวัดได้ | 🟠 เส้นประสีส้ม: AI Forecast คาดการณ์ถึง 22:00 น. | 🔴 เส้นประสีแดง: เกณฑ์วิกฤต (Threshold 0.70 ม. / 1.00 ม.)
+            📊 <strong>ซ้อนสถิติ พ.ศ.:</strong> 🔴 พ.ศ. 2554 (+2.60 ม.) | 🟠 พ.ศ. 2565 (+1.95 ม.) | 🟡 พ.ศ. 2564 (+1.85 ม.) | 🔵 พ.ศ. 2567 (+1.75 ม.) | 🟢 <strong>พ.ศ. 2569 ปัจจุบัน (+0.42 ➔ +1.00 ม.)</strong>
           </div>
         </div>
 
@@ -3910,15 +3910,15 @@
     let loraPingActive = false;
     let loraPingStartTime = 0;
 
-    // Tsunami Multi-Phase Simulation State (Realistic 75s Cycle)
+    // Tsunami Multi-Phase Simulation State (Realistic 180s / 3-min Cycle)
     let tsunamiAutoPlay = true;
     let tsunamiCurrentPhase = 1;
     let tsunamiManualPhaseTime = 0;
     let tsunamiPhaseStartTime = 0;
-    const TSUNAMI_CYCLE_SECS = 75.0;
+    const TSUNAMI_CYCLE_SECS = 180.0;
 
-    // Buddhist Era Chart Mode
-    let showHistoricalOverlay = false;
+    // Buddhist Era Chart Mode (Active by default to show พ.ศ. comparison lines)
+    let showHistoricalOverlay = true;
 
     // Web Audio Disaster Synthesizer
     let disasterAudioCtx = null, disasterAudioGain = null;
@@ -6070,9 +6070,9 @@
           }
         }
 
-        // 2. Realistic Multi-Phase Tsunami Surge Simulation (75s Sustained Cycle & Manual Phase Control)
+        // 2. Realistic Multi-Phase Tsunami Surge Simulation (180s Sustained Cycle & Manual Phase Control)
         if (disasterMode === 'tsunami') {
-          // Simulation clock: Auto 75-second progression or manual phase inspect
+          // Simulation clock: Auto 180-second progression or manual phase inspect
           let simTime;
           if (tsunamiAutoPlay) {
             simTime = (t - tsunamiPhaseStartTime) % TSUNAMI_CYCLE_SECS;
@@ -6086,13 +6086,13 @@
           let waveScaleY = 1.0;
           let tsunamiPhase = 1;
           let phaseTitle = '';
-          let levelM = -1.50;
+          let levelM = -1.80;
           let speedKmh = 12;
 
-          if (simTime < 15.0) {
-            // PHASE 1: Water Receding / Drawback (0 - 15s)
+          if (simTime < 40.0) {
+            // PHASE 1: Water Receding / Drawback (0 - 40s)
             tsunamiPhase = 1;
-            const pFrac = simTime / 15.0;
+            const pFrac = simTime / 40.0;
             targetCanalY = -0.55 - pFrac * 1.25; // Plummets to -1.80m MSL!
             targetFloodY = -0.40;
             levelM = targetCanalY;
@@ -6113,10 +6113,10 @@
                 deb.rotation.z = 0.45;
               });
             }
-          } else if (simTime < 35.0) {
-            // PHASE 2: Leading Wave Surge & Violent Attack (15 - 35s)
+          } else if (simTime < 90.0) {
+            // PHASE 2: Leading Wave Surge & Violent Attack (40 - 90s)
             tsunamiPhase = 2;
-            const pFrac = (simTime - 15.0) / 20.0;
+            const pFrac = (simTime - 40.0) / 50.0;
             waveX = 80 - pFrac * 120; // Surges inland across pier (X: 80 to X: -40)
             waveScaleY = 1.0 + Math.sin(pFrac * Math.PI) * 0.2; // Full 7.5m curl
             targetCanalY = -1.80 + pFrac * 6.60; // Shoots up to +4.80m MSL!
@@ -6147,10 +6147,10 @@
                 }
               });
             }
-          } else if (simTime < 55.0) {
-            // PHASE 3: Deep Sustained Inundation & Whirlpools (35 - 55s)
+          } else if (simTime < 145.0) {
+            // PHASE 3: Deep Sustained Inundation & Whirlpools (90 - 145s)
             tsunamiPhase = 3;
-            const pFrac = (simTime - 35.0) / 20.0;
+            const pFrac = (simTime - 90.0) / 55.0;
             // The water STAYS DEEPLY FLOODED! Ground floor of houses submerged!
             targetCanalY = 4.30 + Math.sin(t * 1.8) * 0.18;
             targetFloodY = 4.25 + Math.cos(t * 1.8) * 0.18;
@@ -6179,9 +6179,9 @@
               });
             }
           } else {
-            // PHASE 4: Secondary Wave Surge & Backwash Suction (55 - 75s)
+            // PHASE 4: Secondary Wave Surge & Backwash Suction (145 - 180s)
             tsunamiPhase = 4;
-            const pFrac = (simTime - 55.0) / 20.0;
+            const pFrac = (simTime - 145.0) / 35.0;
             levelM = 4.20 - pFrac * 3.40; // Gradual backwash drainage down to +0.8m
             targetCanalY = Math.max(-0.55, levelM);
             targetFloodY = Math.max(-0.20, levelM);
@@ -6693,6 +6693,52 @@
       forecast = forecast || 1.0;
       threshold = threshold || 0.70;
 
+      // Synchronize DOM titles and button styles
+      const btnFc = document.getElementById('btn-chart-forecast');
+      const btnHist = document.getElementById('btn-chart-historical');
+      const btnOverlay = document.getElementById('btn-chart-overlay');
+      const titleEl = document.getElementById('chart-main-title');
+      const captionEl = document.getElementById('chart-main-caption');
+      const summaryEl = document.getElementById('chart-summary-text');
+
+      if (currentChartMode === 'historical') {
+        if (btnFc) btnFc.classList.remove('active');
+        if (btnHist) btnHist.classList.add('active');
+        if (btnOverlay) {
+          btnOverlay.classList.remove('active');
+          btnOverlay.style.background = '';
+          btnOverlay.style.color = '';
+          btnOverlay.style.borderColor = '';
+        }
+        if (titleEl) titleEl.innerText = 'สถิติเปรียบเทียบระดับน้ำท่วมสูงสุดในประวัติศาสตร์ (พ.ศ. 2554 – 2569)';
+        if (captionEl) captionEl.innerText = 'เปรียบเทียบระดับน้ำสูงสุดแม่น้ำเจ้าพระยาชุมชนวัดเทวราชกุญชร เทียบระดับคันกั้นน้ำ (+1.50 ม. MSL)';
+        if (summaryEl) summaryEl.innerHTML = '📊 <strong>เปรียบเทียบปี พ.ศ.:</strong> พ.ศ. 2554 (+2.60 ม. มหาอุทกภัย) | พ.ศ. 2564 (+1.85 ม.) | พ.ศ. 2565 (+1.95 ม.) | พ.ศ. 2567 (+1.75 ม.) | <strong>พ.ศ. 2569 (+1.00 ม. แบบจำลองปัจจุบัน)</strong>';
+      } else if (showHistoricalOverlay) {
+        if (btnFc) btnFc.classList.remove('active');
+        if (btnHist) btnHist.classList.remove('active');
+        if (btnOverlay) {
+          btnOverlay.classList.add('active');
+          btnOverlay.style.background = 'rgba(0, 113, 227, 0.2)';
+          btnOverlay.style.color = '#0071E3';
+          btnOverlay.style.borderColor = '#0071E3';
+        }
+        if (titleEl) titleEl.innerText = 'ระดับน้ำตรวจวัดจริง (พ.ศ. 2569) ซ้อนเปรียบเทียบสถิติปี พ.ศ. 2554 – 2567';
+        if (captionEl) captionEl.innerText = 'เทียบเคียงระดับน้ำจริงปี พ.ศ. 2569 กับสถิติมหาอุทกภัย พ.ศ. 2554, 2564, 2565, 2567 และระดับคันกั้นน้ำ';
+        if (summaryEl) summaryEl.innerHTML = '📊 <strong>ซ้อนสถิติ พ.ศ.:</strong> 🔴 พ.ศ. 2554 (+2.60 ม.) | 🟠 พ.ศ. 2565 (+1.95 ม.) | 🟡 พ.ศ. 2564 (+1.85 ม.) | 🔵 พ.ศ. 2567 (+1.75 ม.) | 🟢 <strong>พ.ศ. 2569 ปัจจุบัน (+0.42 ➔ +1.00 ม.)</strong>';
+      } else {
+        if (btnFc) btnFc.classList.add('active');
+        if (btnHist) btnHist.classList.remove('active');
+        if (btnOverlay) {
+          btnOverlay.classList.remove('active');
+          btnOverlay.style.background = '';
+          btnOverlay.style.color = '';
+          btnOverlay.style.borderColor = '';
+        }
+        if (titleEl) titleEl.innerText = 'ระดับน้ำตรวจวัดจริง & แบบจำลอง AI คาดการณ์ — วันที่ 16 ก.ย. พ.ศ. 2569';
+        if (captionEl) captionEl.innerText = 'ค่าเซนเซอร์จริง (Actual) เทียบกับแบบจำลอง AI คาดการณ์ต่อเนื่องถึงเกณฑ์วิกฤต 1.00 ม.';
+        if (summaryEl) summaryEl.innerHTML = '🟢 เส้นสีเขียว: ข้อมูลจริงตรวจวัดได้ | 🟠 เส้นประสีส้ม: AI Forecast คาดการณ์ถึง 22:00 น. | 🔴 เส้นประสีแดง: เกณฑ์วิกฤต (Threshold 0.70 ม. / 1.00 ม.)';
+      }
+
       const canvas = document.getElementById('chart-canvas');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
@@ -6865,17 +6911,17 @@
         if (showHistoricalOverlay) {
           // Buddhist Era Historical Benchmark Reference Lines
           const beBenchmarks = [
-            { year: 'พ.ศ. 2554', val: 2.60, color: 'rgba(215, 0, 21, 0.85)', label: '🔴 พ.ศ. 2554 (+2.60 ม. มหาอุทกภัย)' },
-            { year: 'พ.ศ. 2565', val: 1.95, color: 'rgba(255, 105, 0, 0.85)', label: '🟠 พ.ศ. 2565 (+1.95 ม. โนรู)' },
-            { year: 'พ.ศ. 2564', val: 1.85, color: 'rgba(245, 158, 11, 0.85)', label: '🟡 พ.ศ. 2564 (+1.85 ม. เตี้ยนหมู่)' },
-            { year: 'พ.ศ. 2567', val: 1.75, color: 'rgba(0, 113, 227, 0.85)', label: '🔵 พ.ศ. 2567 (+1.75 ม. น้ำเหนือหลาก)' },
-            { year: 'แนวกั้นน้ำ', val: 1.50, color: 'rgba(156, 163, 175, 0.85)', label: '🧱 แนวกั้นน้ำชุมชน (+1.50 ม. MSL)' }
+            { year: 'พ.ศ. 2554', val: 2.60, color: '#D70015', label: '🔴 พ.ศ. 2554 (+2.60 ม. มหาอุทกภัย)' },
+            { year: 'พ.ศ. 2565', val: 1.95, color: '#FF6900', label: '🟠 พ.ศ. 2565 (+1.95 ม. พายุโนรู)' },
+            { year: 'พ.ศ. 2564', val: 1.85, color: '#F59E0B', label: '🟡 พ.ศ. 2564 (+1.85 ม. พายุเตี้ยนหมู่)' },
+            { year: 'พ.ศ. 2567', val: 1.75, color: '#0071E3', label: '🔵 พ.ศ. 2567 (+1.75 ม. น้ำเหนือหลาก)' },
+            { year: 'แนวกั้นน้ำ', val: 1.50, color: '#64748B', label: '🧱 แนวกั้นน้ำชุมชน (+1.50 ม. MSL)' }
           ];
 
           beBenchmarks.forEach(bm => {
             const bY = getY(bm.val);
             ctx.strokeStyle = bm.color;
-            ctx.lineWidth = 1.5;
+            ctx.lineWidth = 1.6;
             ctx.setLineDash([5, 3]);
             ctx.beginPath();
             ctx.moveTo(paddingLeft, bY);
@@ -6883,10 +6929,30 @@
             ctx.stroke();
             ctx.setLineDash([]);
 
-            ctx.fillStyle = bm.color;
+            // Draw crisp solid pill badge with border
             ctx.font = 'bold 9.5px -apple-system, sans-serif';
+            const txt = bm.label;
+            const textWidth = ctx.measureText(txt).width;
+            const badgeW = textWidth + 12;
+            const badgeH = 16;
+            const badgeX = w - paddingRight - badgeW;
+            const badgeY = bY - badgeH / 2;
+
+            ctx.fillStyle = isDark ? '#0f172a' : '#ffffff';
+            ctx.beginPath();
+            if (ctx.roundRect) {
+              ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 4);
+            } else {
+              ctx.rect(badgeX, badgeY, badgeW, badgeH);
+            }
+            ctx.fill();
+            ctx.strokeStyle = bm.color;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            ctx.fillStyle = bm.color;
             ctx.textAlign = 'right';
-            ctx.fillText(bm.label, w - paddingRight - 4, bY - 3);
+            ctx.fillText(txt, w - paddingRight - 6, bY + 3.5);
           });
         } else {
           // Subtle Watermark / Benchmark badge indicating comparison years
@@ -6980,11 +7046,11 @@
       }
     }
 
-    // --- Tsunami Multi-Phase Simulation Controller Handlers (75s Sequence) ---
+    // --- Tsunami Multi-Phase Simulation Controller Handlers (180s Sequence) ---
     function jumpTsunamiPhase(phaseNum) {
       tsunamiCurrentPhase = phaseNum;
       tsunamiAutoPlay = true;
-      const phaseOffsets = { 1: 0.0, 2: 15.0, 3: 35.0, 4: 55.0 };
+      const phaseOffsets = { 1: 0.0, 2: 40.0, 3: 90.0, 4: 145.0 };
       const offset = phaseOffsets[phaseNum] || 0.0;
       tsunamiPhaseStartTime = performance.now() / 1000 - offset;
       tsunamiManualPhaseTime = offset;
@@ -6994,12 +7060,12 @@
 
       updateTsunamiPhaseButtons(phaseNum);
       const phaseNames = {
-        1: 'ระยะที่ 1: น้ำลดผิดปกติ (-1.5 ม. รทก.)',
+        1: 'ระยะที่ 1: น้ำลดผิดปกติ (-1.8 ม. รทก.)',
         2: 'ระยะที่ 2: กำแพงคลื่นซัด (+4.8 ม. รทก. 48 กม./ชม.)',
-        3: 'ระยะที่ 3: ท่วมมิดชั้น 1 (+4.2 ม. รทก. น้ำวนเศษซาก)',
+        3: 'ระยะที่ 3: ท่วมมิดชั้น 1 ขังยาวนาน (+4.3 ม. รทก. น้ำวน)',
         4: 'ระยะที่ 4: คลื่นระลอกสอง & น้ำดูดย้อน (+3.5 ม. รทก.)'
       };
-      showToast(`🌊 สึนามิ: ${phaseNames[phaseNum]}`, `ข้ามไปยังเวลา ${offset.toFixed(0)} วินาทีของแบบจำลองความยาว 75 วินาที`, 'warning');
+      showToast(`🌊 สึนามิ: ${phaseNames[phaseNum]}`, `ข้ามไปยังเวลา ${offset.toFixed(0)} วินาทีของแบบจำลองความยาว 180 วินาที (3 นาที)`, 'warning');
     }
 
     function toggleTsunamiPlayPause() {
@@ -7016,7 +7082,7 @@
       } else {
         const curT = performance.now() / 1000;
         tsunamiPhaseStartTime = curT - tsunamiManualPhaseTime;
-        showToast('▶️ เล่นแบบจำลองต่อ', 'แบบจำลองสึนามิ 75 วินาทีทำงานต่อเนื่อง', 'info');
+        showToast('▶️ เล่นแบบจำลองต่อ', 'แบบจำลองสึนามิ 180 วินาที (3 นาที) ทำงานต่อเนื่อง', 'info');
       }
     }
 
@@ -7035,7 +7101,7 @@
       if (timeMeter) {
         const curMin = Math.floor(simTime / 60).toString().padStart(2, '0');
         const curSec = Math.floor(simTime % 60).toString().padStart(2, '0');
-        timeMeter.innerText = `⏱️ ${curMin}:${curSec} / 01:15`;
+        timeMeter.innerText = `⏱️ ${curMin}:${curSec} / 03:00`;
       }
 
       const levelMeter = document.getElementById('tsunami-level-meter');
