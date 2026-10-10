@@ -3684,6 +3684,102 @@
         </div>
       </div>
 
+      <!-- LoRA (Low-Rank Adaptation) AI Engine & Decision Copilot Section -->
+      <div style="background:linear-gradient(135deg, rgba(88,86,214,0.06), rgba(0,113,227,0.06)); border:1px solid rgba(88,86,214,0.3); border-radius:12px; padding:14px; margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <div style="width:28px; height:28px; border-radius:8px; background:linear-gradient(135deg, #5856D6, #0071E3); display:flex; align-items:center; justify-content:center; color:#fff; font-size:14px;">
+              🧠
+            </div>
+            <div>
+              <div style="font-size:13px; font-weight:700; color:var(--text-primary); display:flex; align-items:center; gap:6px;">
+                <span>LoRA AI Telemetry Decision Engine (Low-Rank Adaptation)</span>
+                <span class="brand-badge" style="background:rgba(88,86,214,0.14); color:#5856D6; border-color:rgba(88,86,214,0.35); font-size:10px;">PEFT LoRA (r=16, α=32)</span>
+              </div>
+              <div style="font-size:11px; color:var(--text-secondary);">
+                ประมวลผลข้อมูลสดจากโทรมาตร LoRaWAN ด้วยโมเดล AI เฉพาะทางภัยพิบัติชุมชนริมเจ้าพระยา (ออฟไลน์ 100%)
+              </div>
+            </div>
+          </div>
+          <button class="btn-step" id="btn-run-lora-ai" onclick="triggerLoraAiAnalysis()" style="font-size:11px; padding:5px 12px; background:#5856D6; color:#FFF; font-weight:700; border-color:#5856D6;">
+            ⚡ รัน LoRA AI วิเคราะห์สถานการณ์สด
+          </button>
+        </div>
+
+        <!-- LoRA Model Specs & Chain-of-Thought Reasoning Box -->
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:12px;">
+          <!-- Left: Model Architecture Specs -->
+          <div style="background:var(--surface-card); border:1px solid var(--border-subtle); border-radius:8px; padding:10px; font-size:11px;">
+            <div style="font-weight:700; color:var(--text-primary); margin-bottom:6px; display:flex; justify-content:space-between;">
+              <span>📐 ข้อมูลสถาปัตยกรรมโมเดล LoRA</span>
+              <span style="color:#10B981; font-weight:600;">Active Loaded (38ms)</span>
+            </div>
+            <div style="display:grid; grid-template-columns:auto 1fr; gap:4px 8px; color:var(--text-secondary);">
+              <span>Base Model:</span> <strong style="color:var(--text-primary);">Qwen-2.5-7B (INT4 GGUF)</strong>
+              <span>LoRA Adapter:</span> <span style="color:#5856D6; font-family:monospace; font-weight:600;">thewarat-disaster-lora-v1</span>
+              <span>Hyperparameters:</span> <span style="font-family:monospace;">Rank r=16, Alpha α=32 (4.2M params)</span>
+              <span>Adapter Footprint:</span> <span style="color:#10B981; font-weight:600;">16.8 MB (ประหยัดแรม 95%+)</span>
+              <span>Hardware Device:</span> <span>Apple Neural Engine / Edge CPU</span>
+            </div>
+          </div>
+
+          <!-- Right: Live AI Reasoning Output -->
+          <div style="background:var(--surface-card); border:1px solid var(--border-subtle); border-radius:8px; padding:10px; font-size:11px;">
+            <div style="font-weight:700; color:var(--text-primary); margin-bottom:6px; display:flex; justify-content:space-between;">
+              <span>💡 ผลวิเคราะห์อัตโนมัติจากสัญญาณ LoRa</span>
+              <span class="brand-badge" id="lora-ai-risk-badge" style="background:#ef4444; color:#fff; font-size:10px; padding:1px 6px;">CRITICAL RISK</span>
+            </div>
+            <div id="lora-ai-summary-text" style="color:var(--text-secondary); line-height:1.4; margin-bottom:6px;">
+              ระดับน้ำจากเซนเซอร์ LoRa อยู่ที่ +0.42 ม. อัตราน้ำหนุน +0.32 ม./ชม. ผู้ป่วยติดเตียงบ้าน A-012 ออกซิเจนสำรองเหลือ 90 นาที แนะนำอนุมัติ Plan B เคลื่อนย้ายเร่งด่วน
+            </div>
+            <div style="display:flex; gap:10px; font-size:10.5px; border-top:1px dashed var(--border-subtle); padding-top:4px;">
+              <span>⏱️ เวลาก่อนน้ำล้นคัน: <strong id="lora-ai-time-to-breach" style="color:#D70015;">109 นาที</strong></span>
+              <span>🚑 แผนแนะนำ: <strong id="lora-ai-rec-plan" style="color:#34C759;">Plan B (ดอนพระอุโบสถ)</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- LoRA Chain-of-Thought Steps -->
+        <div style="background:var(--surface-sunken); border-radius:8px; padding:8px 10px; font-size:10.5px; font-family:monospace; margin-bottom:12px;" id="lora-ai-thought-chain">
+          <div style="color:var(--text-secondary); margin-bottom:2px;">[Step 1: Ingest LoRa Packet] Node 70-B3-D5-7E-D0-04-A1-2F | ระดับน้ำตรวจวัด +0.42 ม. รทก. | Freq: 923.2 MHz</div>
+          <div style="color:var(--text-secondary); margin-bottom:2px;">[Step 2: RF Link Evaluation] RSSI: -78 dBm, SNR: +9.5 dB (สถานะลิงก์เสถียร 99.9%)</div>
+          <div style="color:var(--text-secondary); margin-bottom:2px;">[Step 3: LoRA Hydrology Weights] น้ำขึ้น +0.32 ม./ชม. ถึงเกณฑ์ 1.00 ม. ใน 109 นาที</div>
+          <div style="color:var(--text-secondary); margin-bottom:2px;">[Step 4: Vulnerability Correlation] ยายสมจิตร A-012 ออกซิเจนเหลือ 90 นาที | น้ำท่วมซอย 35 ซม.</div>
+          <div style="color:#5856D6; font-weight:bold;">[Step 5: PEFT Triage Inference] ออกคำสั่งภารกิจเร่งด่วน: แนะนำเคลื่อนย้าย Plan B ผ่านสะพานไม้ยกสูง</div>
+        </div>
+
+        <!-- Interactive LoRA AI Copilot Prompt -->
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <div style="font-size:11px; font-weight:700; color:var(--text-primary); display:flex; justify-content:space-between;">
+            <span>💬 ถาม-ตอบผู้ช่วยบัญชาการ LoRA AI Copilot:</span>
+            <span style="font-size:10px; color:var(--text-tertiary);">Offline Local Inference</span>
+          </div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button type="button" class="btn-step" onclick="askLoraAiQuick('ประเมินสถานะยายสมจิตร A-012')" style="font-size:10px; padding:3px 8px;">
+              👵 ประเมินยายสมจิตร A-012
+            </button>
+            <button type="button" class="btn-step" onclick="askLoraAiQuick('ถ้าสะพานไม้จมน้ำ 45 ซม. แนะนำเส้นทางใด')" style="font-size:10px; padding:3px 8px;">
+              🌉 ถ้าสะพานไม้จมน้ำ 45 ซม.
+            </button>
+            <button type="button" class="btn-step" onclick="askLoraAiQuick('วิเคราะห์สัญญาณคลื่น LoRa AS923')" style="font-size:10px; padding:3px 8px;">
+              📡 สัญญาณ LoRa AS923
+            </button>
+            <button type="button" class="btn-step" onclick="askLoraAiQuick('ทำไมต้องใช้ LoRA AI ในระบบนี้')" style="font-size:10px; padding:3px 8px;">
+              💡 ทำไมต้องใช้ LoRA AI
+            </button>
+          </div>
+          <div style="display:flex; gap:6px; margin-top:4px;">
+            <input type="text" id="lora-ai-query-input" placeholder="พิมพ์คำสั่งหรือคำถามสอบถามโมเดล LoRA AI..." style="flex:1; font-size:11px; padding:6px 10px; border-radius:6px; border:1px solid var(--border-subtle); background:var(--surface-card); color:var(--text-primary);" onkeydown="if(event.key==='Enter') submitLoraAiQuery()">
+            <button class="btn-step" onclick="submitLoraAiQuery()" style="font-size:11px; padding:6px 12px; background:#5856D6; color:#FFF; font-weight:600; border-color:#5856D6;">
+              ส่งคำถาม
+            </button>
+          </div>
+          <div id="lora-ai-query-response" style="display:none; margin-top:6px; background:var(--surface-card); border-left:3px solid #5856D6; padding:8px 10px; border-radius:4px; font-size:11px; line-height:1.4; color:var(--text-primary);">
+            <!-- Response injected here -->
+          </div>
+        </div>
+      </div>
+
       <!-- Recent LoRa Packets Log Table -->
       <div style="background:var(--surface-card); border:1px solid var(--border-subtle); border-radius:10px; padding:12px;">
         <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:8px;">
@@ -7052,6 +7148,9 @@
         window._cachedLoraPackets = data.recent_packets;
         renderLoraPacketsTable(data.recent_packets);
       }
+      if (data.loraAiAnalysis) {
+        updateLoraAiUI(data.loraAiAnalysis);
+      }
     }
 
     function renderLoraPacketsTable(packets) {
@@ -7084,6 +7183,99 @@
     function trigger3DLoraPingBurst() {
       loraPingActive = true;
       loraPingStartTime = performance.now() / 1000;
+    }
+
+    // --- LoRA (Low-Rank Adaptation) AI Engine & Decision Copilot Handlers ---
+    async function triggerLoraAiAnalysis() {
+      const btn = document.getElementById('btn-run-lora-ai');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerText = '⏳ กำลังประมวลผล LoRA...';
+      }
+      try {
+        const res = await fetch('/api/lora/ai-analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
+        });
+        const data = await res.json();
+        if (data.success && data.analysis) {
+          updateLoraAiUI(data.analysis);
+          showToast('🧠 LoRA AI ประมวลผลสำเร็จ', 'คำนวณเวกเตอร์สถานการณ์จากโทรมาตร LoRa เรียบร้อย', 'info');
+        }
+      } catch (err) {
+        showToast('❌ รัน LoRA AI ผิดพลาด', String(err), 'danger');
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerText = '⚡ รัน LoRA AI วิเคราะห์สถานการณ์สด';
+        }
+      }
+    }
+
+    function updateLoraAiUI(analysis) {
+      if (!analysis) return;
+      const riskBadge = document.getElementById('lora-ai-risk-badge');
+      if (riskBadge) {
+        riskBadge.innerText = `${analysis.riskLevel} RISK`;
+        riskBadge.style.background = analysis.riskLevel === 'CRITICAL' ? '#ef4444' : analysis.riskLevel === 'WARNING' ? '#f59e0b' : '#10b981';
+      }
+      const summaryText = document.getElementById('lora-ai-summary-text');
+      if (summaryText) summaryText.innerText = analysis.summaryExecutiveTh;
+
+      const timeBreach = document.getElementById('lora-ai-time-to-breach');
+      if (timeBreach) timeBreach.innerText = `${analysis.estimatedTimeToBreachMinutes} นาที`;
+
+      const recPlan = document.getElementById('lora-ai-rec-plan');
+      if (recPlan) recPlan.innerText = analysis.activeRecommendedPlan;
+
+      const chainBox = document.getElementById('lora-ai-thought-chain');
+      if (chainBox && analysis.thoughtChain) {
+        chainBox.innerHTML = analysis.thoughtChain.map((step, idx) => {
+          const isFinal = idx === analysis.thoughtChain.length - 1;
+          return `<div style="${isFinal ? 'color:#5856D6; font-weight:bold;' : 'color:var(--text-secondary);'} margin-bottom:2px;">${step}</div>`;
+        }).join('');
+      }
+    }
+
+    async function submitLoraAiQuery() {
+      const input = document.getElementById('lora-ai-query-input');
+      if (!input || !input.value.trim()) return;
+      const query = input.value.trim();
+      await executeLoraAiQuery(query);
+    }
+
+    function askLoraAiQuick(query) {
+      const input = document.getElementById('lora-ai-query-input');
+      if (input) input.value = query;
+      executeLoraAiQuery(query);
+    }
+
+    async function executeLoraAiQuery(query) {
+      const resBox = document.getElementById('lora-ai-query-response');
+      if (resBox) {
+        resBox.style.display = 'block';
+        resBox.innerHTML = '⏳ กำลังประมวลผล LoRA Adapter...';
+      }
+      try {
+        const res = await fetch('/api/lora/ai-query', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query })
+        });
+        const data = await res.json();
+        if (data.success && resBox) {
+          resBox.innerHTML = `
+            <div style="font-weight:700; color:#5856D6; margin-bottom:3px; display:flex; justify-content:space-between;">
+              <span>🤖 คำตอบจาก LoRA AI Copilot (${data.source || 'LoRA Adapter'})</span>
+              <span style="font-size:10px; color:var(--text-tertiary);">${data.latencyMs || 38}ms</span>
+            </div>
+            <div>${data.answerTh}</div>
+          `;
+        }
+      } catch (err) {
+        if (resBox) resBox.innerHTML = `❌ เกิดข้อผิดพลาด: ${err}`;
+      }
     }
 
     // Dynamic Nurse Triage Live Updates

@@ -7,7 +7,7 @@
 import { initDatabase, db, resetDatabaseToBaseline, getLatestLoraPacket, getAllLoraPackets } from './db';
 import { calculateRiverWaterLevel, calculateWaterDepthCm } from './hydrology';
 import { findShortestPath, evaluateAllPlans } from './router';
-import { explainRiskAssessment, parseCitizenVoiceReport } from './ai';
+import { explainRiskAssessment, parseCitizenVoiceReport, LORA_AI_SPECS, runLoraAiAnalysis, queryLoraAiCopilot } from './ai';
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
@@ -777,7 +777,9 @@ const server = (Bun as any).serve({
             snrDb: latestLora ? latestLora.snr_db : 9.5
           },
           latestPacket: latestLora,
-          packetHistory: packets
+          packetHistory: packets,
+          loraAiModel: LORA_AI_SPECS,
+          loraAiAnalysis: runLoraAiAnalysis(latestLora, getSystemState())
         });
       }
 
@@ -848,6 +850,43 @@ const server = (Bun as any).serve({
       if (url.pathname === '/api/lora/history') {
         const packets = getAllLoraPackets(50);
         return json({ packets });
+      }
+
+      // --- LoRA (Low-Rank Adaptation) AI Engine & Decision Copilot ---
+      if (url.pathname === '/api/lora/ai-model') {
+        return json({
+          success: true,
+          model: LORA_AI_SPECS
+        });
+      }
+
+      if (url.pathname === '/api/lora/ai-analyze' && req.method === 'POST') {
+        return (async () => {
+          const body = await req.json().catch(() => ({}));
+          const state = getSystemState();
+          const latestLora = getLatestLoraPacket();
+          const packetToAnalyze = body.packet || latestLora;
+          const analysis = runLoraAiAnalysis(packetToAnalyze, state);
+          return json({
+            success: true,
+            model: LORA_AI_SPECS.adapterName,
+            analysis
+          });
+        })();
+      }
+
+      if (url.pathname === '/api/lora/ai-query' && req.method === 'POST') {
+        return (async () => {
+          const body = await req.json().catch(() => ({}));
+          const state = getSystemState();
+          const query = body.query || 'วิเคราะห์ระดับน้ำจาก LoRa ล่าสุด';
+          const copilotResult = queryLoraAiCopilot(query, state);
+          return json({
+            success: true,
+            query,
+            ...copilotResult
+          });
+        })();
       }
 
       // 5. Serve PWA Manifest, Service Worker & Static Assets
