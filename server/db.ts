@@ -182,6 +182,21 @@ export function initDatabase() {
     );
   `);
 
+  // 11. LINE Broadcast & Alert Messages table
+  db.run(`
+    CREATE TABLE IF NOT EXISTS line_broadcasts (
+      id TEXT PRIMARY KEY,
+      sent_at TEXT NOT NULL,
+      hazard_type TEXT NOT NULL,
+      target_audience TEXT NOT NULL,
+      title TEXT NOT NULL,
+      message TEXT NOT NULL,
+      recipients_count INTEGER DEFAULT 0,
+      status TEXT NOT NULL,
+      delivery_receipt TEXT
+    );
+  `);
+
   // Seed Data if households table is empty
   const count = db.query('SELECT COUNT(*) as cnt FROM households').get() as { cnt: number };
   if (count.cnt === 0) {
@@ -199,6 +214,41 @@ export function initDatabase() {
   if (nurseCount.cnt === 0) {
     seedNurseNotes();
   }
+
+  // Ensure line_broadcasts are seeded
+  const lineCount = db.query('SELECT COUNT(*) as cnt FROM line_broadcasts').get() as { cnt: number };
+  if (lineCount.cnt === 0) {
+    seedLineBroadcasts();
+  }
+}
+
+function seedLineBroadcasts() {
+  const insert = db.prepare(`
+    INSERT INTO line_broadcasts (id, sent_at, hazard_type, target_audience, title, message, recipients_count, status, delivery_receipt)
+    VALUES ($id, $sent_at, $hazard_type, $target_audience, $title, $message, $recipients_count, $status, $delivery_receipt);
+  `);
+  insert.run({
+    $id: 'lb-001',
+    $sent_at: '20:10',
+    $hazard_type: 'flood',
+    $target_audience: 'all_community',
+    $title: 'แจ้งเตือนระดับน้ำเฝ้าระวัง +0.72 ม. (เตือนภัยชุมชนวัดเทวราชกุญชร)',
+    $message: 'ระดับน้ำแม่น้ำเจ้าพระยาเริ่มเอ่อล้นตลิ่ง คาดแตะวิกฤต 1.00 ม. เวลา 22:00 น. ขอให้ทุกครัวเรือนยกของขึ้นที่สูงทันที',
+    $recipients_count: 248,
+    $status: 'sent',
+    $delivery_receipt: 'LINE_BC_20261010_01'
+  });
+  insert.run({
+    $id: 'lb-002',
+    $sent_at: '20:24',
+    $hazard_type: 'flood',
+    $target_audience: 'field_teams',
+    $title: 'มอบหมายภารกิจกู้ชีพเร่งด่วน: TASK #A-012',
+    $message: 'มอบหมายทีม Community Team 02 เคลื่อนย้ายผู้ป่วยติดเตียงบ้าน A-012 (ยายสมจิตร) ผ่านสะพานไม้ยกสูงไปยังจุดส่งต่อการแพทย์ B',
+    $recipients_count: 14,
+    $status: 'sent',
+    $delivery_receipt: 'LINE_MSG_TASK_A012'
+  });
 }
 
 function seedDatabase() {

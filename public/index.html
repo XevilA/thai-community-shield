@@ -406,6 +406,62 @@
       color: #FFF;
     }
 
+    .btn-line-broadcast {
+      background: rgba(6, 199, 85, 0.12);
+      border: 1px solid rgba(6, 199, 85, 0.35);
+      color: #059440;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 0 12px;
+      height: 36px;
+      border-radius: 9px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    [data-theme="dark"] .btn-line-broadcast {
+      background: rgba(6, 199, 85, 0.18);
+      border-color: rgba(6, 199, 85, 0.45);
+      color: #06C755;
+    }
+    .btn-line-broadcast:hover {
+      background: #06C755;
+      color: #FFFFFF;
+      box-shadow: 0 4px 14px rgba(6, 199, 85, 0.35);
+    }
+    .line-icon-badge {
+      display: inline-flex;
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      background: #06C755;
+      color: #FFFFFF;
+      align-items: center;
+      justify-content: center;
+      font-size: 8.5px;
+      font-weight: 900;
+      letter-spacing: -0.3px;
+    }
+    .line-btn-label-desktop {
+      display: inline;
+    }
+    .line-btn-label-mobile {
+      display: none;
+    }
+
+    .btn-step.active-whatif {
+      box-shadow: 0 0 0 2px currentColor, 0 4px 14px rgba(0,0,0,0.15);
+      font-weight: 700 !important;
+      transform: scale(1.02);
+      filter: brightness(1.08);
+    }
+
     .segmented-control {
       display: flex;
       align-items: center;
@@ -1402,6 +1458,297 @@
       border-color: var(--apple-blue);
     }
 
+    /* Floating In-App LINE Alert Notification Banner */
+    .line-floating-banner {
+      position: fixed;
+      top: 56px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 24px);
+      max-width: 680px;
+      background: var(--surface-card);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      border: 1px solid rgba(6, 199, 85, 0.40);
+      border-left: 5px solid #06C755;
+      border-radius: 14px;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.20), 0 0 24px rgba(6, 199, 85, 0.16);
+      padding: 10px 14px;
+      z-index: 10001;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
+      animation: bannerSlideDown 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+    @keyframes bannerSlideDown {
+      from { opacity: 0; transform: translate(-50%, -24px) scale(0.96); }
+      to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+    }
+    .line-banner-content-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      min-width: 0;
+    }
+    .line-banner-icon-box {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      background: #06C755;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 900;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(6, 199, 85, 0.4);
+    }
+    .line-banner-text-box {
+      flex: 1;
+      min-width: 0;
+    }
+    .line-banner-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+    .line-banner-tag {
+      font-size: 9.5px;
+      font-weight: 700;
+      color: #059440;
+      background: rgba(6, 199, 85, 0.12);
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+    [data-theme="dark"] .line-banner-tag {
+      color: #06C755;
+      background: rgba(6, 199, 85, 0.20);
+    }
+    .line-banner-time {
+      font-size: 9.5px;
+      color: var(--text-tertiary);
+    }
+    .line-banner-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .line-banner-desc {
+      font-size: 11px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .line-banner-cta {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #06C755;
+      white-space: nowrap;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(6, 199, 85, 0.08);
+    }
+    .line-banner-close-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-tertiary);
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .line-banner-close-btn:hover {
+      background: var(--surface-sunken);
+      color: var(--text-primary);
+    }
+
+    /* LINE Disaster Alert Broadcast Modal */
+    .line-modal-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 18px;
+      margin-top: 12px;
+    }
+    @media (max-width: 860px) {
+      .line-modal-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .line-audience-group, .line-template-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .line-aud-btn, .line-tmpl-btn {
+      background: var(--surface-inset);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .line-aud-btn:hover, .line-tmpl-btn:hover {
+      border-color: rgba(6, 199, 85, 0.5);
+      color: var(--text-primary);
+    }
+    .line-aud-btn.active, .line-tmpl-btn.active {
+      background: rgba(6, 199, 85, 0.12);
+      border-color: #06C755;
+      color: #059440;
+      font-weight: 700;
+    }
+    [data-theme="dark"] .line-aud-btn.active, [data-theme="dark"] .line-tmpl-btn.active {
+      color: #06C755;
+    }
+
+    /* Smartphone LINE Flex Message Frame Preview */
+    .line-phone-frame {
+      background: #7494a8;
+      border: 4px solid #2d3748;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 14px 34px rgba(0,0,0,0.22);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 480px;
+    }
+    .line-phone-header {
+      background: #20272c;
+      color: #FFFFFF;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 600;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .line-phone-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .line-verified-badge {
+      background: #06C755;
+      color: #FFF;
+      border-radius: 50%;
+      width: 14px;
+      height: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      font-weight: 900;
+    }
+    .line-chat-body {
+      flex: 1;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+    }
+    .line-flex-bubble {
+      background: #FFFFFF;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.14);
+      max-width: 100%;
+    }
+    .line-bubble-header {
+      padding: 10px 14px;
+      color: #FFFFFF;
+      font-weight: 700;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .line-bubble-header.flood { background: linear-gradient(135deg, #0071E3, #0284C7); }
+    .line-bubble-header.wildfire { background: linear-gradient(135deg, #EA580C, #D97706); }
+    .line-bubble-header.tsunami { background: linear-gradient(135deg, #0284C7, #075985); }
+    .line-bubble-header.earthquake { background: linear-gradient(135deg, #D97706, #B45309); }
+
+    .line-bubble-body {
+      padding: 12px 14px;
+      color: #1E293B;
+      font-size: 11.5px;
+      line-height: 1.5;
+    }
+    .line-bubble-footer {
+      border-top: 1px solid #E2E8F0;
+      padding: 8px 12px;
+      background: #F8FAFC;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .line-bubble-btn {
+      background: #06C755;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 8px;
+      padding: 7px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+      display: block;
+      text-decoration: none;
+      box-shadow: 0 2px 6px rgba(6, 199, 85, 0.3);
+    }
+    .line-bubble-brand {
+      font-size: 9.5px;
+      color: #64748B;
+      text-align: center;
+    }
+    .line-history-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      margin-top: 8px;
+    }
+    .line-history-table th {
+      background: var(--surface-inset);
+      color: var(--text-tertiary);
+      padding: 6px 10px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-subtle);
+      font-weight: 600;
+    }
+    .line-history-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+    }
+    .line-history-table tr:hover td {
+      background: var(--surface-inset);
+      color: var(--text-primary);
+    }
+
     /* Toast Notification System */
     .toast-container {
       position: fixed;
@@ -1570,6 +1917,18 @@
         display: none;
       }
       .emergency-label-mobile {
+        display: inline;
+        font-weight: 700;
+      }
+      .btn-line-broadcast {
+        padding: 0 8px;
+        height: 32px;
+        font-size: 11px;
+      }
+      .line-btn-label-desktop {
+        display: none;
+      }
+      .line-btn-label-mobile {
         display: inline;
         font-weight: 700;
       }
@@ -1919,6 +2278,28 @@
 </head>
 <body data-theme="light">
 
+  <!-- Floating In-App LINE Alert Notification Banner -->
+  <div id="line-floating-banner" class="line-floating-banner" onclick="openModal('line-broadcast-modal')" style="display:none;">
+    <div class="line-banner-content-wrap">
+      <div class="line-banner-icon-box">
+        <span>LINE</span>
+      </div>
+      <div class="line-banner-text-box">
+        <div class="line-banner-badge-row">
+          <span class="line-banner-tag" id="line-banner-tag">🚨 LINE BROADCAST DISPATCHED</span>
+          <span class="line-banner-time" id="line-banner-time">เมื่อสักครู่</span>
+        </div>
+        <div class="line-banner-title" id="line-banner-title">แจ้งเตือนระดับน้ำเฝ้าระวัง +0.72 ม. (วัดเทวราชกุญชร)</div>
+        <div class="line-banner-desc" id="line-banner-desc">ระดับน้ำแม่น้ำเจ้าพระยาเริ่มเอ่อล้นตลิ่ง ขอให้ทุกครัวเรือนยกของขึ้นที่สูงทันที</div>
+      </div>
+      <div class="line-banner-cta">
+        <span>ดูการแจ้งเตือน</span>
+        <svg viewBox="0 0 24 24" style="width:14px; height:14px; fill:currentColor;"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+      </div>
+    </div>
+    <button class="line-banner-close-btn" onclick="event.stopPropagation(); closeLineFloatingBanner();" title="ปิด">×</button>
+  </div>
+
   <!-- Top Navigation Bar -->
   <header>
     <div class="brand-cluster">
@@ -1965,6 +2346,12 @@
         </svg>
         <span class="emergency-label-desktop">แจ้งเหตุฉุกเฉิน</span>
         <span class="emergency-label-mobile">SOS</span>
+      </button>
+
+      <button class="btn-line-broadcast" id="btn-hdr-line-broadcast" onclick="openLineBroadcastModal()" title="ส่งแจ้งเตือน LINE Broadcast / LINE Message สู่ชุมชนและทีมกู้ภัย">
+        <span class="line-icon-badge">LINE</span>
+        <span class="line-btn-label-desktop">LINE Broadcast</span>
+        <span class="line-btn-label-mobile">LINE</span>
       </button>
 
       <div class="segmented-control">
@@ -2157,10 +2544,13 @@
         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
       </svg>
     </div>
-    <div class="banner-content">
+    <div class="banner-content" style="flex:1;">
       <h4 id="replanning-title">การปรับเปลี่ยนเส้นทางฉุกเฉิน (Dynamic Replanning Active)</h4>
       <p id="replanning-desc">ตรวจพบสะพานไม้ทางแยก 2 จมน้ำลึกเกินเกณฑ์ปลอดภัย ระบบได้สลับไปใช้เส้นทางเลี่ยงยกระดับผ่านหน้าศูนย์ชุมชน (Plaza Forecourt) เรียบร้อยแล้ว</p>
     </div>
+    <button type="button" class="btn-step" onclick="openLineBroadcastModal('reroute')" style="font-size:11px; padding:6px 12px; background:#06C755; color:#fff; border-color:#05b34c; font-weight:700; white-space:nowrap; align-self:center; display:flex; align-items:center; gap:4px; box-shadow:0 2px 8px rgba(6,199,85,0.3);">
+      <span>📢 LINE แจ้งเส้นทางเลี่ยง</span>
+    </button>
   </div>
 
   <!-- Timeline Stepper Bar -->
@@ -2296,7 +2686,7 @@
               <button class="btn-step" id="btn-whatif-ambulance" onclick="triggerWhatIf('ambulance')" style="font-size:11px; padding:6px 12px; background:var(--apple-amber-surface); color:var(--apple-amber); border-color:var(--apple-amber-border); font-weight:600;">
                 🚑 ถ้ารถพยาบาลเข้าไม่ได้ (เปิดใช้ Plan B)
               </button>
-              <button class="btn-step" onclick="triggerWhatIf('reset')" style="font-size:11px; padding:6px 12px;">
+              <button class="btn-step" id="btn-whatif-reset" onclick="triggerWhatIf('reset')" style="font-size:11px; padding:6px 12px;">
                 🔄 รีเซ็ตเริ่มต้น (20:00 น.)
               </button>
             </div>
@@ -2402,8 +2792,9 @@
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- 2. MOBILE FIELD RESPONDER VIEW -->
+  <!-- 2. MOBILE FIELD RESPONDER VIEW -->
     <div id="mobile-view">
       <div class="field-card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -2468,9 +2859,13 @@
         <input type="number" id="report-depth" class="input-field" value="45" />
       </div>
       <div style="margin-bottom:16px;">
-        <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer;">
+        <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer; margin-bottom:8px;">
           <input type="checkbox" id="report-bridge-submerged" checked style="accent-color:var(--apple-red);" />
           <span>ตรวจพบสะพานไม้ทางแยก 2 จมน้ำ / แผ่นไม้ลอยไม่ปลอดภัย</span>
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer; color:#059440; font-weight:600;">
+          <input type="checkbox" id="report-line-broadcast" checked style="accent-color:#06C755;" />
+          <span>ส่ง LINE Broadcast แจ้งเตือนศูนย์บัญชาการและชุมชนทันที</span>
         </label>
       </div>
       <button class="btn-approve" onclick="submitFieldReport()">ส่งรายงานสถานการณ์หน้างาน</button>
@@ -2653,6 +3048,237 @@
     </div>
   </div>
 
+  <!-- LINE Disaster Alert Broadcast Modal (Apple HIG Glass + LINE Flex Interactive UI) -->
+  <div class="modal-backdrop" id="line-broadcast-modal" onclick="if(event.target===this) closeModal('line-broadcast-modal')">
+    <div class="modal-dialog" style="max-width:960px; max-height:92vh; overflow-y:auto;">
+      <div class="modal-drag-handle"></div>
+      
+      <!-- Modal Header -->
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid var(--border-subtle);">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="width:40px; height:40px; border-radius:10px; background:#06C755; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:900; font-size:12px; box-shadow:0 4px 12px rgba(6,199,85,0.35);">
+            LINE
+          </div>
+          <div>
+            <div class="modal-title" style="display:flex; align-items:center; gap:8px;">
+              <span>ศูนย์ส่งแจ้งเตือนภัยฉุกเฉิน LINE Official</span>
+              <span class="brand-badge" style="background:rgba(6,199,85,0.12); color:#059440; border-color:rgba(6,199,85,0.35); font-size:10px;">Messaging API</span>
+            </div>
+            <div style="font-size:11.5px; color:var(--text-secondary); margin-top:2px;">
+              ส่งข้อความ Broadcast แจ้งเตือน 248 ครัวเรือน (980 คน) และ Multicast ทีมกู้ภัยภาคสนาม พร้อมพรีวิวแบบเรียลไทม์
+            </div>
+          </div>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('line-broadcast-modal')">×</button>
+      </div>
+
+      <!-- Main 2-Column Responsive Layout -->
+      <div class="line-modal-grid">
+        <!-- Left: Broadcast Controls -->
+        <div>
+          <!-- Target Audience Picker -->
+          <div style="margin-bottom:14px;">
+            <div style="font-size:11.5px; font-weight:700; color:var(--text-primary); margin-bottom:6px; display:flex; justify-content:space-between;">
+              <span>👥 กลุ่มเป้าหมายผู้รับข้อความ (Target Audience):</span>
+              <span id="line-aud-count-tag" style="font-size:10px; color:var(--apple-blue); font-weight:600;">248 ครัวเรือน (ทั้งชุมชน)</span>
+            </div>
+            <div class="line-audience-group">
+              <button type="button" class="line-aud-btn active" id="aud-all" onclick="setLineAudience('all_community')">
+                📢 ทุกครัวเรือนในชุมชน (248 หลัง)
+              </button>
+              <button type="button" class="line-aud-btn" id="aud-field" onclick="setLineAudience('field_teams')">
+                🚑 ทีมกู้ภัยภาคสนาม (14 นาย)
+              </button>
+              <button type="button" class="line-aud-btn" id="aud-vuln" onclick="setLineAudience('vulnerable_caregivers')">
+                👵 ผู้ดูแลกลุ่มเปราะบาง (32 หลัง)
+              </button>
+              <button type="button" class="line-aud-btn" id="aud-cmd" onclick="setLineAudience('committee_command')">
+                🏛️ คณะกรรมการชุมชน (8 ท่าน)
+              </button>
+            </div>
+          </div>
+
+          <!-- Hazard Type Selector -->
+          <div style="margin-bottom:14px;">
+            <div style="font-size:11.5px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+              🌪️ ประเภทภัยพิบัติ (Disaster Hazard):
+            </div>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button type="button" class="line-tmpl-btn active" id="haz-flood" onclick="setLineHazardType('flood')">💧 อุทกภัย (Flood)</button>
+              <button type="button" class="line-tmpl-btn" id="haz-wildfire" onclick="setLineHazardType('wildfire')">🔥 เพลิงไหม้ (Fire)</button>
+              <button type="button" class="line-tmpl-btn" id="haz-tsunami" onclick="setLineHazardType('tsunami')">🌊 สึนามิ (Tsunami)</button>
+              <button type="button" class="line-tmpl-btn" id="haz-earthquake" onclick="setLineHazardType('earthquake')">⚠️ แผ่นดินไหว (Quake)</button>
+            </div>
+          </div>
+
+          <!-- 1-Click Quick Disaster Templates -->
+          <div style="margin-bottom:14px; background:var(--surface-inset); padding:10px 12px; border-radius:10px; border:1px solid var(--border-subtle);">
+            <div style="font-size:11px; font-weight:700; color:var(--text-primary); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+              <span>⚡ เทมเพลตด่วนตามสถานการณ์จริง (1-Click Presets):</span>
+            </div>
+            <div class="line-template-group" style="margin-bottom:0;">
+              <button type="button" class="line-tmpl-btn" onclick="setLineTemplate('flood_alert')">🚨 เตือนภัยน้ำท่วม +0.72ม.</button>
+              <button type="button" class="line-tmpl-btn" onclick="setLineTemplate('task_a012')">🚑 มอบหมายภารกิจ TASK #A-012</button>
+              <button type="button" class="line-tmpl-btn" onclick="setLineTemplate('reroute')">🔄 สลับเส้นทางเลี่ยงดอนวัด</button>
+              <button type="button" class="line-tmpl-btn" onclick="setLineTemplate('fire_evac')">🔥 อพยพไฟไหม้ Zone C</button>
+              <button type="button" class="line-tmpl-btn" onclick="setLineTemplate('tsunami_surge')">🌊 อพยพคลื่นยักษ์สึนามิ</button>
+            </div>
+          </div>
+
+          <!-- Alert Title -->
+          <div style="margin-bottom:12px;">
+            <label style="display:block; font-size:11.5px; font-weight:600; color:var(--text-primary); margin-bottom:4px;">
+              หัวข้อการแจ้งเตือน (Broadcast Title)
+            </label>
+            <input type="text" id="line-input-title" class="input-field" value="แจ้งเตือนระดับน้ำเฝ้าระวัง +0.72 ม. (วัดเทวราชกุญชร)" oninput="updateLinePreview()" />
+          </div>
+
+          <!-- Alert Message Body -->
+          <div style="margin-bottom:12px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+              <label style="font-size:11.5px; font-weight:600; color:var(--text-primary);">
+                ข้อความแจ้งเตือน (Line Flex Message Body)
+              </label>
+              <span id="line-char-count" style="font-size:10px; color:var(--text-tertiary);">0 / 500 ตัวอักษร</span>
+            </div>
+            <textarea id="line-input-message" class="input-field" rows="4" oninput="updateLinePreview()">ระดับน้ำแม่น้ำเจ้าพระยาเริ่มเอ่อล้นตลิ่ง คาดแตะวิกฤต 1.00 ม. เวลา 22:00 น. ขอให้ทุกครัวเรือนยกของขึ้นที่สูงทันที ครอบครัวที่มีผู้ป่วยติดเตียงหรือผู้สูงอายุเตรียมพร้อมรับทีมช่วยเหลือ</textarea>
+          </div>
+
+          <!-- Optional Real Channel Access Token -->
+          <details style="margin-bottom:14px; font-size:11px; color:var(--text-secondary); background:var(--surface-inset); padding:8px 12px; border-radius:8px; border:1px solid var(--border-subtle);">
+            <summary style="cursor:pointer; font-weight:600; color:var(--text-primary);">⚙️ ตั้งค่า LINE Messaging API Token (ขั้นสูง)</summary>
+            <div style="margin-top:8px;">
+              <input type="password" id="line-input-token" class="input-field" placeholder="Channel Access Token (ปล่อยว่างเพื่อใช้ระบบจำลองพร้อมใบเสร็จจัดส่ง)..." style="font-size:11px; margin-bottom:4px;" />
+              <div style="font-size:10px; color:var(--text-tertiary); line-height:1.4;">
+                * หากไม่ระบุ Token ระบบจะใช้ High-Fidelity Simulation เชื่อมฐานข้อมูล SQLite พร้อมออก Delivery Receipt และส่งสัญญาณ WebSocket เรียลไทม์
+              </div>
+            </div>
+          </details>
+
+          <!-- Submit Buttons -->
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="btn-step primary" id="btn-send-line-bc" onclick="sendLineBroadcast()" style="flex:1; height:42px; font-size:12.5px; font-weight:700; background:#06C755; border-color:#05b34c; color:#fff; box-shadow:0 4px 14px rgba(6,199,85,0.35);">
+              <span>🚀 ส่ง LINE Broadcast ทันที</span>
+            </button>
+            <button type="button" class="btn-step" id="btn-send-line-push" onclick="sendLinePush()" style="height:42px; font-size:12px; font-weight:600;">
+              <span>📲 Push ถึงทีมกู้ภัย</span>
+            </button>
+          </div>
+          <div id="line-send-status" style="margin-top:8px; font-size:11px; min-height:16px;"></div>
+        </div>
+
+        <!-- Right: Authentic Live Smartphone LINE Flex Message Preview -->
+        <div>
+          <div style="font-size:11.5px; font-weight:700; color:var(--text-primary); margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
+            <span>📱 ตัวอย่างข้อความ LINE Flex Message บนมือถือ:</span>
+            <span style="font-size:10px; color:var(--text-tertiary);">Live Interactive Preview</span>
+          </div>
+
+          <div class="line-phone-frame">
+            <!-- Phone Header Bar -->
+            <div class="line-phone-header">
+              <div class="line-phone-title">
+                <span style="font-size:14px;">‹</span>
+                <div style="width:24px; height:24px; border-radius:50%; background:#06C755; color:#fff; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:900;">CS</div>
+                <div>
+                  <div style="display:flex; align-items:center; gap:4px; font-size:11px; font-weight:700;">
+                    <span>ประชาอารักษ์ Official</span>
+                    <span class="line-verified-badge">✓</span>
+                  </div>
+                  <div style="font-size:8.5px; color:#94a3b8; font-weight:400;">ศูนย์บริหารจัดการภัยพิบัติชุมชน</div>
+                </div>
+              </div>
+              <span id="line-preview-header-time" style="font-size:9px; color:#cbd5e1;">20:24 น.</span>
+            </div>
+
+            <!-- Chat Message Bubble -->
+            <div class="line-chat-body">
+              <div class="line-flex-bubble">
+                <!-- Flex Header Card -->
+                <div class="line-bubble-header flood" id="line-preview-header">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:9.5px; text-transform:uppercase; letter-spacing:0.5px; opacity:0.9;" id="line-preview-badge">🛡️ ประกาศเตือนภัยฉุกเฉิน</span>
+                    <span style="font-size:9px; background:rgba(255,255,255,0.22); padding:1px 6px; border-radius:4px;" id="line-preview-audience-tag">ทั้งชุมชน</span>
+                  </div>
+                  <div style="font-size:13px; font-weight:800; line-height:1.35; margin-top:2px;" id="line-preview-title">
+                    แจ้งเตือนระดับน้ำเฝ้าระวัง +0.72 ม. (วัดเทวราชกุญชร)
+                  </div>
+                </div>
+
+                <!-- Flex Body Card -->
+                <div class="line-bubble-body">
+                  <div id="line-preview-msg" style="margin-bottom:10px; color:#334155; line-height:1.5;">
+                    ระดับน้ำแม่น้ำเจ้าพระยาเริ่มเอ่อล้นตลิ่ง คาดแตะวิกฤต 1.00 ม. เวลา 22:00 น. ขอให้ทุกครัวเรือนยกของขึ้นที่สูงทันที
+                  </div>
+                  
+                  <div style="background:#F1F5F9; border-radius:8px; padding:8px 10px; font-size:10px; display:flex; flex-direction:column; gap:4px;">
+                    <div style="display:flex; justify-content:space-between;">
+                      <span style="color:#64748B;">เวลาประกาศ:</span>
+                      <strong style="color:#0F172A;" id="line-preview-meta-time">20:24 น. (10 ต.ค. 2569)</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between;">
+                      <span style="color:#64748B;">ระดับน้ำเจ้าพระยา:</span>
+                      <strong style="color:#0071E3;" id="line-preview-meta-water">+0.72 เมตร (สูงขึ้นต่อเนื่อง)</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between;">
+                      <span style="color:#64748B;">เวลาเตรียมการ:</span>
+                      <strong style="color:#D70015;">เหลือ 1 ชม. 36 นาที</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Flex Footer Action Card -->
+                <div class="line-bubble-footer">
+                  <a href="#" class="line-bubble-btn" onclick="event.preventDefault(); closeModal('line-broadcast-modal'); setCameraView('iso'); showToast('3D Navigator', 'เปิดมุมมองแผนที่หลบภัยชุมชน', 'info');">
+                    🗺️ เปิดดูแผนที่ 3D & เส้นทางหลบภัย
+                  </a>
+                  <div class="line-bubble-brand">
+                    ระบบบริหารจัดการภัยพิบัติชุมชน ประชาอารักษ์ • ชุมชนวัดเทวราชกุญชร
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Broadcast History Section -->
+      <div style="margin-top:20px; padding-top:16px; border-top:1px solid var(--border-subtle);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="font-size:12px; font-weight:700; color:var(--text-primary); display:flex; align-items:center; gap:6px;">
+            <span>📜 ประวัติการส่งแจ้งเตือนล่าสุด (LINE Broadcast & Push History)</span>
+          </div>
+          <button type="button" class="btn-step" onclick="fetchLineHistory()" style="font-size:10px; padding:3px 8px;">
+            🔄 รีเฟรชประวัติ
+          </button>
+        </div>
+        
+        <div style="overflow-x:auto;">
+          <table class="line-history-table">
+            <thead>
+              <tr>
+                <th>เวลาส่ง</th>
+                <th>ประเภทภัย</th>
+                <th>กลุ่มเป้าหมาย</th>
+                <th>หัวข้อข้อความ</th>
+                <th>ผู้รับ (ราย)</th>
+                <th>สถานะ</th>
+                <th>Delivery Receipt ID</th>
+              </tr>
+            </thead>
+            <tbody id="line-history-tbody">
+              <!-- Populated by JavaScript fetchLineHistory() -->
+              <tr>
+                <td colspan="7" style="text-align:center; padding:12px; color:var(--text-tertiary);">กำลังโหลดประวัติการส่ง...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Native Android Bottom Navigation Bar (Visible on mobile <= 768px) -->
   <nav class="android-bottom-nav" id="android-bottom-nav">
     <button class="bnav-btn active" id="bnav-command" onclick="setAppMode('command')">
@@ -2737,6 +3363,12 @@
     let currentCamView = 'iso';
     let photonMesh = null;
     let activeCurve = null;
+
+    // Rain and What-If Hazard 3D Objects
+    let rainGroup = null, rainGeo = null, rainStreakMat = null, isRainActive = false, rainVels = [];
+    let whatIfBridgeHazard = null, whatIfAmbHazard = null, whatIfMedPointBadge = null, whatIfMedPulseRing = null;
+    let bridgeCautionLight = null, ambCautionLight = null;
+    let currentWhatIf = null;
 
     // Web Audio Disaster Synthesizer
     let disasterAudioCtx = null, disasterAudioGain = null;
@@ -4158,6 +4790,89 @@
       scene.add(earthquakeDustGroup);
     }
 
+    // 3D Rain & Storm Simulation System (What-If Rain +80mm/h & Storm Inundation)
+    function buildRainAndStormSystem(scene) {
+      if (rainGroup) scene.remove(rainGroup);
+      rainGroup = new THREE.Group();
+
+      const rainCount = 3200;
+      const positions = new Float32Array(rainCount * 6);
+      rainVels = [];
+
+      for (let i = 0; i < rainCount; i++) {
+        const x = -80 + Math.random() * 165;
+        const z = -105 + Math.random() * 210;
+        const y = 1.0 + Math.random() * 50;
+        const len = 1.2 + Math.random() * 1.0;
+        const speed = 2.0 + Math.random() * 1.6;
+
+        positions[i * 6 + 0] = x;
+        positions[i * 6 + 1] = y;
+        positions[i * 6 + 2] = z;
+
+        positions[i * 6 + 3] = x + 0.18;
+        positions[i * 6 + 4] = y - len;
+        positions[i * 6 + 5] = z - 0.18;
+
+        rainVels.push({ x, y, z, len, speed });
+      }
+
+      rainGeo = new THREE.BufferGeometry();
+      rainGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+      rainStreakMat = new THREE.LineBasicMaterial({
+        color: 0xa5c9eb,
+        transparent: true,
+        opacity: 0.68,
+        blending: THREE.AdditiveBlending
+      });
+
+      const rainLines = new THREE.LineSegments(rainGeo, rainStreakMat);
+      rainGroup.add(rainLines);
+      rainGroup.visible = false;
+      scene.add(rainGroup);
+    }
+
+    // 3D What-If Hazard Caution System (Bridge Submersion, Blocked Ambulance, Medical Point B)
+    function buildWhatIfHazardSystem(scene) {
+      // 1. Bridge Hazard Pin (Submerged Boardwalk)
+      whatIfBridgeHazard = createBadgeSprite('⛔ อันตราย: สะพานไม้จมน้ำ 45 ซม.', 'ตัดขาดเส้นทางหลัก • AI สลับใช้ทางเบี่ยงดอนพระอุโบสถ (เส้นสีเขียว)', '#D70015');
+      whatIfBridgeHazard.sprite.position.set(8, 4.8, -60);
+      whatIfBridgeHazard.sprite.visible = false;
+      scene.add(whatIfBridgeHazard.sprite);
+
+      bridgeCautionLight = new THREE.PointLight(0xff0022, 0, 20);
+      bridgeCautionLight.position.set(8, 2.5, -60);
+      scene.add(bridgeCautionLight);
+
+      // 2. Ambulance Hazard Pin (Temple Courtyard Inundation)
+      whatIfAmbHazard = createBadgeSprite('🚑 ทางเข้าลานวัดน้ำท่วม (รถพยาบาลติดหล่ม)', 'สลับใช้จุดส่งต่อการแพทย์ B (Community Stretcher Relay)', '#C96800');
+      whatIfAmbHazard.sprite.position.set(-7, 4.5, -60);
+      whatIfAmbHazard.sprite.visible = false;
+      scene.add(whatIfAmbHazard.sprite);
+
+      ambCautionLight = new THREE.PointLight(0xff9900, 0, 20);
+      ambCautionLight.position.set(-7, 2.5, -60);
+      scene.add(ambCautionLight);
+
+      // 3. Medical Point B Highlight & Pulsing Ground Ring
+      whatIfMedPointBadge = createBadgeSprite('📍 Medical Point B (ท่าเรือเทเวศร์)', 'จุดส่งต่อการแพทย์ฉุกเฉิน • รถ EMS พร้อมรับช่วงต่อ', '#1E8E3E');
+      whatIfMedPointBadge.sprite.position.set(28, 4.8, 35);
+      whatIfMedPointBadge.sprite.visible = false;
+      scene.add(whatIfMedPointBadge.sprite);
+
+      whatIfMedPulseRing = createGroundPulseRing(28, 35, '#34C759');
+      whatIfMedPulseRing.group.visible = false;
+      scene.add(whatIfMedPulseRing.group);
+
+      window.whatIfBridgeHazard = whatIfBridgeHazard;
+      window.bridgeCautionLight = bridgeCautionLight;
+      window.whatIfAmbHazard = whatIfAmbHazard;
+      window.ambCautionLight = ambCautionLight;
+      window.whatIfMedPointBadge = whatIfMedPointBadge;
+      window.whatIfMedPulseRing = whatIfMedPulseRing;
+    }
+
     // Disaster-Specific 3D Floating Pins
     let housePins = [];
     function initHousePins() {
@@ -4454,6 +5169,8 @@
       buildFireAndSmokeSystem(scene);
       buildTsunamiSystem(scene);
       buildEarthquakeDustSystem(scene);
+      buildRainAndStormSystem(scene);
+      buildWhatIfHazardSystem(scene);
       initWaterGaugePole();
       initBoardwalkMesh();
       initDisasterPins();
@@ -4840,8 +5557,46 @@
         if (disasterMode === 'flood') {
           if (canalWaterMat) canalWaterMat.color.setHex(0x6e5c47);
           if (floodWaterMat) floodWaterMat.color.setHex(0x7b6852);
-          scene.background = new THREE.Color(currentTheme === 'dark' ? '#070B14' : '#D4DFE8');
-          scene.fog = null;
+          if (isRainActive) {
+            scene.background = new THREE.Color(currentTheme === 'dark' ? '#0f172a' : '#1e293b');
+            scene.fog = new THREE.FogExp2('#1e293b', 0.012);
+          } else {
+            scene.background = new THREE.Color(currentTheme === 'dark' ? '#070B14' : '#D4DFE8');
+            scene.fog = null;
+          }
+        }
+
+        // Animate 3D Rain Streaks
+        if (isRainActive && rainGroup && rainGeo) {
+          rainGroup.visible = true;
+          const rPos = rainGeo.attributes.position;
+          for (let i = 0; i < rainVels.length; i++) {
+            const v = rainVels[i];
+            v.y -= v.speed;
+            v.x += 0.06;
+            v.z -= 0.06;
+            if (v.y < 0.2) {
+              v.y = 48 + Math.random() * 6.0;
+              v.x = -80 + Math.random() * 165;
+              v.z = -105 + Math.random() * 210;
+            }
+            rPos.setXYZ(i * 6 + 0, v.x, v.y, v.z);
+            rPos.setXYZ(i * 6 + 3, v.x + 0.18, v.y - v.len, v.z - 0.18);
+          }
+          rPos.needsUpdate = true;
+        } else if (rainGroup) {
+          rainGroup.visible = false;
+        }
+
+        // Animate What-If Hazard Caution Beacons
+        if (whatIfBridgeHazard && whatIfBridgeHazard.sprite && whatIfBridgeHazard.sprite.visible && bridgeCautionLight) {
+          bridgeCautionLight.intensity = 2.8 + Math.sin(t * 16) * 1.6;
+        }
+        if (whatIfAmbHazard && whatIfAmbHazard.sprite && whatIfAmbHazard.sprite.visible && ambCautionLight) {
+          ambCautionLight.intensity = 2.8 + Math.sin(t * 16) * 1.6;
+        }
+        if (whatIfMedPulseRing && whatIfMedPulseRing.group && whatIfMedPulseRing.group.visible && typeof whatIfMedPulseRing.animate === 'function') {
+          whatIfMedPulseRing.animate(t);
         }
 
         // Boardwalk Planks dynamic rocking / submersion response
@@ -5585,9 +6340,12 @@
           ${
             !state.isPlanApproved
               ? `<button class="btn-approve" onclick="approvePlan()">อนุมัติแผนปฏิบัติการ Plan B (มอบหมายทีม Community Team 02)</button>`
-              : `<div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+              : `<div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; gap:6px; flex-wrap:wrap;">
                    <div style="font-size:11px; color:var(--apple-green); font-weight:600;">✓ แผนได้รับการอนุมัติแล้ว (TASK #A-012 กำลังดำเนินการ)</div>
-                   <button class="btn-step" onclick="resetPlanApproval()" style="font-size:10px; padding:3px 8px;">รีเซ็ตการอนุมัติ</button>
+                   <div style="display:flex; gap:6px;">
+                     <button class="btn-step" onclick="openLineBroadcastModal('task_a012')" style="font-size:10px; padding:3px 8px; background:rgba(6,199,85,0.12); color:#059440; border-color:rgba(6,199,85,0.35); font-weight:700;">📢 LINE สั่งการทีมกู้ภัย</button>
+                     <button class="btn-step" onclick="resetPlanApproval()" style="font-size:10px; padding:3px 8px;">รีเซ็ต</button>
+                   </div>
                  </div>`
           }
         </div>
@@ -6067,28 +6825,66 @@
       const expBox = document.getElementById('whatif-explanation');
       if (!expBox) return;
 
+      // Update button active state classes
+      ['rain', 'bridge', 'ambulance', 'reset'].forEach(t => {
+        const btn = document.getElementById(`btn-whatif-${t}`);
+        if (btn) {
+          if (t === type && type !== 'reset') {
+            btn.classList.add('active-whatif');
+          } else {
+            btn.classList.remove('active-whatif');
+          }
+        }
+      });
+
       if (type === 'rain') {
         playDisasterSound('warning');
-        targetFloodY = 0.40;
-        targetCanalY = 0.18;
+        isRainActive = true;
+        currentWhatIf = 'rain';
+        targetFloodY = 0.55;
+        targetCanalY = 0.25;
         if (state && state.hydrology) {
           state.hydrology.waterLevelMeters = 1.15;
           state.hydrology.rateOfRisePerHour = 0.45;
+          state.hydrology.trend = 'rising_rapid';
         }
+
+        // 3D Weather effects: Dark storm clouds and heavy rain
+        if (scene) {
+          scene.background = new THREE.Color(currentTheme === 'dark' ? '#0f172a' : '#1e293b');
+          scene.fog = new THREE.FogExp2('#1e293b', 0.012);
+        }
+
         expBox.style.display = 'block';
         expBox.style.background = 'rgba(215, 0, 21, 0.08)';
         expBox.style.color = 'var(--apple-red)';
         expBox.style.borderColor = 'var(--apple-red)';
-        expBox.innerHTML = '🌧️ <strong>What-If: ฝนตกหนักเพิ่มขึ้น +80 มม./ชม.</strong><br>ระดับน้ำเจ้าพระยาเอ่อล้นทะลักตลิ่งแตะ +1.15 ม. ตรอก Zone C จมน้ำลึก 55 ซม. ภายใน 20 นาที — ระบบ AI แนะนำยกระดับเป็นอพยพทันที!';
+        expBox.innerHTML = `🌧️ <strong>What-If: ฝนตกหนักเพิ่มขึ้น +80 มม./ชม. (จำลองมรสุมฉับพลัน)</strong><br>
+        ระดับน้ำเจ้าพระยาเอ่อล้นทะลักตลิ่งแตะ <strong>+1.15 ม.</strong> ตรอก Zone C จมน้ำลึก 55 ซม. ภายใน 20 นาที — ระบบ AI แนะนำยกระดับเป็นอพยพทันที!
+        <div style="margin-top:8px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+          <button type="button" class="btn-step" onclick="openLineBroadcastModal('flood_alert')" style="font-size:11px; padding:4px 10px; background:#06C755; color:#fff; border-color:#05b34c; font-weight:700;">
+            📢 ส่ง LINE Broadcast เตือนภัยมรสุมถึง 248 ครัวเรือน
+          </button>
+        </div>`;
         speakThaiVoice('แบบจำลอง ถ้าฝนตกหนักเพิ่มแปดสิบมิลลิเมตร น้ำจะล้นตลิ่งแตะหนึ่งจุดหนึ่งห้าเมตร แนะนำอพยพทันที');
-        showToast('What-If: ฝนตกหนักฉับพลัน', 'ระดับน้ำเพิ่มขึ้นเป็น +1.15 ม. ซอย Zone C จมน้ำ 55 ซม.', 'danger');
+        showToast('What-If: ฝนตกหนักฉับพลัน', 'ระดับน้ำเพิ่มขึ้นเป็น +1.15 ม. ตรอก Zone C จมน้ำ 55 ซม. (เปิดแอนิเมชันฝน 3D ตกหนัก)', 'danger');
       } else if (type === 'bridge') {
         playDisasterSound('warning');
+        currentWhatIf = 'bridge';
         if (state && state.routing) {
           state.routing.isBoardwalkSubmerged = true;
           state.routing.isReplanned = true;
         }
         if (state) state.isReplanningActive = true;
+
+        // Show 3D hazard caution pins & lights
+        if (whatIfBridgeHazard && whatIfBridgeHazard.sprite) whatIfBridgeHazard.sprite.visible = true;
+        if (bridgeCautionLight) bridgeCautionLight.intensity = 3.5;
+        if (whatIfAmbHazard && whatIfAmbHazard.sprite) whatIfAmbHazard.sprite.visible = false;
+        if (ambCautionLight) ambCautionLight.intensity = 0;
+        if (whatIfMedPointBadge && whatIfMedPointBadge.sprite) whatIfMedPointBadge.sprite.visible = false;
+        if (whatIfMedPulseRing && whatIfMedPulseRing.group) whatIfMedPulseRing.group.visible = false;
+
         const bypassWaypoints = [
           { x: -7, y: 1.2, z: -80 },
           { x: -14, y: 1.5, z: -70 },
@@ -6105,24 +6901,80 @@
         expBox.style.background = 'rgba(245, 158, 11, 0.08)';
         expBox.style.color = 'var(--apple-amber)';
         expBox.style.borderColor = 'var(--apple-amber)';
-        expBox.innerHTML = '⛔ <strong>What-If: สะพานไม้ทางแยก 2 จมน้ำ 45 ซม.</strong><br>รถเข็นและเปลสนามไม่สามารถผ่านได้ — AI ทำการ Replanning สลับไปใช้ทางเบี่ยงดอนพระอุโบสถ (เส้นสีเขียว) ระยะทาง +80 ม. ปลอดภัย 100%';
+        expBox.innerHTML = `⛔ <strong>What-If: สะพานไม้ทางแยก 2 จมน้ำ 45 ซม. (เส้นทางหลักถูกตัดขาด)</strong><br>
+        รถเข็นและเปลสนามไม่สามารถผ่านได้ — AI ทำการ Replanning สลับไปใช้ทางเบี่ยงดอนพระอุโบสถ (เส้นสีเขียว) ระยะทาง +80 ม. ปลอดภัย 100%
+        <div style="margin-top:8px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+          <button type="button" class="btn-step" onclick="openLineBroadcastModal('reroute')" style="font-size:11px; padding:4px 10px; background:#06C755; color:#fff; border-color:#05b34c; font-weight:700;">
+            📢 ส่ง LINE Broadcast แจ้งเส้นทางเลี่ยงสู่ชุมชน
+          </button>
+        </div>`;
         speakThaiVoice('แบบจำลอง สะพานไม้จมน้ำ ระบบสลับใช้เส้นทางอ้อมดอนพระอุโบสถทันที');
-        showToast('What-If: สะพานไม้จมน้ำ', 'ระบบสลับเส้นทาง Dynamic Reroute ทันที', 'warning');
+        showToast('What-If: สะพานไม้จมน้ำ', 'ระบบสลับเส้นทาง Dynamic Reroute ทันที พร้อมแสดงป้ายเตือน 3D และไฟกระพริบ', 'warning');
       } else if (type === 'ambulance') {
         playDisasterSound('warning');
+        currentWhatIf = 'ambulance';
+
+        // Show ambulance hazard pin and highlight Medical Point B
+        if (whatIfAmbHazard && whatIfAmbHazard.sprite) whatIfAmbHazard.sprite.visible = true;
+        if (ambCautionLight) ambCautionLight.intensity = 3.5;
+        if (whatIfBridgeHazard && whatIfBridgeHazard.sprite) whatIfBridgeHazard.sprite.visible = false;
+        if (bridgeCautionLight) bridgeCautionLight.intensity = 0;
+        if (whatIfMedPointBadge && whatIfMedPointBadge.sprite) whatIfMedPointBadge.sprite.visible = true;
+        if (whatIfMedPulseRing && whatIfMedPulseRing.group) whatIfMedPulseRing.group.visible = true;
+
+        const bypassWaypoints = [
+          { x: -7, y: 1.2, z: -80 },
+          { x: -14, y: 1.5, z: -70 },
+          { x: -10, y: 1.8, z: -40 },
+          { x: 5, y: 2.2, z: -20 },
+          { x: 20, y: 2.6, z: 0 },
+          { x: 28, y: 2.8, z: 25 },
+          { x: 28, y: 2.8, z: 35 }
+        ];
+        update3DRouteLine(bypassWaypoints, 0xF59E0B);
+
         expBox.style.display = 'block';
         expBox.style.background = 'rgba(0, 113, 227, 0.08)';
         expBox.style.color = 'var(--apple-blue)';
         expBox.style.borderColor = 'var(--apple-blue)';
-        expBox.innerHTML = '🚑 <strong>What-If: ลานวัดเทวราชฯ มีน้ำท่วมขัง</strong><br>รถพยาบาลฉุกเฉินไม่สามารถจอดเทียบได้ — ระบบปรับจุดส่งต่อการแพทย์ไปยังท่าเรือเทเวศร์ และเตรียมเรือกู้ชีพเทศบาลรับช่วงต่อ';
+        expBox.innerHTML = `🚑 <strong>What-If: ลานวัดเทวราชฯ มีน้ำท่วมขัง (รถพยาบาลเข้าไม่ได้)</strong><br>
+        รถพยาบาลฉุกเฉินไม่สามารถจอดเทียบได้ — ระบบปรับจุดส่งต่อการแพทย์ไปยังท่าเรือเทเวศร์ (Medical Point B) และเตรียมเรือกู้ชีพเทศบาลรับช่วงต่อ
+        <div style="margin-top:8px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+          <button type="button" class="btn-step" onclick="openLineBroadcastModal('task_a012')" style="font-size:11px; padding:4px 10px; background:#06C755; color:#fff; border-color:#05b34c; font-weight:700;">
+            📲 ส่ง LINE Push แจ้งทีมกู้ภัยสลับจุดส่งต่อ Medical Point B
+          </button>
+        </div>`;
         speakThaiVoice('แบบจำลอง ลานวัดน้ำท่วม สลับจุดส่งต่อการแพทย์ไปท่าเรือเทเวศร์');
-        showToast('What-If: ลานวัดน้ำท่วม', 'สลับจุดส่งต่อการแพทย์ไปท่าเรือเทเวศร์', 'info');
+        showToast('What-If: ลานวัดน้ำท่วม', 'สลับจุดส่งต่อการแพทย์ไป Medical Point B พร้อมไฮไลท์วงแหวน 3D', 'info');
       } else if (type === 'reset') {
         playDisasterSound('chime');
+        currentWhatIf = null;
+        isRainActive = false;
+        if (rainGroup) rainGroup.visible = false;
+        if (whatIfBridgeHazard && whatIfBridgeHazard.sprite) whatIfBridgeHazard.sprite.visible = false;
+        if (whatIfAmbHazard && whatIfAmbHazard.sprite) whatIfAmbHazard.sprite.visible = false;
+        if (whatIfMedPointBadge && whatIfMedPointBadge.sprite) whatIfMedPointBadge.sprite.visible = false;
+        if (whatIfMedPulseRing && whatIfMedPulseRing.group) whatIfMedPulseRing.group.visible = false;
+        if (bridgeCautionLight) bridgeCautionLight.intensity = 0;
+        if (ambCautionLight) ambCautionLight.intensity = 0;
+
+        if (scene) {
+          scene.background = new THREE.Color(currentTheme === 'dark' ? '#070B14' : '#D4DFE8');
+          scene.fog = null;
+        }
+
+        if (state && state.routing) {
+          state.routing.isBoardwalkSubmerged = false;
+          state.routing.isReplanned = false;
+        }
+        if (state) state.isReplanningActive = false;
+
         expBox.style.display = 'none';
         setStep(state && state.timeline ? state.timeline.currentIndex : 0);
-        showToast('คืนค่าแบบจำลอง', 'กลับสู่สถานการณ์จริงปัจจุบัน', 'info');
+        showToast('คืนค่าแบบจำลอง', 'กลับสู่สถานการณ์จริงปัจจุบัน (20:00 น.)', 'info');
       }
+      window.isRainActive = isRainActive;
+      window.currentWhatIf = currentWhatIf;
       saveLocalState();
       renderApp();
       renderChart();
@@ -6198,6 +7050,7 @@
     async function changeDisasterMode(mode, fromNotification = false) {
       if (!['flood', 'earthquake', 'wildfire', 'tsunami'].includes(mode)) return;
       currentDisasterMode = mode;
+      window.currentDisasterMode = currentDisasterMode;
       if (state) state.disasterMode = mode;
       updateDisasterAudioState(mode);
 
@@ -6360,6 +7213,18 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ planId: 'PLAN_B' })
+        }).catch(() => {});
+
+        // Automatically dispatch LINE Push notification to field rescue team
+        fetch('/api/line/message', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: '🚑 คำสั่งปฏิบัติการ: TASK #A-012 (Plan B)',
+            message: 'ศูนย์บัญชาการอนุมัติ Plan B สั่งการทีม Community Team 02 เคลื่อนย้ายยายสมจิตร (A-012) ผ่านสะพานไม้ยกสูง ไปยัง Medical Point B',
+            target_audience: 'field_teams',
+            hazard_type: currentDisasterMode || 'flood'
+          })
         }).catch(() => {});
       } catch (e) {}
     }
@@ -6754,6 +7619,27 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ depthCm: depth, isBridgeSubmerged: isSub })
         }).catch(() => {});
+
+        const sendLineBc = document.getElementById('report-line-broadcast')?.checked;
+        if (sendLineBc) {
+          const bcTitle = isSub 
+            ? `🚨 ด่วน: สะพานไม้ทางแยก 2 จมน้ำ ${depth} ซม. — สลับใช้เส้นทางเลี่ยง`
+            : `ℹ️ รายงานระดับน้ำหน้างาน: ซอย A-012 ระดับน้ำ ${depth} ซม.`;
+          const bcMsg = isSub
+            ? `ทีมกู้ภัยรายงานตรวจพบสะพานไม้ชำรุด/จมน้ำ ${depth} ซม. รถเข็นและเปลสนามผ่านไม่ได้ ระบบสลับใช้เส้นทางเลี่ยงยกระดับดอนพระอุโบสถวัดเทวราชกุญชร (เส้นสีเขียว) ขอให้ทีมงานและผู้สัญจรใช้เส้นทางเลี่ยงทันที`
+            : `ทีมกู้ภัยรายงานระดับน้ำในซอยอยู่ที่ ${depth} ซม. สะพานไม้ยังสัญจรได้ เจ้าหน้าที่กำลังอำนวยความสะดวก`;
+          
+          fetch('/api/line/broadcast', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              title: bcTitle,
+              message: bcMsg,
+              hazard_type: currentDisasterMode || 'flood',
+              target_audience: 'field_teams'
+            })
+          }).catch(() => {});
+        }
       } catch (e) {}
     }
 
@@ -6874,6 +7760,357 @@
       }
     });
 
+    // --- LINE Alert Broadcast & Messaging Engine ---
+    let currentLineAudience = 'all_community';
+    let currentLineHazard = 'flood';
+    let lineBannerTimer = null;
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/[&<>"']/g, function(m) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+      });
+    }
+
+    const LINE_AUDIENCE_MAP = {
+      'all_community': { label: 'ทั้งชุมชน', count: '248 ครัวเรือน (ทั้งชุมชน)', btnId: 'aud-all' },
+      'field_teams': { label: 'ทีมกู้ภัยสนาม', count: '14 นาย (Field Responders)', btnId: 'aud-field' },
+      'vulnerable_caregivers': { label: 'ผู้ดูแลกลุ่มเปราะบาง', count: '32 หลัง (Bedridden & Elderly)', btnId: 'aud-vuln' },
+      'committee_command': { label: 'คณะกรรมการ', count: '8 ท่าน (Command Committee)', btnId: 'aud-cmd' }
+    };
+
+    const LINE_HAZARD_CONFIG = {
+      'flood': { badge: '🌊 ประกาศเตือนภัยอุทกภัย', headerClass: 'flood', btnId: 'haz-flood' },
+      'wildfire': { badge: '🔥 ประกาศเตือนภัยอัคคีภัย', headerClass: 'fire', btnId: 'haz-wildfire' },
+      'tsunami': { badge: '🌊 ประกาศเตือนภัยคลื่นสึนามิ', headerClass: 'tsunami', btnId: 'haz-tsunami' },
+      'earthquake': { badge: '⚠️ ประกาศเตือนภัยแผ่นดินไหว', headerClass: 'quake', btnId: 'haz-earthquake' }
+    };
+
+    const LINE_TEMPLATES = {
+      'flood_alert': {
+        hazard: 'flood',
+        audience: 'all_community',
+        title: 'แจ้งเตือนระดับน้ำเฝ้าระวัง +0.72 ม. (วัดเทวราชกุญชร)',
+        message: 'ระดับน้ำแม่น้ำเจ้าพระยาเริ่มเอ่อล้นตลิ่ง คาดแตะวิกฤต 1.00 ม. เวลา 22:00 น. ขอให้ทุกครัวเรือนยกของขึ้นที่สูงทันที ครอบครัวที่มีผู้ป่วยติดเตียงหรือผู้สูงอายุเตรียมพร้อมรับทีมช่วยเหลือ'
+      },
+      'task_a012': {
+        hazard: 'flood',
+        audience: 'field_teams',
+        title: '🚑 คำสั่งเคลื่อนย้ายด่วน: TASK #A-012 (ยายสมจิตร 82 ปี)',
+        message: 'มอบหมายทีมกู้ภัยสนาม Community Team 02 เข้าพื้นที่บ้าน A-012 (ซอย 2) เพื่อเคลื่อนย้ายยายสมจิตรผ่านสะพานไม้ยกสูง ไปยังจุดส่งต่อการแพทย์ Medical Point B (ลานวัดเทวราชฯ)'
+      },
+      'reroute': {
+        hazard: 'flood',
+        audience: 'all_community',
+        title: '🔄 แจ้งเปลี่ยนเส้นทางฉุกเฉิน: สะพานไม้ทางแยก 2 จมน้ำ',
+        message: 'สะพานไม้ยกสูงทางแยก 2 มีน้ำท่วมขัง 45 ซม. ไม่สามารถผ่านได้ ระบบสลับใช้เส้นทางเลี่ยงยกระดับดอนพระอุโบสถวัดเทวราชกุญชร (เส้นสีเขียว) ปลอดภัย 100%'
+      },
+      'fire_evac': {
+        hazard: 'wildfire',
+        audience: 'all_community',
+        title: '🔥 คำสั่งอพยพเร่งด่วน: เกิดเพลิงไหม้ลุกลาม Zone C',
+        message: 'ตรวจพบควันหนาแน่นและไฟลุกลามบริเวณบ้านไม้ ซอย 1 ให้ทุกครัวเรือนใน Zone C อพยพตามเส้นทางดอนพระอุโบสถ ไปยังจุดรวมพลศาลาการเปรียญทันที ห้ามใช้ลิฟต์หรือหลบในห้องปิด'
+      },
+      'tsunami_surge': {
+        hazard: 'tsunami',
+        audience: 'all_community',
+        title: '🌊 แจ้งเตือนมวลน้ำหลากฉับพลัน / คลื่นหนุนสูงสุด',
+        message: 'มวลน้ำระลอกใหญ่จากแม่น้ำเจ้าพระยาเข้าปะทะแนวเขื่อน ให้ผู้ที่อยู่ริมตลิ่งและบ้านชั้นเดียว อพยพขึ้นชั้น 2 หรือขึ้นอาคารพระอุโบสถทันที!'
+      }
+    };
+
+    function openLineBroadcastModal(prefillKey) {
+      if (prefillKey && LINE_TEMPLATES[prefillKey]) {
+        setLineTemplate(prefillKey);
+      } else {
+        updateLinePreview();
+      }
+      fetchLineHistory();
+      openModal('line-broadcast-modal');
+    }
+
+    function setLineAudience(aud) {
+      if (!LINE_AUDIENCE_MAP[aud]) return;
+      currentLineAudience = aud;
+      document.querySelectorAll('.line-aud-btn').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById(LINE_AUDIENCE_MAP[aud].btnId);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const countTag = document.getElementById('line-aud-count-tag');
+      if (countTag) countTag.innerText = LINE_AUDIENCE_MAP[aud].count;
+
+      const previewTag = document.getElementById('line-preview-audience-tag');
+      if (previewTag) previewTag.innerText = LINE_AUDIENCE_MAP[aud].label;
+    }
+
+    function setLineHazardType(type) {
+      if (!LINE_HAZARD_CONFIG[type]) return;
+      currentLineHazard = type;
+      window.currentLineHazard = currentLineHazard;
+      ['flood', 'wildfire', 'tsunami', 'earthquake'].forEach(h => {
+        const btn = document.getElementById(`haz-${h}`);
+        if (btn) btn.classList.toggle('active', h === type);
+      });
+
+      const pHeader = document.getElementById('line-preview-header');
+      if (pHeader) {
+        pHeader.className = `line-bubble-header ${LINE_HAZARD_CONFIG[type].headerClass}`;
+      }
+      const pBadge = document.getElementById('line-preview-badge');
+      if (pBadge) {
+        pBadge.innerText = LINE_HAZARD_CONFIG[type].badge;
+      }
+    }
+
+    function setLineTemplate(key) {
+      const tmpl = LINE_TEMPLATES[key];
+      if (!tmpl) return;
+
+      setLineHazardType(tmpl.hazard);
+      setLineAudience(tmpl.audience);
+
+      const titleInput = document.getElementById('line-input-title');
+      const msgInput = document.getElementById('line-input-message');
+      if (titleInput) titleInput.value = tmpl.title;
+      if (msgInput) msgInput.value = tmpl.message;
+
+      updateLinePreview();
+      showToast('เลือกเทมเพลตด่วน', tmpl.title, 'info');
+    }
+
+    function updateLinePreview() {
+      const title = document.getElementById('line-input-title')?.value || 'ประกาศเตือนภัยชุมชน';
+      const msg = document.getElementById('line-input-message')?.value || '';
+      
+      const charCount = document.getElementById('line-char-count');
+      if (charCount) charCount.innerText = `${msg.length} / 500 ตัวอักษร`;
+
+      const pTitle = document.getElementById('line-preview-title');
+      if (pTitle) pTitle.innerText = title;
+
+      const pMsg = document.getElementById('line-preview-msg');
+      if (pMsg) pMsg.innerText = msg;
+
+      const now = new Date();
+      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')} น.`;
+      const dateStr = `${timeStr} (10 ต.ค. 2569)`;
+
+      const pHeaderTime = document.getElementById('line-preview-header-time');
+      if (pHeaderTime) pHeaderTime.innerText = timeStr;
+
+      const pMetaTime = document.getElementById('line-preview-meta-time');
+      if (pMetaTime) pMetaTime.innerText = dateStr;
+
+      const pMetaWater = document.getElementById('line-preview-meta-water');
+      if (pMetaWater && state && state.hydrology) {
+        pMetaWater.innerText = `+${Number(state.hydrology.waterLevelMeters || 0.72).toFixed(2)} เมตร (${state.hydrology.waterLevelMeters >= 0.8 ? 'ระดับวิกฤต' : 'เฝ้าระวัง'})`;
+      }
+    }
+
+    async function sendLineBroadcast() {
+      const title = document.getElementById('line-input-title')?.value.trim();
+      const message = document.getElementById('line-input-message')?.value.trim();
+      const token = document.getElementById('line-input-token')?.value.trim();
+      const statusEl = document.getElementById('line-send-status');
+      const btn = document.getElementById('btn-send-line-bc');
+
+      if (!title || !message) {
+        showToast('กรอกข้อมูลไม่ครบ', 'กรุณาระบุหัวข้อและข้อความแจ้งเตือน', 'danger');
+        return;
+      }
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span>⏳ กำลังส่ง Broadcast...</span>';
+      }
+      if (statusEl) {
+        statusEl.innerHTML = '<span style="color:var(--apple-blue);">กำลังเชื่อมต่อ LINE Messaging API Gateway...</span>';
+      }
+
+      try {
+        const payload = {
+          title,
+          message,
+          hazard_type: currentLineHazard,
+          target_audience: currentLineAudience,
+          channel_access_token: token || undefined
+        };
+
+        const res = await fetch('/api/line/broadcast', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (data.ok || data.success) {
+          playDisasterSound('siren');
+          speakThaiVoice('ระบบส่งข้อความแจ้งเตือนทางไลน์ บรอดคาสต์ สู่ชุมชนเรียบร้อยแล้ว');
+          const count = data.recipients_count || data.recipientsCount || 248;
+          const receipt = data.delivery_receipt || data.deliveryReceipt || 'LINE_OK';
+          showToast('LINE Broadcast สำเร็จ', `ส่งถึง ${count} หลังคาเรือน (Receipt: ${receipt.slice(0, 16)}...)`, 'success');
+          
+          if (statusEl) {
+            statusEl.innerHTML = `<span style="color:#059440; font-weight:600;">✓ ส่งสำเร็จ (${count} ราย) • Receipt ID: ${receipt}</span>`;
+          }
+
+          showFloatingLineBanner(title, message, currentLineHazard);
+          fetchLineHistory();
+        } else {
+          showToast('ส่งไม่สำเร็จ', data.error || 'Server error', 'danger');
+          if (statusEl) {
+            statusEl.innerHTML = `<span style="color:var(--apple-red);">เกิดข้อผิดพลาด: ${data.error || 'ไม่สามารถส่งได้'}</span>`;
+          }
+        }
+      } catch (err) {
+        showToast('ข้อผิดพลาดเครือข่าย', err.message, 'danger');
+        if (statusEl) {
+          statusEl.innerHTML = `<span style="color:var(--apple-red);">Network Error: ${err.message}</span>`;
+        }
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<span>🚀 ส่ง LINE Broadcast ทันที</span>';
+        }
+      }
+    }
+
+    async function sendLinePush() {
+      const title = document.getElementById('line-input-title')?.value.trim();
+      const message = document.getElementById('line-input-message')?.value.trim();
+      const token = document.getElementById('line-input-token')?.value.trim();
+      const statusEl = document.getElementById('line-send-status');
+      const btn = document.getElementById('btn-send-line-push');
+
+      if (!title || !message) {
+        showToast('กรอกข้อมูลไม่ครบ', 'กรุณาระบุหัวข้อและข้อความแจ้งเตือน', 'danger');
+        return;
+      }
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span>⏳ ส่ง Push...</span>';
+      }
+
+      try {
+        const res = await fetch('/api/line/message', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: `[Push ทีมกู้ภัย] ${title}`,
+            message,
+            target_audience: 'field_teams',
+            hazard_type: currentLineHazard,
+            channel_access_token: token || undefined
+          })
+        });
+        const data = await res.json();
+        if (data.ok || data.success) {
+          playDisasterSound('chime');
+          const receipt = data.delivery_receipt || data.deliveryReceipt || 'PUSH_OK';
+          showToast('LINE Push สำเร็จ', `ส่งตรงถึงทีมกู้ภัยภาคสนาม 14 นาย (${receipt.slice(0, 16)}...)`, 'success');
+          if (statusEl) {
+            statusEl.innerHTML = `<span style="color:#059440; font-weight:600;">✓ ส่ง Push สำเร็จถึงทีมกู้ภัย (Receipt: ${receipt})</span>`;
+          }
+          fetchLineHistory();
+        } else {
+          showToast('ส่งไม่สำเร็จ', data.error || 'Push failed', 'danger');
+        }
+      } catch (e) {
+        showToast('ข้อผิดพลาด', e.message, 'danger');
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<span>📲 Push ถึงทีมกู้ภัย</span>';
+        }
+      }
+    }
+
+    function showFloatingLineBanner(title, desc, hazardType = 'flood') {
+      const banner = document.getElementById('line-floating-banner');
+      if (!banner) return;
+
+      const titleEl = document.getElementById('line-banner-title');
+      const descEl = document.getElementById('line-banner-desc');
+      const tagEl = document.getElementById('line-banner-tag');
+      const timeEl = document.getElementById('line-banner-time');
+
+      if (titleEl) titleEl.innerText = title;
+      if (descEl) descEl.innerText = desc;
+      if (tagEl) {
+        const hazardTagNames = { flood: '💧 LINE อุทกภัย', wildfire: '🔥 LINE เพลิงไหม้', tsunami: '🌊 LINE สึนามิ', earthquake: '⚠️ LINE แผ่นดินไหว' };
+        tagEl.innerText = `${hazardTagNames[hazardType] || '🚨 LINE ALERT'} • BROADCAST DISPATCHED`;
+      }
+      if (timeEl) timeEl.innerText = 'เมื่อสักครู่';
+
+      banner.style.display = 'flex';
+      banner.style.animation = 'slideDownBanner 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
+
+      if (lineBannerTimer) clearTimeout(lineBannerTimer);
+      lineBannerTimer = setTimeout(() => {
+        closeLineFloatingBanner();
+      }, 8500);
+    }
+
+    function closeLineFloatingBanner() {
+      const banner = document.getElementById('line-floating-banner');
+      if (!banner) return;
+      banner.style.display = 'none';
+      if (lineBannerTimer) {
+        clearTimeout(lineBannerTimer);
+        lineBannerTimer = null;
+      }
+    }
+
+    async function fetchLineHistory() {
+      const tbody = document.getElementById('line-history-tbody');
+      if (!tbody) return;
+
+      try {
+        const res = await fetch('/api/line/history');
+        const data = await res.json();
+        if ((data.ok || data.success || data.history) && Array.isArray(data.history) && data.history.length > 0) {
+          tbody.innerHTML = data.history.map(item => {
+            const hazardBadges = {
+              flood: '<span style="background:rgba(0,113,227,0.12); color:var(--apple-blue); padding:2px 6px; border-radius:4px; font-weight:600;">💧 Flood</span>',
+              wildfire: '<span style="background:rgba(215,0,21,0.12); color:var(--apple-red); padding:2px 6px; border-radius:4px; font-weight:600;">🔥 Fire</span>',
+              tsunami: '<span style="background:rgba(88,86,214,0.12); color:#5856D6; padding:2px 6px; border-radius:4px; font-weight:600;">🌊 Tsunami</span>',
+              earthquake: '<span style="background:rgba(245,158,11,0.12); color:var(--apple-amber); padding:2px 6px; border-radius:4px; font-weight:600;">⚠️ Quake</span>'
+            };
+            const audNames = {
+              all_community: 'ทั้งชุมชน (248)',
+              field_teams: 'กู้ภัยสนาม (14)',
+              vulnerable_caregivers: 'กลุ่มเปราะบาง (32)',
+              committee_command: 'คณะกรรมการ (8)'
+            };
+            return `
+              <tr>
+                <td style="font-family:monospace; font-size:10px;">${item.sent_at || '-'}</td>
+                <td>${hazardBadges[item.hazard_type] || item.hazard_type}</td>
+                <td style="font-weight:600;">${audNames[item.target_audience] || item.target_audience}</td>
+                <td style="max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${escapeHtml(item.message || '')}">
+                  <strong>${escapeHtml(item.title || '')}</strong>
+                </td>
+                <td style="text-align:center; font-weight:700; color:var(--apple-blue);">${item.recipients_count || 1}</td>
+                <td>
+                  <span class="line-status-pill ${item.status === 'delivered' || item.status === 'sent' ? 'delivered' : 'pending'}">
+                    ${item.status === 'delivered' || item.status === 'sent' ? '✓ สำเร็จ' : item.status}
+                  </span>
+                </td>
+                <td style="font-family:monospace; font-size:9.5px; color:var(--text-tertiary);" title="${item.delivery_receipt || ''}">
+                  ${(item.delivery_receipt || '-').slice(0, 18)}...
+                </td>
+              </tr>
+            `;
+          }).join('');
+        } else {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:12px; color:var(--text-tertiary);">ไม่มีประวัติการส่ง</td></tr>';
+        }
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:12px; color:var(--apple-red);">โหลดประวัติไม่สำเร็จ: ${err.message}</td></tr>`;
+      }
+    }
+
     // WebSocket Real-time Bus with Serverless Fallback
     let wsAttempts = 0;
     let fallbackPollInterval = null;
@@ -6905,6 +8142,12 @@
                 }
               }
               renderApp();
+            } else if (payload.event === 'LINE_ALERT_BROADCASTED') {
+              showFloatingLineBanner(payload.data.title, payload.data.message, payload.data.hazard_type);
+              playDisasterSound('warning');
+              if (document.getElementById('line-broadcast-modal')?.classList.contains('show')) {
+                fetchLineHistory();
+              }
             }
           } catch (e) {
             console.error('WS error:', e);

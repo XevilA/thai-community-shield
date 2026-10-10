@@ -191,6 +191,7 @@ export function getSystemState(stepOverride?: number) {
     incidents,
     tasks,
     nurseNotes,
+    lineBroadcasts: db.query('SELECT * FROM line_broadcasts ORDER BY id DESC').all(),
     aiExplanation,
   };
 }
@@ -520,6 +521,203 @@ const server = (Bun as any).serve({
           broadcast('STATE_UPDATED', state);
           return json({ success: true, parsed, incCode });
         })();
+      }
+
+      // --- LINE Notification & Broadcast Engine ---
+      if (url.pathname === '/api/line/broadcast' && req.method === 'POST') {
+        return (async () => {
+          const body = await req.json().catch(() => ({}));
+          const title = body.title || 'แจ้งเตือนภัยพิบัติระดับชุมชน (Community Shield)';
+          const message = body.message || 'โปรดติดตามสถานการณ์ระดับน้ำและปฏิบัติตามคำแนะนำของศูนย์บัญชาการ';
+          const hazardType = body.hazardType || body.hazard_type || currentDisasterMode || 'flood';
+          const targetAudience = body.targetAudience || body.target_audience || 'all_community';
+          const userToken = body.channelAccessToken || body.channel_access_token || process.env.LINE_CHANNEL_ACCESS_TOKEN || '';
+          const nowTime = TIMELINE_STEPS[currentStepIndex].time;
+          const broadcastId = `lb-${Date.now()}`;
+          
+          let deliveryReceipt = `LINE_SIM_${Date.now()}`;
+          let status = 'sent';
+          let realApiStatus = null;
+
+          // If a real token is provided, attempt actual LINE Messaging API Broadcast
+          if (userToken && userToken.trim().length > 10) {
+            try {
+              const flexPayload = {
+                messages: [
+                  {
+                    type: 'flex',
+                    altText: `[ด่วน] ${title}`,
+                    contents: {
+                      type: 'bubble',
+                      header: {
+                        type: 'box',
+                        layout: 'vertical',
+                        backgroundColor: hazardType === 'flood' ? '#0071E3' : hazardType === 'wildfire' ? '#EA580C' : hazardType === 'tsunami' ? '#0284C7' : '#D97706',
+                        contents: [
+                          { type: 'text', text: '🛡️ ประชาอารักษ์ — แจ้งเตือนภัยชุมชน', color: '#FFFFFF', size: 'xs', weight: 'bold' },
+                          { type: 'text', text: title, color: '#FFFFFF', size: 'md', weight: 'bold', wrap: true, margin: 'xs' }
+                        ]
+                      },
+                      body: {
+                        type: 'box',
+                        layout: 'vertical',
+                        contents: [
+                          { type: 'text', text: message, wrap: true, size: 'sm', color: '#333333' },
+                          { type: 'separator', margin: 'md' },
+                          {
+                            type: 'box',
+                            layout: 'vertical',
+                            margin: 'md',
+                            spacing: 'sm',
+                            contents: [
+                              {
+                                type: 'box',
+                                layout: 'baseline',
+                                contents: [
+                                  { type: 'text', text: 'เวลาแจ้งเตือน:', size: 'xs', color: '#888888', flex: 2 },
+                                  { type: 'text', text: `${nowTime} น. (10 ต.ค. 2569)`, size: 'xs', color: '#111111', flex: 4 }
+                                ]
+                              },
+                              {
+                                type: 'box',
+                                layout: 'baseline',
+                                contents: [
+                                  { type: 'text', text: 'พื้นที่เป้าหมาย:', size: 'xs', color: '#888888', flex: 2 },
+                                  { type: 'text', text: 'ชุมชนวัดเทวราชกุญชร เขตดุสิต', size: 'xs', color: '#111111', flex: 4 }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      footer: {
+                        type: 'box',
+                        layout: 'vertical',
+                        spacing: 'sm',
+                        contents: [
+                          {
+                            type: 'button',
+                            style: 'primary',
+                            color: '#0071E3',
+                            action: { type: 'uri', label: 'ดูแผนผัง 3D และเส้นทางเลี่ยง', uri: 'https://thai-community-shield.vercel.app' }
+                          },
+                          {
+                            type: 'button',
+                            style: 'secondary',
+                            action: { type: 'uri', label: 'โทรสายด่วนเขตดุสิต (02-243-5311)', uri: 'tel:022435311' }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              };
+
+              const lineRes = await fetch('https://api.line.me/v2/bot/message/broadcast', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${userToken.trim()}`
+                },
+                body: JSON.stringify(flexPayload)
+              });
+              realApiStatus = lineRes.status;
+              if (lineRes.ok) {
+                deliveryReceipt = `LINE_LIVE_${Date.now()}`;
+              } else {
+                deliveryReceipt = `LINE_LIVE_ERR_${lineRes.status}`;
+              }
+            } catch (netErr: any) {
+              deliveryReceipt = `LINE_NET_ERR: ${netErr.message}`;
+            }
+          }
+
+          const recipients = targetAudience === 'field_teams' ? 14 : targetAudience === 'caregivers' ? 16 : 248;
+
+          db.run(`
+            INSERT INTO line_broadcasts (id, sent_at, hazard_type, target_audience, title, message, recipients_count, status, delivery_receipt)
+            VALUES ($id, $sent_at, $hazard_type, $target_audience, $title, $message, $recipients, $status, $delivery_receipt);
+          `, {
+            $id: broadcastId,
+            $sent_at: nowTime,
+            $hazard_type: hazardType,
+            $target_audience: targetAudience,
+            $title: title,
+            $message: message,
+            $recipients: recipients,
+            $status: status,
+            $delivery_receipt: deliveryReceipt
+          });
+
+          const state = getSystemState();
+          broadcast('LINE_ALERT_BROADCASTED', {
+            id: broadcastId,
+            sent_at: nowTime,
+            hazard_type: hazardType,
+            target_audience: targetAudience,
+            title,
+            message,
+            recipients,
+            deliveryReceipt,
+            realApiStatus
+          });
+          broadcast('STATE_UPDATED', state);
+
+          return json({
+            success: true,
+            broadcastId,
+            sent_at: nowTime,
+            recipients_count: recipients,
+            deliveryReceipt,
+            realApiStatus,
+            state
+          });
+        })();
+      }
+
+      if (url.pathname === '/api/line/message' && req.method === 'POST') {
+        return (async () => {
+          const body = await req.json().catch(() => ({}));
+          const target = body.target || body.target_audience || 'field_teams';
+          const title = body.title || 'มอบหมายงานกู้ชีพผ่าน LINE';
+          const message = body.message || 'มอบหมายงานเร่งด่วน กรุณาตรวจสอบและดำเนินการ';
+          const hazardType = body.hazardType || body.hazard_type || currentDisasterMode || 'flood';
+          const nowTime = TIMELINE_STEPS[currentStepIndex].time;
+          const msgId = `lm-${Date.now()}`;
+          const receipt = `LINE_DIRECT_${Date.now()}`;
+
+          db.run(`
+            INSERT INTO line_broadcasts (id, sent_at, hazard_type, target_audience, title, message, recipients_count, status, delivery_receipt)
+            VALUES ($id, $sent_at, $hazard, $target, $title, $message, 1, 'sent', $receipt);
+          `, {
+            $id: msgId,
+            $sent_at: nowTime,
+            $hazard: hazardType,
+            $target: target,
+            $title: title,
+            $message: message,
+            $receipt: receipt
+          });
+
+          const state = getSystemState();
+          broadcast('LINE_ALERT_BROADCASTED', {
+            id: msgId,
+            sent_at: nowTime,
+            hazard_type: hazardType,
+            target_audience: target,
+            title,
+            message,
+            recipients: 1,
+            deliveryReceipt: receipt
+          });
+          broadcast('STATE_UPDATED', state);
+          return json({ success: true, msgId, sent_at: nowTime, deliveryReceipt: receipt, state });
+        })();
+      }
+
+      if (url.pathname === '/api/line/history') {
+        const history = db.query('SELECT * FROM line_broadcasts ORDER BY id DESC').all();
+        return json({ history });
       }
 
       // 5. Serve PWA Manifest, Service Worker & Static Assets
