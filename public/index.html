@@ -462,6 +462,207 @@
       filter: brightness(1.08);
     }
 
+    /* LoRaWAN Status Button in Header */
+    .btn-lora-status {
+      background: rgba(14, 165, 233, 0.12);
+      border: 1px solid rgba(14, 165, 233, 0.35);
+      color: #0284C7;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 0 12px;
+      height: 36px;
+      border-radius: 9px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    [data-theme="dark"] .btn-lora-status {
+      background: rgba(14, 165, 233, 0.20);
+      border-color: rgba(14, 165, 233, 0.45);
+      color: #38BDF8;
+    }
+    .btn-lora-status:hover {
+      background: #0284C7;
+      color: #FFFFFF;
+      box-shadow: 0 4px 14px rgba(14, 165, 233, 0.35);
+    }
+    .lora-pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 8px #10B981;
+      animation: loraDotPulse 1.8s infinite;
+      flex-shrink: 0;
+    }
+    @keyframes loraDotPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.8); }
+    }
+    .lora-btn-label-desktop { display: inline; }
+    .lora-btn-label-mobile { display: none; }
+
+    /* LoRa Telemetry HUD Badge inside 3D Viewport */
+    #lora-hud-badge {
+      position: absolute;
+      bottom: 50px;
+      left: 12px;
+      z-index: 15;
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #F1F5F9;
+      border-radius: 8px;
+      padding: 5px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+      transition: all 0.2s ease;
+    }
+    #lora-hud-badge:hover {
+      background: rgba(2, 132, 199, 0.95);
+      color: #FFFFFF;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(2, 132, 199, 0.4);
+    }
+
+    /* Tsunami Multi-Phase Simulation Controller */
+    #tsunami-phase-controller {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      z-index: 20;
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      border-radius: 12px;
+      padding: 10px 14px;
+      color: #F8FAFC;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      animation: fadeInDown 0.3s ease;
+    }
+    .tsunami-ctrl-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tsunami-ctrl-title {
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #38BDF8;
+    }
+    .tsunami-ctrl-telemetry {
+      font-size: 11px;
+      color: #94A3B8;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      flex-wrap: wrap;
+    }
+    .tsunami-phases-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr) auto;
+      gap: 6px;
+      align-items: center;
+    }
+    .tsunami-phase-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #E2E8F0;
+      border-radius: 8px;
+      padding: 6px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 2px;
+    }
+    .tsunami-phase-btn:hover {
+      background: rgba(56, 189, 248, 0.25);
+      border-color: #38BDF8;
+      color: #FFF;
+    }
+    .tsunami-phase-btn.active {
+      background: linear-gradient(135deg, #0284C7, #0369A1);
+      border-color: #38BDF8;
+      color: #FFFFFF;
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.5);
+    }
+    .tsunami-phase-sub {
+      font-size: 9.5px;
+      opacity: 0.85;
+      font-weight: 400;
+    }
+    .tsunami-progress-bar-wrap {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .tsunami-progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #38BDF8, #0284C7);
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    /* Buddhist Era (พ.ศ.) Historical Flood Strip */
+    .historical-years-strip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+      padding: 6px 10px;
+      background: var(--surface-sunken);
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+      font-size: 11px;
+    }
+    .pill-be {
+      border-radius: 12px;
+      padding: 2px 8px;
+      font-weight: 600;
+      font-size: 10.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .pill-be:hover {
+      transform: scale(1.04);
+      filter: brightness(1.08);
+    }
+
     .segmented-control {
       display: flex;
       align-items: center;
@@ -2354,6 +2555,12 @@
         <span class="line-btn-label-mobile">LINE</span>
       </button>
 
+      <button class="btn-lora-status" id="btn-hdr-lora" onclick="openLoraModal()" title="เครือข่าย LoRaWAN AS923 เซนเซอร์วัดระดับน้ำและเกตเวย์ชุมชน">
+        <span class="lora-pulse-dot"></span>
+        <span class="lora-btn-label-desktop" id="hdr-lora-label-desktop">📡 LoRa: AS923 (-78dBm)</span>
+        <span class="lora-btn-label-mobile">📡 LoRa</span>
+      </button>
+
       <div class="segmented-control">
         <button class="seg-btn active" id="tab-command" onclick="setAppMode('command')">
           <svg class="icon" viewBox="0 0 24 24">
@@ -2618,6 +2825,54 @@
 
           <div id="viewport-3d-box">
             <div id="canvas-container"></div>
+            
+            <!-- Tsunami Multi-Phase Simulation Controller (Active during Tsunami mode) -->
+            <div id="tsunami-phase-controller" style="display:none;">
+              <div class="tsunami-ctrl-header">
+                <div class="tsunami-ctrl-title">
+                  <span>🌊 แบบจำลองคลื่นยักษ์สึนามิ & คลื่นพายุซัดฝั่ง (Multi-Phase Tsunami)</span>
+                  <span class="brand-badge" id="tsunami-live-phase-badge" style="background:#0284c7; color:#fff; border:none; padding:2px 8px;">ระยะที่ 1: น้ำลดผิดปกติ</span>
+                </div>
+                <div class="tsunami-ctrl-telemetry">
+                  <span id="tsunami-time-meter">⏱️ 00:00 / 01:15</span>
+                  <span id="tsunami-level-meter" style="color:#38bdf8;">ระดับน้ำ: -1.50 ม. รทก.</span>
+                  <span id="tsunami-speed-meter">ความเร็ว: 48 กม./ชม.</span>
+                </div>
+              </div>
+
+              <div class="tsunami-phases-strip">
+                <button class="tsunami-phase-btn active" id="btn-tsu-p1" onclick="jumpTsunamiPhase(1)">
+                  <span>🌊 1. น้ำลดผิดปกติ</span>
+                  <span class="tsunami-phase-sub">-1.5 ม. รทก. (0-15s)</span>
+                </button>
+                <button class="tsunami-phase-btn" id="btn-tsu-p2" onclick="jumpTsunamiPhase(2)">
+                  <span>🚨 2. กำแพงคลื่นซัด</span>
+                  <span class="tsunami-phase-sub">+4.8 ม. รทก. (15-35s)</span>
+                </button>
+                <button class="tsunami-phase-btn" id="btn-tsu-p3" onclick="jumpTsunamiPhase(3)">
+                  <span>🏚️ 3. ท่วมมิดชั้น 1</span>
+                  <span class="tsunami-phase-sub">+4.2 ม. รทก. (35-55s)</span>
+                </button>
+                <button class="tsunami-phase-btn" id="btn-tsu-p4" onclick="jumpTsunamiPhase(4)">
+                  <span>🔄 4. คลื่นระลอกสอง</span>
+                  <span class="tsunami-phase-sub">น้ำดูดย้อน (55-75s)</span>
+                </button>
+                <button class="btn-step" id="btn-tsu-playpause" onclick="toggleTsunamiPlayPause()" style="font-size:11px; padding:6px 10px; background:rgba(255,255,255,0.15); color:#fff; border-color:rgba(255,255,255,0.25);">
+                  ⏸️ หยุดวิเคราะห์
+                </button>
+              </div>
+
+              <div class="tsunami-progress-bar-wrap">
+                <div class="tsunami-progress-bar-fill" id="tsunami-progress-fill"></div>
+              </div>
+            </div>
+
+            <!-- LoRa Telemetry HUD Badge inside 3D Viewport -->
+            <div id="lora-hud-badge" onclick="openLoraModal()" title="คลิกเพื่อดูสถาปัตยกรรมโครงข่ายและโทรมาตร LoRaWAN">
+              <span class="lora-pulse-dot"></span>
+              <span id="lora-hud-text">📡 LoRa AS923: SF9 | RSSI -78 dBm | โหนดท่าน้ำ ➔ หอระฆัง</span>
+            </div>
+
             <div id="loading-3d" style="position:absolute; top:12px; right:12px; z-index:15; background:rgba(255, 255, 255, 0.92); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); padding:6px 14px; border-radius:10px; box-shadow:0 4px 16px rgba(0,0,0,0.08); border:1px solid rgba(0,0,0,0.08); display:flex; align-items:center; gap:8px; pointer-events:none; transition:opacity 0.5s ease;">
               <div style="width:8px; height:8px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981; flex-shrink:0;"></div>
               <div style="text-align:left;">
@@ -2637,6 +2892,9 @@
               <button class="cam-btn" id="btn-cam-boardwalk" onclick="setCameraView('boardwalk')">
                 <svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
                 สะพานไม้ J2
+              </button>
+              <button class="cam-btn" id="btn-cam-lora" onclick="setCameraView('lora')" title="โฟกัสเสาเซนเซอร์ LoRa ท่าน้ำและเกตเวย์หอระฆัง">
+                📡 โฟกัส LoRa
               </button>
               <button class="cam-btn" id="btn-cam-top" onclick="setCameraView('top')">
                 <svg class="icon" viewBox="0 0 24 24"><path d="M3 3v18h18V3H3zm16 16H5V5h14v14z"/></svg>
@@ -2706,6 +2964,9 @@
               <button class="btn-step active" id="btn-chart-forecast" onclick="setChartMode('forecast')" style="font-size:11px; padding:4px 10px;">
                 📈 พยากรณ์วันนี้ (พ.ศ. 2569)
               </button>
+              <button class="btn-step" id="btn-chart-overlay" onclick="toggleHistoricalOverlay()" style="font-size:11px; padding:4px 10px;" title="ซ้อนเปรียบเทียบสถิติปี พ.ศ. 2554, 2564, 2565, 2567, 2569 บนกราฟพร้อมกัน">
+                📊 ซ้อนสถิติ พ.ศ. บนกราฟ
+              </button>
               <button class="btn-step" id="btn-chart-historical" onclick="setChartMode('historical')" style="font-size:11px; padding:4px 10px;">
                 📚 ย้อนหลังเปรียบเทียบปี พ.ศ. (2554-2567)
               </button>
@@ -2713,6 +2974,26 @@
                 +0.17 ม. / 30 นาที
               </span>
             </div>
+          </div>
+
+          <!-- Permanent Buddhist Era Historical Comparison Strip -->
+          <div class="historical-years-strip" id="buddhist-era-strip">
+            <span style="font-weight:700; color:var(--text-primary);">🏛️ ระดับน้ำเทียบสถิติปี พ.ศ.:</span>
+            <span class="pill-be" onclick="setChartMode('historical')" style="background:rgba(215,0,21,0.12); color:#D70015; border:1px solid rgba(215,0,21,0.3);" title="คลิกดูรายละเอียดสถิติปี พ.ศ. 2554">
+              🔴 พ.ศ. 2554 (+2.60 ม. มหาอุทกภัย)
+            </span>
+            <span class="pill-be" onclick="setChartMode('historical')" style="background:rgba(255,105,0,0.12); color:#FF6900; border:1px solid rgba(255,105,0,0.3);" title="คลิกดูรายละเอียดสถิติปี พ.ศ. 2565">
+              🟠 พ.ศ. 2565 (+1.95 ม. โนรู)
+            </span>
+            <span class="pill-be" onclick="setChartMode('historical')" style="background:rgba(245,158,11,0.12); color:#F59E0B; border:1px solid rgba(245,158,11,0.3);" title="คลิกดูรายละเอียดสถิติปี พ.ศ. 2564">
+              🟡 พ.ศ. 2564 (+1.85 ม. เตี้ยนหมู่)
+            </span>
+            <span class="pill-be" onclick="setChartMode('historical')" style="background:rgba(0,113,227,0.12); color:#0071E3; border:1px solid rgba(0,113,227,0.3);" title="คลิกดูรายละเอียดสถิติปี พ.ศ. 2567">
+              🔵 พ.ศ. 2567 (+1.75 ม. น้ำเหนือหลาก)
+            </span>
+            <span class="pill-be" onclick="setChartMode('forecast')" style="background:rgba(52,199,89,0.16); color:#248A3D; border:1px solid rgba(52,199,89,0.35); font-weight:700;" title="คลิกดูการคาดการณ์ปี พ.ศ. 2569 ปัจจุบัน">
+              🟢 พ.ศ. 2569 ปัจจุบัน (+0.42 ➔ +1.00 ม.)
+            </span>
           </div>
 
           <canvas id="chart-canvas" style="width:100%; height:195px;"></canvas>
@@ -3279,6 +3560,159 @@
     </div>
   </div>
 
+  <!-- LoRaWAN Telemetry & Mesh Gateway Modal (Section 37 in สรุป.md) -->
+  <div class="modal-backdrop" id="lora-telemetry-modal" onclick="if(event.target===this) closeModal('lora-telemetry-modal')">
+    <div class="modal-dialog" style="max-width:920px; max-height:92vh; overflow-y:auto;">
+      <div class="modal-drag-handle"></div>
+      
+      <!-- Modal Header -->
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid var(--border-subtle);">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="width:40px; height:40px; border-radius:10px; background:linear-gradient(135deg, #0284c7, #0ea5e9); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:900; font-size:18px; box-shadow:0 4px 12px rgba(14,165,233,0.35);">
+            📡
+          </div>
+          <div>
+            <div style="font-size:16px; font-weight:700; color:var(--text-primary); display:flex; align-items:center; gap:8px;">
+              <span>สถาปัตยกรรมโครงข่าย LoRaWAN & โทรมาตรเซนเซอร์ชุมชน</span>
+              <span class="brand-badge" style="background:rgba(16,185,129,0.12); color:#10B981; border-color:rgba(16,185,129,0.3);">🟢 AS923-TH ONLINE</span>
+            </div>
+            <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">
+              ระบบสื่อสารไร้สายระยะไกลพลังงานต่ำ (LPWAN) รองรับ Offline-First ตามสรุปสถาปัตยกรรม Section 37
+            </div>
+          </div>
+        </div>
+        <button class="btn-step" onclick="closeModal('lora-telemetry-modal')" style="padding:4px 10px; font-size:12px;">✕ ปิด</button>
+      </div>
+
+      <!-- Section 37 Pipeline Architecture Diagram -->
+      <div style="background:var(--surface-sunken); border:1px solid var(--border-subtle); border-radius:12px; padding:12px 14px; margin-bottom:16px;">
+        <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">
+          📐 ผังการไหลข้อมูล LoRaWAN (Section 37 Architecture Pipeline)
+        </div>
+        <div style="display:flex; align-items:center; gap:4px; flex-wrap:wrap; font-size:11px;">
+          <span style="background:var(--surface-card); border:1px solid var(--border-subtle); padding:6px 10px; border-radius:8px; font-weight:600; display:flex; align-items:center; gap:5px;">
+            🌊 Water Sensor<br><small style="color:var(--text-tertiary);">ท่าน้ำเจ้าพระยา</small>
+          </span>
+          <span style="color:var(--text-tertiary); font-weight:bold;">➔</span>
+          <span style="background:rgba(14,165,233,0.12); border:1px solid rgba(14,165,233,0.35); color:#0284c7; padding:6px 10px; border-radius:8px; font-weight:700; display:flex; align-items:center; gap:5px;">
+            📡 LoRa AS923<br><small>923.2MHz / SF9</small>
+          </span>
+          <span style="color:var(--text-tertiary); font-weight:bold;">➔</span>
+          <span style="background:var(--surface-card); border:1px solid var(--border-subtle); padding:6px 10px; border-radius:8px; font-weight:600; display:flex; align-items:center; gap:5px;">
+            🗼 Community Gateway<br><small style="color:var(--text-tertiary);">หอระฆังวัดเทวราช</small>
+          </span>
+          <span style="color:var(--text-tertiary); font-weight:bold;">➔</span>
+          <span style="background:var(--surface-card); border:1px solid var(--border-subtle); padding:6px 10px; border-radius:8px; font-weight:600; display:flex; align-items:center; gap:5px;">
+            🗄️ SQLite Database<br><small style="color:var(--text-tertiary);">WAL Mode / Local SSD</small>
+          </span>
+          <span style="color:var(--text-tertiary); font-weight:bold;">➔</span>
+          <span style="background:var(--surface-card); border:1px solid var(--border-subtle); padding:6px 10px; border-radius:8px; font-weight:600; display:flex; align-items:center; gap:5px;">
+            🧠 AI Forecast<br><small style="color:var(--text-tertiary);">2h Window (22:00)</small>
+          </span>
+          <span style="color:var(--text-tertiary); font-weight:bold;">➔</span>
+          <span style="background:var(--surface-card); border:1px solid var(--border-subtle); padding:6px 10px; border-radius:8px; font-weight:600; display:flex; align-items:center; gap:5px;">
+            🗺️ Risk Map<br><small style="color:var(--text-tertiary);">16 หลังคาเรือน</small>
+          </span>
+          <span style="color:var(--text-tertiary); font-weight:bold;">➔</span>
+          <span style="background:var(--surface-card); border:1px solid var(--border-subtle); padding:6px 10px; border-radius:8px; font-weight:600; display:flex; align-items:center; gap:5px;">
+            📋 Response Task<br><small style="color:var(--text-tertiary);">ทีมกู้ภัยสนาม</small>
+          </span>
+          <span style="color:var(--text-tertiary); font-weight:bold;">➔</span>
+          <span style="background:rgba(52,199,89,0.12); border:1px solid rgba(52,199,89,0.35); color:#248a3d; padding:6px 10px; border-radius:8px; font-weight:700; display:flex; align-items:center; gap:5px;">
+            🔄 Offline Sync<br><small>Service Worker</small>
+          </span>
+        </div>
+      </div>
+
+      <!-- Real-Time Radio & Node Telemetry Grid -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:10px; margin-bottom:16px;">
+        <div style="background:var(--surface-card); border:1px solid var(--border-subtle); border-radius:10px; padding:12px;">
+          <div style="font-size:11px; color:var(--text-tertiary);">เกตเวย์รับสัญญาณ (LoRa Gateway)</div>
+          <div style="font-size:13px; font-weight:700; color:var(--text-primary); margin-top:2px;" id="lora-gw-id">GW-THEWARAT-BELF-01</div>
+          <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">หอระฆังวัดเทวราชกุญชร (เสา 5.8 dBi)</div>
+        </div>
+
+        <div style="background:var(--surface-card); border:1px solid var(--border-subtle); border-radius:10px; padding:12px;">
+          <div style="font-size:11px; color:var(--text-tertiary);">คุณภาพสัญญาณคลื่นวิทยุ (RF Signal)</div>
+          <div style="font-size:13px; font-weight:700; color:#10B981; margin-top:2px;" id="lora-rf-quality">RSSI: -78 dBm | SNR: +9.5 dB</div>
+          <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;" id="lora-rf-details">Freq: 923.2 MHz | SF9 / BW 125kHz</div>
+        </div>
+
+        <div style="background:var(--surface-card); border:1px solid var(--border-subtle); border-radius:10px; padding:12px;">
+          <div style="font-size:11px; color:var(--text-tertiary);">สถานะแบตเตอรี่โหนด (LiSOCl2)</div>
+          <div style="font-size:13px; font-weight:700; color:var(--text-primary); margin-top:2px;" id="lora-battery-status">3.62V (94% คงเหลือ)</div>
+          <div style="font-size:11px; color:#10B981; margin-top:2px;">🔋 พร้อมโซลาร์เซลล์ชาร์จเสริม (อายุ ~3.8 ปี)</div>
+        </div>
+
+        <div style="background:var(--surface-card); border:1px solid var(--border-subtle); border-radius:10px; padding:12px;">
+          <div style="font-size:11px; color:var(--text-tertiary);">ค่าตรวจวัดระดับน้ำปัจจุบัน (Ultrasonic)</div>
+          <div style="font-size:13px; font-weight:700; color:#0071E3; margin-top:2px;" id="lora-water-reading">+0.42 ม. รทก. (28.4°C)</div>
+          <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;" id="lora-last-packet-time">อัปเดตล่าสุด: เมื่อสักครู่</div>
+        </div>
+      </div>
+
+      <!-- Action Bar: Ping & Focus in 3D -->
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:16px; padding:10px 14px; background:rgba(0,113,227,0.06); border:1px solid rgba(0,113,227,0.2); border-radius:10px;">
+        <div style="font-size:12px; color:var(--text-primary);">
+          <strong>📡 ทดสอบการส่งแพ็กเก็ตคลื่น LoRaWAN (Uplink Test):</strong>
+          <span style="color:var(--text-secondary); margin-left:4px;">จำลองการยิงสัญญาณสดจากท่าน้ำขึ้นสู่หอระฆัง</span>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-step" onclick="focusCameraOnLora()" style="font-size:11px; padding:6px 12px; background:var(--surface-card);">
+            🎥 ซูมดูโหนด LoRa 3D
+          </button>
+          <button class="btn-step" id="btn-ping-lora" onclick="pingLoraUplink()" style="font-size:11px; padding:6px 14px; background:#0071E3; color:#FFF; font-weight:700; border-color:#0071E3;">
+            ⚡ ส่งสัญญาณทดสอบ (Ping LoRa)
+          </button>
+        </div>
+      </div>
+
+      <!-- Raw Hex Payload Inspector (Cayenne LPP standard) -->
+      <div style="background:var(--surface-card); border:1px solid var(--border-subtle); border-radius:10px; padding:12px; margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="font-size:12px; font-weight:700; color:var(--text-primary);">
+            🔍 ตรวจสอบ Raw Hex Payload (Cayenne LPP Standard)
+          </div>
+          <div style="font-size:11px; font-family:monospace; color:var(--text-tertiary);" id="lora-payload-hex">
+            01 02 01 A4 02 67 01 1C 03 02 0E 24
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; font-size:11px; font-family:monospace; background:var(--surface-sunken); padding:8px 12px; border-radius:8px;">
+          <div><span style="color:#0284c7; font-weight:bold;">Ch 1 (Water Level):</span> <span id="lpp-dec-water">01A4 ➔ 420mm (0.42m)</span></div>
+          <div><span style="color:#ea580c; font-weight:bold;">Ch 2 (Temp):</span> <span id="lpp-dec-temp">011C ➔ 28.4°C</span></div>
+          <div><span style="color:#10b981; font-weight:bold;">Ch 3 (Battery):</span> <span id="lpp-dec-bat">0E24 ➔ 3620mV (3.62V)</span></div>
+        </div>
+      </div>
+
+      <!-- Recent LoRa Packets Log Table -->
+      <div style="background:var(--surface-card); border:1px solid var(--border-subtle); border-radius:10px; padding:12px;">
+        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:8px;">
+          📋 ประวัติแพ็กเก็ต LoRaWAN จากฐานข้อมูล SQLite (lora_packets)
+        </div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse; font-size:11px; text-align:left;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border-subtle); color:var(--text-tertiary);">
+                <th style="padding:6px 8px;">เวลา</th>
+                <th style="padding:6px 8px;">Frame #</th>
+                <th style="padding:6px 8px;">ความถี่</th>
+                <th style="padding:6px 8px;">RSSI / SNR</th>
+                <th style="padding:6px 8px;">ระดับน้ำ</th>
+                <th style="padding:6px 8px;">แบตเตอรี่</th>
+                <th style="padding:6px 8px;">Hex Payload</th>
+                <th style="padding:6px 8px;">สถานะ</th>
+              </tr>
+            </thead>
+            <tbody id="lora-packets-tbody">
+              <!-- Populated by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Native Android Bottom Navigation Bar (Visible on mobile <= 768px) -->
   <nav class="android-bottom-nav" id="android-bottom-nav">
     <button class="bnav-btn active" id="bnav-command" onclick="setAppMode('command')">
@@ -3369,6 +3803,26 @@
     let whatIfBridgeHazard = null, whatIfAmbHazard = null, whatIfMedPointBadge = null, whatIfMedPulseRing = null;
     let bridgeCautionLight = null, ambCautionLight = null;
     let currentWhatIf = null;
+
+    // LoRaWAN 3D & Telemetry State (Section 37)
+    let loraGroup = null;
+    let loraNodeGroup = null;
+    let loraGatewayGroup = null;
+    let loraRadioWaveRings = [];
+    let loraCarrierArcLine = null;
+    let loraPacketParticles = [];
+    let loraPingActive = false;
+    let loraPingStartTime = 0;
+
+    // Tsunami Multi-Phase Simulation State (Realistic 75s Cycle)
+    let tsunamiAutoPlay = true;
+    let tsunamiCurrentPhase = 1;
+    let tsunamiManualPhaseTime = 0;
+    let tsunamiPhaseStartTime = 0;
+    const TSUNAMI_CYCLE_SECS = 75.0;
+
+    // Buddhist Era Chart Mode
+    let showHistoricalOverlay = false;
 
     // Web Audio Disaster Synthesizer
     let disasterAudioCtx = null, disasterAudioGain = null;
@@ -3472,9 +3926,9 @@
       mesh.position.set(0, 0.05, 0);
       group.add(mesh);
       group.position.set(x, 0, z);
-      scene.add(group);
-      pulseRings.push({ group, mesh, mat, baseScale: 1.0, phase: Math.random() * Math.PI });
-      return group;
+      const ringObj = { group, mesh, mat, baseScale: 1.0, phase: Math.random() * Math.PI };
+      pulseRings.push(ringObj);
+      return ringObj;
     }
 
     // Apple-Design Sleek 3D Floating Pin
@@ -3828,6 +4282,143 @@
       // Positioned right in the flooded alley outside House A-012
       waterGaugeGroup.position.set(-9.5, 0, -78);
       scene.add(waterGaugeGroup);
+    }
+
+    // 3D LoRaWAN Wireless Telemetry Network System (Section 37: Pier Node & Belfry Gateway)
+    function initLoRaNetworkSystem(scene) {
+      if (loraGroup) scene.remove(loraGroup);
+      loraGroup = new THREE.Group();
+      loraRadioWaveRings = [];
+      loraPacketParticles = [];
+
+      // 1. LoRa Pier Sensor Node at Chao Phraya Pier (x: 63.5, y: 0.4, z: 20)
+      loraNodeGroup = new THREE.Group();
+      loraNodeGroup.position.set(63.5, 0.4, 20);
+
+      // Mounting Mast / Pier Pole
+      const poleGeo = new THREE.CylinderGeometry(0.06, 0.08, 2.2, 12);
+      const poleMat = new THREE.MeshStandardMaterial({ color: 0x475569, metalness: 0.7, roughness: 0.3 });
+      const pole = new THREE.Mesh(poleGeo, poleMat);
+      pole.position.y = 1.1;
+      loraNodeGroup.add(pole);
+
+      // IP67 Die-cast Weatherproof Enclosure
+      const encGeo = new THREE.BoxGeometry(0.38, 0.48, 0.24);
+      const encMat = new THREE.MeshStandardMaterial({ color: 0xE2E8F0, roughness: 0.4, metalness: 0.1 });
+      const enc = new THREE.Mesh(encGeo, encMat);
+      enc.position.set(0, 1.8, 0.14);
+      loraNodeGroup.add(enc);
+
+      // Solar Panel Top Visor
+      const solGeo = new THREE.BoxGeometry(0.42, 0.03, 0.34);
+      const solMat = new THREE.MeshStandardMaterial({ color: 0x1E3A8A, roughness: 0.15, metalness: 0.6 });
+      const sol = new THREE.Mesh(solGeo, solMat);
+      sol.position.set(0, 2.08, 0.14);
+      sol.rotation.x = -0.26;
+      loraNodeGroup.add(sol);
+
+      // LoRa 923MHz Dipole Whip Antenna
+      const antGeo = new THREE.CylinderGeometry(0.012, 0.012, 0.75, 8);
+      const antMat = new THREE.MeshStandardMaterial({ color: 0x0F172A, roughness: 0.8 });
+      const ant = new THREE.Mesh(antGeo, antMat);
+      ant.position.set(0, 2.45, 0.14);
+      loraNodeGroup.add(ant);
+
+      // Antenna Glowing Tip (Green LED)
+      const tipGeo = new THREE.SphereGeometry(0.035, 8, 8);
+      const tipMat = new THREE.MeshBasicMaterial({ color: 0x10B981 });
+      const tip = new THREE.Mesh(tipGeo, tipMat);
+      tip.position.set(0, 2.83, 0.14);
+      loraNodeGroup.add(tip);
+
+      // Downward Ultrasonic Hydrostatic Transducer Horn (points down at river)
+      const transGeo = new THREE.CylinderGeometry(0.05, 0.08, 0.40, 12);
+      const transMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.5 });
+      const trans = new THREE.Mesh(transGeo, transMat);
+      trans.position.set(0.18, 1.2, 0.14);
+      loraNodeGroup.add(trans);
+
+      // Concentric Radio Wave Carrier Rings (expanding outwards)
+      for (let r = 0; r < 3; r++) {
+        const ringGeo = new THREE.TorusGeometry(0.8 + r * 0.4, 0.03, 8, 24);
+        ringGeo.rotateX(Math.PI / 2);
+        const ringMat = new THREE.MeshBasicMaterial({
+          color: 0x00E5FF,
+          transparent: true,
+          opacity: 0.75 - r * 0.2,
+          depthWrite: false
+        });
+        const ring = new THREE.Mesh(ringGeo, ringMat);
+        ring.position.set(0, 2.5, 0.14);
+        loraRadioWaveRings.push(ring);
+        loraNodeGroup.add(ring);
+      }
+
+      // Billboard 3D Label
+      const nodeBadge = createBadgeSprite('📡 LoRa Sensor Node (AS923)', 'ท่าน้ำเจ้าพระยา • 923.2 MHz (SF9)', '#0284C7');
+      nodeBadge.sprite.position.set(0, 3.8, 0.14);
+      loraNodeGroup.add(nodeBadge.sprite);
+      loraGroup.add(loraNodeGroup);
+
+      // 2. LoRa Community Gateway atop Monastery Belfry (x: 28.0, y: 12.0, z: 35)
+      loraGatewayGroup = new THREE.Group();
+      loraGatewayGroup.position.set(28.0, 12.0, 35.0);
+
+      // Heavy industrial gateway chassis
+      const gwChassisGeo = new THREE.BoxGeometry(0.55, 0.70, 0.30);
+      const gwChassisMat = new THREE.MeshStandardMaterial({ color: 0x1E293B, metalness: 0.8, roughness: 0.2 });
+      const gwChassis = new THREE.Mesh(gwChassisGeo, gwChassisMat);
+      gwChassis.position.y = 0.35;
+      loraGatewayGroup.add(gwChassis);
+
+      // High-gain fiberglass collinear antenna (1.45m tall)
+      const gwAntGeo = new THREE.CylinderGeometry(0.035, 0.035, 1.45, 12);
+      const gwAntMat = new THREE.MeshStandardMaterial({ color: 0xFFFFFF, roughness: 0.3 });
+      const gwAnt = new THREE.Mesh(gwAntGeo, gwAntMat);
+      gwAnt.position.set(0, 1.42, 0);
+      loraGatewayGroup.add(gwAnt);
+
+      // Strobe Light Beacon
+      const strobeGeo = new THREE.SphereGeometry(0.06, 8, 8);
+      const strobeMat = new THREE.MeshBasicMaterial({ color: 0x00E5FF });
+      const strobe = new THREE.Mesh(strobeGeo, strobeMat);
+      strobe.position.set(0, 2.18, 0);
+      loraGatewayGroup.add(strobe);
+
+      const gwBadge = createBadgeSprite('🗼 LoRa Gateway (หอระฆัง)', 'GW-THEWARAT-01 • รัศมี 5.2 กม.', '#0284C7');
+      gwBadge.sprite.position.set(0, 3.2, 0);
+      loraGatewayGroup.add(gwBadge.sprite);
+      loraGroup.add(loraGatewayGroup);
+
+      // 3. Parabolic Wireless Carrier Wave Arc connecting Node to Gateway
+      const p0 = new THREE.Vector3(63.5, 2.8, 20.0);
+      const p1 = new THREE.Vector3(45.0, 17.5, 27.5);
+      const p2 = new THREE.Vector3(28.0, 14.0, 35.0);
+      const carrierCurve = new THREE.QuadraticBezierCurve3(p0, p1, p2);
+      const arcPoints = carrierCurve.getPoints(40);
+      const arcGeo = new THREE.BufferGeometry().setFromPoints(arcPoints);
+      const arcMat = new THREE.LineDashedMaterial({
+        color: 0x00E5FF,
+        dashSize: 1.0,
+        gapSize: 0.6,
+        transparent: true,
+        opacity: 0.65
+      });
+      loraCarrierArcLine = new THREE.Line(arcGeo, arcMat);
+      loraCarrierArcLine.computeLineDistances();
+      loraGroup.add(loraCarrierArcLine);
+
+      // 4. Data Packet Light Photons traveling along the arc
+      for (let i = 0; i < 3; i++) {
+        const pktGeo = new THREE.SphereGeometry(0.24, 12, 12);
+        const pktMat = new THREE.MeshBasicMaterial({ color: 0x00E5FF });
+        const pktMesh = new THREE.Mesh(pktGeo, pktMat);
+        pktMesh.position.copy(p0);
+        loraPacketParticles.push(pktMesh);
+        loraGroup.add(pktMesh);
+      }
+
+      scene.add(loraGroup);
     }
 
     // 3D Raised Wooden Boardwalk (สะพานไม้ยกสูงชั่วคราว Zone C)
@@ -5172,6 +5763,7 @@
       buildRainAndStormSystem(scene);
       buildWhatIfHazardSystem(scene);
       initWaterGaugePole();
+      initLoRaNetworkSystem(scene);
       initBoardwalkMesh();
       initDisasterPins();
       initHousePins();
@@ -5382,57 +5974,170 @@
           }
         }
 
-        // 2. Hyper-Realistic Tsunami Surge Simulation (Curled 7.5m Wave, Debris, Spray, Evacuation Path)
+        // 2. Realistic Multi-Phase Tsunami Surge Simulation (75s Sustained Cycle & Manual Phase Control)
         if (disasterMode === 'tsunami') {
-          targetCanalY = 4.5;
-          targetFloodY = 4.5;
-          if (canalWaterMat) canalWaterMat.color.setHex(0x083358);
-          if (floodWaterMat) floodWaterMat.color.setHex(0x083358);
+          // Simulation clock: Auto 75-second progression or manual phase inspect
+          let simTime;
+          if (tsunamiAutoPlay) {
+            simTime = (t - tsunamiPhaseStartTime) % TSUNAMI_CYCLE_SECS;
+            if (simTime < 0) simTime += TSUNAMI_CYCLE_SECS;
+          } else {
+            simTime = tsunamiManualPhaseTime;
+          }
 
-          // Wave surge position: Rolls from River (X: 75) westward inland to X: -45, then resets smoothly
-          const surgeCycle = (t * 12) % 135;
-          const waveX = 75 - surgeCycle;
+          let waveX = 75;
+          let waveVisible = true;
+          let waveScaleY = 1.0;
+          let tsunamiPhase = 1;
+          let phaseTitle = '';
+          let levelM = -1.50;
+          let speedKmh = 12;
 
-          if (tsunamiWaveGroup) {
-            tsunamiWaveGroup.visible = true;
-            tsunamiWaveGroup.position.set(waveX, 0, 0);
+          if (simTime < 15.0) {
+            // PHASE 1: Water Receding / Drawback (0 - 15s)
+            tsunamiPhase = 1;
+            const pFrac = simTime / 15.0;
+            targetCanalY = -0.55 - pFrac * 1.25; // Plummets to -1.80m MSL!
+            targetFloodY = -0.40;
+            levelM = targetCanalY;
+            speedKmh = Math.round(12 + pFrac * 8);
+            phaseTitle = 'ระยะที่ 1: น้ำลดฮวบผิดปกติ (-1.80 ม.)';
 
-            // Animate floating tumbling debris (capsized long-tail boat, oil drums, wood planks)
+            // Distant building wave in river channel
+            waveX = 95 - pFrac * 15;
+            waveScaleY = 0.35 + pFrac * 0.45;
+            if (canalWaterMat) canalWaterMat.color.setHex(0x1a3340); // Exposed murky mud
+            if (floodWaterMat) floodWaterMat.color.setHex(0x1a3340);
+            if (tsunamiFoamPlane) tsunamiFoamPlane.visible = false;
+
+            // Capsized boat tilts on mud
+            if (tsunamiDebrisGroup) {
+              tsunamiDebrisGroup.children.forEach((deb) => {
+                deb.position.y = -0.2;
+                deb.rotation.z = 0.45;
+              });
+            }
+          } else if (simTime < 35.0) {
+            // PHASE 2: Leading Wave Surge & Violent Attack (15 - 35s)
+            tsunamiPhase = 2;
+            const pFrac = (simTime - 15.0) / 20.0;
+            waveX = 80 - pFrac * 120; // Surges inland across pier (X: 80 to X: -40)
+            waveScaleY = 1.0 + Math.sin(pFrac * Math.PI) * 0.2; // Full 7.5m curl
+            targetCanalY = -1.80 + pFrac * 6.60; // Shoots up to +4.80m MSL!
+            targetFloodY = -0.40 + Math.max(0, pFrac - 0.15) * 5.20;
+            levelM = Math.min(4.80, targetCanalY);
+            speedKmh = 48;
+            phaseTitle = 'ระยะที่ 2: กำแพงคลื่นยักษ์ปะทะ (+4.80 ม.)';
+
+            if (canalWaterMat) canalWaterMat.color.setHex(0x083358);
+            if (floodWaterMat) floodWaterMat.color.setHex(0x083358);
+            if (tsunamiFoamPlane) {
+              tsunamiFoamPlane.visible = true;
+              tsunamiFoamPlane.position.y = Math.min(4.82, targetCanalY + 0.05);
+            }
+
+            // Tumbling churning debris carried by leading wave
             if (tsunamiDebrisGroup) {
               tsunamiDebrisGroup.children.forEach((deb) => {
                 if (deb.userData.isBoat) {
-                  deb.rotation.x = Math.PI + Math.sin(t * 4.0) * 0.25;
-                  deb.rotation.z += 0.025;
-                  deb.position.y = 4.6 + Math.sin(t * 4.2) * 0.40;
+                  deb.position.x = waveX - 4.0;
+                  deb.position.y = 4.8 + Math.sin(t * 5.0) * 0.4;
+                  deb.rotation.x = Math.PI + Math.sin(t * 6.0) * 0.5;
+                  deb.rotation.z += 0.04;
                 } else {
-                  deb.rotation.x += deb.userData.rotSpeedX;
-                  deb.rotation.z += deb.userData.rotSpeedZ;
-                  deb.position.y = 4.6 + Math.sin(t * 4.5 + deb.userData.bobPhase) * 0.35;
+                  deb.position.x = waveX - 2.0 + (deb.userData.idx || 0) * 2;
+                  deb.position.y = 4.6 + Math.sin(t * 5.0) * 0.3;
+                  deb.rotation.x += 0.05;
                 }
+              });
+            }
+          } else if (simTime < 55.0) {
+            // PHASE 3: Deep Sustained Inundation & Whirlpools (35 - 55s)
+            tsunamiPhase = 3;
+            const pFrac = (simTime - 35.0) / 20.0;
+            // The water STAYS DEEPLY FLOODED! Ground floor of houses submerged!
+            targetCanalY = 4.30 + Math.sin(t * 1.8) * 0.18;
+            targetFloodY = 4.25 + Math.cos(t * 1.8) * 0.18;
+            levelM = targetCanalY;
+            speedKmh = 18;
+            phaseTitle = 'ระยะที่ 3: น้ำท่วมขังมิดชั้น 1 (+4.30 ม.)';
+
+            waveX = -48;
+            waveScaleY = 0.4;
+            waveVisible = (pFrac < 0.25);
+
+            if (tsunamiFoamPlane) {
+              tsunamiFoamPlane.visible = true;
+              tsunamiFoamPlane.position.y = targetFloodY + 0.04;
+            }
+
+            // Debris swirling in violent eddies around submerged community
+            if (tsunamiDebrisGroup) {
+              tsunamiDebrisGroup.children.forEach((deb, idx) => {
+                const eddyRadius = 14 + (idx % 3) * 6;
+                const eddySpeed = 0.7 + (idx % 2) * 0.3;
+                deb.position.x = -15 + Math.cos(t * eddySpeed + idx) * eddyRadius;
+                deb.position.z = -10 + Math.sin(t * eddySpeed + idx) * eddyRadius;
+                deb.position.y = targetFloodY + 0.25 + Math.sin(t * 3.0 + idx) * 0.15;
+                deb.rotation.y += 0.02;
+              });
+            }
+          } else {
+            // PHASE 4: Secondary Wave Surge & Backwash Suction (55 - 75s)
+            tsunamiPhase = 4;
+            const pFrac = (simTime - 55.0) / 20.0;
+            levelM = 4.20 - pFrac * 3.40; // Gradual backwash drainage down to +0.8m
+            targetCanalY = Math.max(-0.55, levelM);
+            targetFloodY = Math.max(-0.20, levelM);
+            speedKmh = 34;
+            phaseTitle = 'ระยะที่ 4: คลื่นระลอกสอง & น้ำดูดย้อนกลับ';
+
+            if (pFrac < 0.35) {
+              waveVisible = true;
+              waveX = 70 - (pFrac / 0.35) * 55;
+              waveScaleY = 0.65;
+            } else {
+              waveVisible = false;
+            }
+
+            // Reverse suction dragging debris back toward river channel
+            if (tsunamiDebrisGroup) {
+              tsunamiDebrisGroup.children.forEach((deb, idx) => {
+                deb.position.x += 0.12;
+                deb.position.y = Math.max(0.2, targetCanalY + 0.2);
+                deb.rotation.z += 0.015;
               });
             }
           }
 
-          // Spray particles blasting off the wave crest
+          // Apply wave mesh properties
+          if (tsunamiWaveGroup) {
+            tsunamiWaveGroup.visible = waveVisible;
+            tsunamiWaveGroup.position.set(waveX, 0, 0);
+            tsunamiWaveGroup.scale.set(1.0, waveScaleY, 1.0);
+          }
+
+          // Spray particles blasting during surge
           if (tsunamiSprayParticles && tsunamiSprayGeo) {
-            tsunamiSprayParticles.visible = true;
-            const spPos = tsunamiSprayGeo.attributes.position;
-            for (let i = 0; i < tsunamiSprayVels.length; i++) {
-              let px = spPos.getX(i) + tsunamiSprayVels[i].vx;
-              let py = spPos.getY(i) + tsunamiSprayVels[i].vy;
-              let pz = spPos.getZ(i) + tsunamiSprayVels[i].vz;
-              tsunamiSprayVels[i].vy -= 0.008; // Gravity
-              if (py < 0.2 || px < -60 || px > 85) {
-                // Respawn on current wave crest
-                px = waveX - 2.5 + (Math.random() - 0.5) * 4.0;
-                py = 5.8 + Math.random() * 1.8;
-                pz = -80 + Math.random() * 160;
-                tsunamiSprayVels[i].vy = 0.14 + Math.random() * 0.28;
-                tsunamiSprayVels[i].vx = -(0.38 + Math.random() * 0.52);
+            tsunamiSprayParticles.visible = waveVisible && (tsunamiPhase === 2 || tsunamiPhase === 4);
+            if (tsunamiSprayParticles.visible) {
+              const spPos = tsunamiSprayGeo.attributes.position;
+              for (let i = 0; i < tsunamiSprayVels.length; i++) {
+                let px = spPos.getX(i) + tsunamiSprayVels[i].vx;
+                let py = spPos.getY(i) + tsunamiSprayVels[i].vy;
+                let pz = spPos.getZ(i) + tsunamiSprayVels[i].vz;
+                tsunamiSprayVels[i].vy -= 0.008; // Gravity
+                if (py < 0.2 || px < -60 || px > 85) {
+                  px = waveX - 2.5 + (Math.random() - 0.5) * 4.0;
+                  py = 5.8 + Math.random() * 1.8;
+                  pz = -80 + Math.random() * 160;
+                  tsunamiSprayVels[i].vy = 0.14 + Math.random() * 0.28;
+                  tsunamiSprayVels[i].vx = -(0.38 + Math.random() * 0.52);
+                }
+                spPos.setXYZ(i, px, py, pz);
               }
-              spPos.setXYZ(i, px, py, pz);
+              spPos.needsUpdate = true;
             }
-            spPos.needsUpdate = true;
           }
 
           // Rotating Temple Strobe Beacon
@@ -5451,7 +6156,11 @@
             });
           }
 
-          if (tsunamiFoamPlane) tsunamiFoamPlane.visible = true;
+          // Update Tsunami Controller UI elements in real time
+          if (typeof updateTsunamiUIProgress === 'function') {
+            updateTsunamiUIProgress(simTime, tsunamiPhase, phaseTitle, levelM, speedKmh);
+          }
+
           scene.background = new THREE.Color('#071322');
           scene.fog = new THREE.FogExp2('#0a1b2e', 0.011);
         } else {
@@ -5659,6 +6368,46 @@
           }
         }
 
+        // 5. Animate LoRaWAN Wireless Telemetry Transmission (Carrier Rings & Flying Data Packets)
+        if (loraGroup) {
+          // Pulse the concentric RF carrier rings expanding from sensor node antenna
+          if (loraRadioWaveRings && loraRadioWaveRings.length > 0) {
+            loraRadioWaveRings.forEach((ring, idx) => {
+              const ringPhase = (t * 2.2 + idx * 1.2) % 3.5;
+              const ringScale = 0.5 + ringPhase * 1.4;
+              ring.scale.set(ringScale, ringScale, ringScale);
+              ring.material.opacity = Math.max(0, 0.85 - ringPhase / 3.5);
+            });
+          }
+
+          // Animate glowing packet particles traveling along parabolic carrier arc
+          if (loraPacketParticles && loraPacketParticles.length > 0) {
+            const isPingBurst = loraPingActive && (t - loraPingStartTime < 3.2);
+            loraPacketParticles.forEach((pkt, idx) => {
+              const pktSpeed = isPingBurst ? 1.4 : 0.35;
+              const pktProgress = ((t * pktSpeed) + (idx * 0.33)) % 1.0;
+              const p0 = new THREE.Vector3(63.5, 2.8, 20.0);
+              const p1 = new THREE.Vector3(45.0, 17.5, 27.5);
+              const p2 = new THREE.Vector3(28.0, 14.0, 35.0);
+              
+              // Quadratic bezier curve point
+              const u = pktProgress;
+              const qx = Math.pow(1 - u, 2) * p0.x + 2 * (1 - u) * u * p1.x + Math.pow(u, 2) * p2.x;
+              const qy = Math.pow(1 - u, 2) * p0.y + 2 * (1 - u) * u * p1.y + Math.pow(u, 2) * p2.y;
+              const qz = Math.pow(1 - u, 2) * p0.z + 2 * (1 - u) * u * p1.z + Math.pow(u, 2) * p2.z;
+              pkt.position.set(qx, qy, qz);
+              
+              if (isPingBurst) {
+                pkt.scale.set(2.0, 2.0, 2.0);
+                pkt.material.color.setHex(0xFFD700); // Gold burst during ping test
+              } else {
+                pkt.scale.set(1.0, 1.0, 1.0);
+                pkt.material.color.setHex(0x00E5FF); // Cyan LoRa frequency wave
+              }
+            });
+          }
+        }
+
         renderer.render(scene, camera);
       }
       animate();
@@ -5741,7 +6490,7 @@
     // Smooth Camera Navigation
     function setCameraView(view) {
       currentCamView = view;
-      ['iso', 'a012', 'boardwalk', 'top'].forEach((v) => {
+      ['iso', 'a012', 'boardwalk', 'lora', 'top'].forEach((v) => {
         const btn = document.getElementById(`btn-cam-${v}`);
         if (btn) btn.classList.toggle('active', v === view);
       });
@@ -5759,6 +6508,10 @@
         // Close focus on Boardwalk J2 where flood water rises and submerges the walkway
         targetCamPos = isMobile ? new THREE.Vector3(26, 18, -35) : new THREE.Vector3(26, 14, -40);
         targetControlsTarget = new THREE.Vector3(8, 2, -60);
+      } else if (view === 'lora') {
+        // Focus on Pier LoRa Node and Belfry Gateway across the riverbank
+        targetCamPos = isMobile ? new THREE.Vector3(76, 26, 56) : new THREE.Vector3(72, 22, 52);
+        targetControlsTarget = new THREE.Vector3(45, 6, 28);
       } else if (view === 'top') {
         // Top-down tactical GIS map
         targetCamPos = isMobile ? new THREE.Vector3(0, 190, -18) : new THREE.Vector3(0, 160, -18);
@@ -5769,13 +6522,54 @@
     // 2. Render 2D Chart with Buddhist Era (พ.ศ.) Support & Historical Benchmark
     let currentChartMode = 'forecast';
 
+    function toggleHistoricalOverlay() {
+      if (currentChartMode === 'historical') {
+        currentChartMode = 'forecast';
+        showHistoricalOverlay = true;
+      } else {
+        showHistoricalOverlay = !showHistoricalOverlay;
+      }
+      const btnFc = document.getElementById('btn-chart-forecast');
+      const btnHist = document.getElementById('btn-chart-historical');
+      const btnOverlay = document.getElementById('btn-chart-overlay');
+      const titleEl = document.getElementById('chart-main-title');
+      const summaryEl = document.getElementById('chart-summary-text');
+
+      if (btnOverlay) {
+        btnOverlay.classList.toggle('active', showHistoricalOverlay);
+        btnOverlay.style.background = showHistoricalOverlay ? 'rgba(0, 113, 227, 0.2)' : '';
+        btnOverlay.style.color = showHistoricalOverlay ? '#0071E3' : '';
+        btnOverlay.style.borderColor = showHistoricalOverlay ? '#0071E3' : '';
+      }
+      if (btnFc) btnFc.classList.toggle('active', !showHistoricalOverlay);
+      if (btnHist) btnHist.classList.remove('active');
+
+      if (showHistoricalOverlay) {
+        if (titleEl) titleEl.innerText = 'ระดับน้ำตรวจวัดจริง (พ.ศ. 2569) ซ้อนเปรียบเทียบสถิติปี พ.ศ. 2554 – 2567';
+        if (summaryEl) summaryEl.innerHTML = '📊 <strong>ซ้อนสถิติ พ.ศ.:</strong> 🔴 พ.ศ. 2554 (+2.60 ม.) | 🟠 พ.ศ. 2565 (+1.95 ม.) | 🟡 พ.ศ. 2564 (+1.85 ม.) | 🔵 พ.ศ. 2567 (+1.75 ม.) | 🟢 <strong>พ.ศ. 2569 ปัจจุบัน (+0.42 ➔ +1.00 ม.)</strong>';
+      } else {
+        if (titleEl) titleEl.innerText = 'ระดับน้ำตรวจวัดจริง & แบบจำลอง AI คาดการณ์ — วันที่ 16 ก.ย. พ.ศ. 2569';
+        if (summaryEl) summaryEl.innerHTML = '🟢 เส้นสีเขียว: ข้อมูลจริงตรวจวัดได้ | 🟠 เส้นประสีส้ม: AI Forecast คาดการณ์ถึง 22:00 น. | 🔴 เส้นประสีแดง: เกณฑ์วิกฤต (Threshold 0.70 ม. / 1.00 ม.)';
+      }
+      renderChart();
+    }
+
     function setChartMode(mode) {
       currentChartMode = mode;
       const btnFc = document.getElementById('btn-chart-forecast');
       const btnHist = document.getElementById('btn-chart-historical');
+      const btnOverlay = document.getElementById('btn-chart-overlay');
       const titleEl = document.getElementById('chart-main-title');
       const captionEl = document.getElementById('chart-main-caption');
       const summaryEl = document.getElementById('chart-summary-text');
+
+      if (btnOverlay) {
+        btnOverlay.classList.remove('active');
+        btnOverlay.style.background = '';
+        btnOverlay.style.color = '';
+        btnOverlay.style.borderColor = '';
+      }
+      showHistoricalOverlay = false;
 
       if (mode === 'historical') {
         if (btnFc) btnFc.classList.remove('active');
@@ -5815,7 +6609,7 @@
 
       const w = rect.width || 600;
       const h = rect.height || 195;
-      const paddingLeft = 48;
+      const paddingLeft = 52;
       const paddingRight = 24;
       const paddingTop = 26;
       const paddingBottom = 32;
@@ -5919,14 +6713,16 @@
 
       } else {
         // FORECAST TODAY (วันที่ 16 ก.ย. พ.ศ. 2569)
-        const maxVal = Math.max(1.4, forecast + 0.2, level + 0.2);
+        // If showHistoricalOverlay is enabled, scale maxVal to 2.85 to accommodate 2554 (+2.60m)
+        const maxVal = showHistoricalOverlay ? 2.85 : Math.max(1.4, forecast + 0.2, level + 0.2);
 
         function getY(val) {
           return paddingTop + plotH * (1 - (val / maxVal));
         }
 
         // Horizontal Grid lines
-        [0.3, 0.6, 0.7, 1.0, 1.2].forEach(v => {
+        const gridSteps = showHistoricalOverlay ? [0.5, 1.0, 1.5, 2.0, 2.5] : [0.3, 0.6, 0.7, 1.0, 1.2];
+        gridSteps.forEach(v => {
           if (v > maxVal) return;
           const y = getY(v);
           ctx.strokeStyle = gridColor;
@@ -5954,19 +6750,55 @@
         ctx.fillStyle = '#F59E0B';
         ctx.font = 'bold 10px -apple-system, sans-serif';
         ctx.textAlign = 'left';
-        ctx.fillText('เกณฑ์เฝ้าระวัง 0.70 ม.', paddingLeft + 5, thWarnY - 4);
+        ctx.fillText('เกณฑ์เฝ้าระวัง 0.70 ม. (พ.ศ. 2569)', paddingLeft + 5, thWarnY - 4);
 
         // Threshold Line 2: วิกฤตล้นตลิ่ง 1.00 ม. (แดง)
         const thCritY = getY(1.00);
         ctx.strokeStyle = 'rgba(215, 0, 21, 0.85)';
         ctx.lineWidth = 1.5;
+        ctx.setLineDash([]);
         ctx.beginPath();
         ctx.moveTo(paddingLeft, thCritY);
         ctx.lineTo(w - paddingRight, thCritY);
         ctx.stroke();
         ctx.fillStyle = '#D70015';
-        ctx.fillText('เกณฑ์วิกฤตล้นตลิ่ง 1.00 ม.', paddingLeft + 5, thCritY - 4);
-        ctx.setLineDash([]);
+        ctx.font = 'bold 10px -apple-system, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('เกณฑ์วิกฤตล้นตลิ่ง 1.00 ม. (พ.ศ. 2569)', paddingLeft + 5, thCritY - 4);
+
+        if (showHistoricalOverlay) {
+          // Buddhist Era Historical Benchmark Reference Lines
+          const beBenchmarks = [
+            { year: 'พ.ศ. 2554', val: 2.60, color: 'rgba(215, 0, 21, 0.85)', label: '🔴 พ.ศ. 2554 (+2.60 ม. มหาอุทกภัย)' },
+            { year: 'พ.ศ. 2565', val: 1.95, color: 'rgba(255, 105, 0, 0.85)', label: '🟠 พ.ศ. 2565 (+1.95 ม. โนรู)' },
+            { year: 'พ.ศ. 2564', val: 1.85, color: 'rgba(245, 158, 11, 0.85)', label: '🟡 พ.ศ. 2564 (+1.85 ม. เตี้ยนหมู่)' },
+            { year: 'พ.ศ. 2567', val: 1.75, color: 'rgba(0, 113, 227, 0.85)', label: '🔵 พ.ศ. 2567 (+1.75 ม. น้ำเหนือหลาก)' },
+            { year: 'แนวกั้นน้ำ', val: 1.50, color: 'rgba(156, 163, 175, 0.85)', label: '🧱 แนวกั้นน้ำชุมชน (+1.50 ม. MSL)' }
+          ];
+
+          beBenchmarks.forEach(bm => {
+            const bY = getY(bm.val);
+            ctx.strokeStyle = bm.color;
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([5, 3]);
+            ctx.beginPath();
+            ctx.moveTo(paddingLeft, bY);
+            ctx.lineTo(w - paddingRight, bY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = bm.color;
+            ctx.font = 'bold 9.5px -apple-system, sans-serif';
+            ctx.textAlign = 'right';
+            ctx.fillText(bm.label, w - paddingRight - 4, bY - 3);
+          });
+        } else {
+          // Subtle Watermark / Benchmark badge indicating comparison years
+          ctx.fillStyle = textMuted;
+          ctx.font = '9px -apple-system, sans-serif';
+          ctx.textAlign = 'right';
+          ctx.fillText('🏛️ สถิติสูงสุด: พ.ศ. 2554 (+2.60 ม.) | พ.ศ. 2565 (+1.95 ม.) | พ.ศ. 2567 (+1.75 ม.)', w - paddingRight - 4, paddingTop + 12);
+        }
 
         // Points
         const curStepIdx = (state && state.timeline) ? state.timeline.currentIndex : 0;
@@ -6031,7 +6863,7 @@
         ctx.fillStyle = textColor;
         ctx.font = 'bold 11px -apple-system, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(`ตรวจวัดจริง ${level.toFixed(2)} ม.`, currentX, curY - 10);
+        ctx.fillText(`ตรวจวัดจริง ${level.toFixed(2)} ม. (พ.ศ. 2569)`, currentX, curY - 10);
 
         ctx.fillStyle = '#F59E0B';
         ctx.textAlign = 'right';
@@ -6041,13 +6873,217 @@
         ctx.fillStyle = textMuted;
         ctx.font = '10px -apple-system, sans-serif';
         ctx.textAlign = 'left';
-        ctx.fillText('20:00 (พ.ศ. 2569)', startX, getY(0) + 15);
+        ctx.fillText('20:00 น. (16 ก.ย. พ.ศ. 2569)', startX, h - 8);
         ctx.textAlign = 'center';
         const currentTimeStr = (state && state.timeline && state.timeline.currentStep) ? state.timeline.currentStep.time : '20:38';
-        ctx.fillText(`${currentTimeStr} น.`, currentX, getY(0) + 15);
+        if (progressFrac > 0.25 && progressFrac < 0.80) {
+          ctx.fillText(`${currentTimeStr} น.`, currentX, h - 8);
+        }
         ctx.textAlign = 'right';
-        ctx.fillText('22:00 น. (คาดการณ์)', endX, getY(0) + 15);
+        ctx.fillText('22:00 น. (คาดการณ์)', endX, h - 8);
       }
+    }
+
+    // --- Tsunami Multi-Phase Simulation Controller Handlers (75s Sequence) ---
+    function jumpTsunamiPhase(phaseNum) {
+      tsunamiCurrentPhase = phaseNum;
+      tsunamiAutoPlay = true;
+      const phaseOffsets = { 1: 0.0, 2: 15.0, 3: 35.0, 4: 55.0 };
+      const offset = phaseOffsets[phaseNum] || 0.0;
+      tsunamiPhaseStartTime = performance.now() / 1000 - offset;
+      tsunamiManualPhaseTime = offset;
+
+      const ppBtn = document.getElementById('btn-tsu-playpause');
+      if (ppBtn) ppBtn.innerHTML = '⏸️ หยุดวิเคราะห์';
+
+      updateTsunamiPhaseButtons(phaseNum);
+      const phaseNames = {
+        1: 'ระยะที่ 1: น้ำลดผิดปกติ (-1.5 ม. รทก.)',
+        2: 'ระยะที่ 2: กำแพงคลื่นซัด (+4.8 ม. รทก. 48 กม./ชม.)',
+        3: 'ระยะที่ 3: ท่วมมิดชั้น 1 (+4.2 ม. รทก. น้ำวนเศษซาก)',
+        4: 'ระยะที่ 4: คลื่นระลอกสอง & น้ำดูดย้อน (+3.5 ม. รทก.)'
+      };
+      showToast(`🌊 สึนามิ: ${phaseNames[phaseNum]}`, `ข้ามไปยังเวลา ${offset.toFixed(0)} วินาทีของแบบจำลองความยาว 75 วินาที`, 'warning');
+    }
+
+    function toggleTsunamiPlayPause() {
+      tsunamiAutoPlay = !tsunamiAutoPlay;
+      const ppBtn = document.getElementById('btn-tsu-playpause');
+      if (ppBtn) {
+        ppBtn.innerHTML = tsunamiAutoPlay ? '⏸️ หยุดวิเคราะห์' : '▶️ เล่นต่อ';
+        ppBtn.style.background = tsunamiAutoPlay ? 'rgba(255,255,255,0.15)' : 'rgba(2, 132, 199, 0.4)';
+      }
+      if (!tsunamiAutoPlay) {
+        const curT = performance.now() / 1000;
+        tsunamiManualPhaseTime = (curT - tsunamiPhaseStartTime) % TSUNAMI_CYCLE_SECS;
+        showToast('⏸️ หยุดการเคลื่อนไหวคลื่น', `ค้างสถานะที่เวลา ${tsunamiManualPhaseTime.toFixed(1)} วินาที เพื่อวิเคราะห์ความลึก`, 'info');
+      } else {
+        const curT = performance.now() / 1000;
+        tsunamiPhaseStartTime = curT - tsunamiManualPhaseTime;
+        showToast('▶️ เล่นแบบจำลองต่อ', 'แบบจำลองสึนามิ 75 วินาทีทำงานต่อเนื่อง', 'info');
+      }
+    }
+
+    function updateTsunamiPhaseButtons(activePhase) {
+      for (let i = 1; i <= 4; i++) {
+        const btn = document.getElementById(`btn-tsu-p${i}`);
+        if (btn) btn.classList.toggle('active', i === activePhase);
+      }
+    }
+
+    function updateTsunamiUIProgress(simTime, phase, phaseTitle, levelM, speedKmh) {
+      const badge = document.getElementById('tsunami-live-phase-badge');
+      if (badge && phaseTitle) badge.innerText = phaseTitle;
+
+      const timeMeter = document.getElementById('tsunami-time-meter');
+      if (timeMeter) {
+        const curMin = Math.floor(simTime / 60).toString().padStart(2, '0');
+        const curSec = Math.floor(simTime % 60).toString().padStart(2, '0');
+        timeMeter.innerText = `⏱️ ${curMin}:${curSec} / 01:15`;
+      }
+
+      const levelMeter = document.getElementById('tsunami-level-meter');
+      if (levelMeter) {
+        const sign = levelM >= 0 ? '+' : '';
+        levelMeter.innerText = `ระดับน้ำ: ${sign}${levelM.toFixed(2)} ม. รทก.`;
+        levelMeter.style.color = levelM >= 3.0 ? '#ef4444' : levelM >= 1.0 ? '#f59e0b' : '#38bdf8';
+      }
+
+      const speedMeter = document.getElementById('tsunami-speed-meter');
+      if (speedMeter) {
+        speedMeter.innerText = `ความเร็ว: ${speedKmh.toFixed(0)} กม./ชม.`;
+      }
+
+      const fill = document.getElementById('tsunami-progress-fill');
+      if (fill) {
+        const pct = Math.min(100, Math.max(0, (simTime / TSUNAMI_CYCLE_SECS) * 100));
+        fill.style.width = `${pct}%`;
+      }
+
+      updateTsunamiPhaseButtons(phase);
+    }
+
+    // --- LoRaWAN Telemetry & Network Modal Handlers (Section 37) ---
+    async function openLoraModal() {
+      openModal('lora-telemetry-modal');
+      await fetchLoraStatus();
+    }
+
+    function closeLoraModal() {
+      closeModal('lora-telemetry-modal');
+    }
+
+    async function fetchLoraStatus() {
+      try {
+        const res = await fetch('/api/lora/status');
+        if (!res.ok) return;
+        const data = await res.json();
+        updateLoraModalUI(data);
+      } catch (err) {
+        console.warn('Failed to fetch LoRa status:', err);
+      }
+    }
+
+    async function pingLoraUplink() {
+      const btn = document.getElementById('btn-ping-lora');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerText = '⏳ กำลังส่งคลื่น RF...';
+      }
+      try {
+        const res = await fetch('/api/lora/ping', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ source: 'ui_manual_ping' })
+        });
+        const result = await res.json();
+        if (result.success && result.packet) {
+          trigger3DLoraPingBurst();
+          updateLoraModalUI({
+            status: 'online',
+            latest_packet: result.packet,
+            recent_packets: [result.packet, ...(window._cachedLoraPackets || []).slice(0, 7)]
+          });
+          showToast('📡 ทดสอบยิงสัญญาณ LoRaWAN สำเร็จ', `Packet #${result.packet.f_cnt} | RSSI: ${result.packet.rssi_dbm} dBm | ระดับน้ำ: +${result.packet.water_level_m} ม.`, 'success');
+        }
+      } catch (err) {
+        showToast('❌ ส่ง LoRa Ping ไม่สำเร็จ', String(err), 'danger');
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerText = '🔄 ส่งแพ็กเก็ตทดสอบ (Ping Uplink)';
+        }
+      }
+    }
+
+    function updateLoraModalUI(data) {
+      if (!data) return;
+      const pkt = data.latest_packet;
+      if (pkt) {
+        const gwEl = document.getElementById('lora-gw-id');
+        if (gwEl) gwEl.innerText = pkt.gateway_id || 'GW-THEWARAT-BELF-01';
+
+        const rfQEl = document.getElementById('lora-rf-quality');
+        if (rfQEl) rfQEl.innerText = `RSSI: ${pkt.rssi_dbm} dBm | SNR: +${pkt.snr_db} dB`;
+
+        const rfDetEl = document.getElementById('lora-rf-details');
+        if (rfDetEl) rfDetEl.innerText = `Freq: ${pkt.frequency_mhz} MHz | ${pkt.spreading_factor} / BW 125kHz`;
+
+        const batEl = document.getElementById('lora-battery-status');
+        if (batEl) batEl.innerText = `${pkt.battery_volts}V (${pkt.battery_pct}% คงเหลือ)`;
+
+        const waterEl = document.getElementById('lora-water-reading');
+        if (waterEl) waterEl.innerText = `+${pkt.water_level_m.toFixed(2)} ม. รทก. (${pkt.temp_c}°C)`;
+
+        const timeEl = document.getElementById('lora-last-packet-time');
+        if (timeEl) timeEl.innerText = `อัปเดตล่าสุด: ${pkt.timestamp_time || 'เมื่อสักครู่'} (FCnt: #${pkt.f_cnt})`;
+
+        const hexEl = document.getElementById('lora-payload-hex');
+        if (hexEl) hexEl.innerText = pkt.raw_payload || '0167011C027301A403020058';
+
+        // Update header & HUD badges
+        const hdrLabel = document.getElementById('hdr-lora-label-desktop');
+        if (hdrLabel) hdrLabel.innerText = `📡 LoRa: AS923 (${pkt.rssi_dbm}dBm)`;
+        const hudText = document.getElementById('lora-hud-text');
+        if (hudText) hudText.innerText = `📡 LoRa AS923: ${pkt.spreading_factor} | RSSI ${pkt.rssi_dbm} dBm | โหนดท่าน้ำ ➔ หอระฆัง`;
+      }
+
+      if (data.recent_packets) {
+        window._cachedLoraPackets = data.recent_packets;
+        renderLoraPacketsTable(data.recent_packets);
+      }
+    }
+
+    function renderLoraPacketsTable(packets) {
+      const tbody = document.getElementById('lora-packets-tbody');
+      if (!tbody) return;
+      if (!packets || packets.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:12px; color:var(--text-tertiary);">ไม่มีประวัติแพ็กเก็ต</td></tr>';
+        return;
+      }
+      tbody.innerHTML = packets.map(p => `
+        <tr style="border-bottom:1px solid var(--border-subtle);">
+          <td style="padding:6px 8px; font-weight:700; color:var(--text-primary); font-family:monospace;">${p.timestamp_time || '-'}</td>
+          <td style="padding:6px 8px; font-family:monospace;">#${p.f_cnt || 0}</td>
+          <td style="padding:6px 8px; color:#10B981; font-weight:600;">+${(p.water_level_m || 0).toFixed(2)} ม.</td>
+          <td style="padding:6px 8px; font-family:monospace;">${p.rssi_dbm} dBm</td>
+          <td style="padding:6px 8px; font-family:monospace;">+${p.snr_db} dB</td>
+          <td style="padding:6px 8px;">${p.battery_volts}V (${p.battery_pct}%)</td>
+          <td style="padding:6px 8px;"><span class="brand-badge" style="background:rgba(52,199,89,0.12); color:#248A3D; font-size:10px;">${p.status || 'SUCCESS'}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    function focusCameraOnLora() {
+      closeLoraModal();
+      setCameraView('lora');
+      trigger3DLoraPingBurst();
+      showToast('🎥 โฟกัสเสาโทรมาตร LoRa', 'กล้องหมุนโฟกัสเสาเซนเซอร์วัดน้ำท่าน้ำและหอระฆังวัดเทวราชกุญชร', 'info');
+    }
+
+    function trigger3DLoraPingBurst() {
+      loraPingActive = true;
+      loraPingStartTime = performance.now() / 1000;
     }
 
     // Dynamic Nurse Triage Live Updates
@@ -7060,6 +8096,14 @@
         const hdr = document.getElementById(`hdr-${m}`);
         if (hdr) hdr.classList.toggle('active', m === mode);
       });
+
+      const tsuCtrl = document.getElementById('tsunami-phase-controller');
+      if (tsuCtrl) {
+        tsuCtrl.style.display = (mode === 'tsunami') ? 'block' : 'none';
+      }
+      if (mode === 'tsunami') {
+        jumpTsunamiPhase(1);
+      }
 
       updateDisasterPinsVisibility(mode);
 
@@ -8141,6 +9185,13 @@
                   updateDisasterPinsVisibility(state.disasterMode);
                 }
               }
+              if (state && state.lora) {
+                updateLoraModalUI({
+                  status: 'online',
+                  latest_packet: state.lora.latestPacket,
+                  recent_packets: state.lora.recentPackets
+                });
+              }
               renderApp();
             } else if (payload.event === 'LINE_ALERT_BROADCASTED') {
               showFloatingLineBanner(payload.data.title, payload.data.message, payload.data.hazard_type);
@@ -8148,6 +9199,14 @@
               if (document.getElementById('line-broadcast-modal')?.classList.contains('show')) {
                 fetchLineHistory();
               }
+            } else if (payload.event === 'LORA_PACKET_RECEIVED') {
+              trigger3DLoraPingBurst();
+              updateLoraModalUI({
+                status: 'online',
+                latest_packet: payload.data,
+                recent_packets: [payload.data, ...(window._cachedLoraPackets || []).slice(0, 7)]
+              });
+              showToast('📡 LoRaWAN Telemetry Uplink', `รับแพ็กเก็ตใหม่ #${payload.data.f_cnt} | ระดับน้ำ +${payload.data.water_level_m.toFixed(2)} ม. | RSSI ${payload.data.rssi_dbm} dBm`, 'info');
             }
           } catch (e) {
             console.error('WS error:', e);
@@ -8189,6 +9248,7 @@
     window.addEventListener('DOMContentLoaded', () => {
       start3DWhenReady();
       fetchState();
+      fetchLoraStatus();
       initWebSocket();
 
       // Deep link support: allow direct loading into disaster or view mode via URL params

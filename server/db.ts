@@ -197,6 +197,27 @@ export function initDatabase() {
     );
   `);
 
+  // 12. LoRaWAN Telemetry & Packets table (Section 37: Water Sensor -> LoRa -> Gateway -> SQLite)
+  db.run(`
+    CREATE TABLE IF NOT EXISTS lora_packets (
+      id TEXT PRIMARY KEY,
+      timestamp_time TEXT NOT NULL,
+      dev_eui TEXT NOT NULL,
+      gateway_id TEXT NOT NULL,
+      frequency_mhz REAL NOT NULL,
+      rssi_dbm INTEGER NOT NULL,
+      snr_db REAL NOT NULL,
+      spreading_factor TEXT NOT NULL,
+      f_cnt INTEGER NOT NULL,
+      battery_volts REAL NOT NULL,
+      battery_pct INTEGER NOT NULL,
+      water_level_m REAL NOT NULL,
+      temp_c REAL NOT NULL,
+      raw_payload TEXT NOT NULL,
+      status TEXT NOT NULL
+    );
+  `);
+
   // Seed Data if households table is empty
   const count = db.query('SELECT COUNT(*) as cnt FROM households').get() as { cnt: number };
   if (count.cnt === 0) {
@@ -219,6 +240,12 @@ export function initDatabase() {
   const lineCount = db.query('SELECT COUNT(*) as cnt FROM line_broadcasts').get() as { cnt: number };
   if (lineCount.cnt === 0) {
     seedLineBroadcasts();
+  }
+
+  // Ensure lora_packets are seeded
+  const loraCount = db.query('SELECT COUNT(*) as cnt FROM lora_packets').get() as { cnt: number };
+  if (loraCount.cnt === 0) {
+    seedLoraPackets();
   }
 }
 
@@ -526,6 +553,136 @@ export function resetDatabaseToBaseline() {
   db.run("UPDATE tasks SET status = 'accepted' WHERE code = 'TASK #A-012'");
 
   seedChecklist();
+  seedNurseNotes();
+  seedLoraPackets();
+}
+
+export function seedLoraPackets() {
+  const insertPacket = db.prepare(`
+    INSERT OR REPLACE INTO lora_packets (
+      id, timestamp_time, dev_eui, gateway_id, frequency_mhz, rssi_dbm, snr_db,
+      spreading_factor, f_cnt, battery_volts, battery_pct, water_level_m, temp_c, raw_payload, status
+    ) VALUES (
+      $id, $timestamp_time, $dev_eui, $gateway_id, $frequency_mhz, $rssi_dbm, $snr_db,
+      $spreading_factor, $f_cnt, $battery_volts, $battery_pct, $water_level_m, $temp_c, $raw_payload, $status
+    )
+  `);
+
+  const initialPackets = [
+    {
+      id: 'lora-pkt-001',
+      timestamp_time: '20:00:15',
+      dev_eui: '70-B3-D5-7E-D0-04-A1-2F',
+      gateway_id: 'GW-THEWARAT-BELF-01',
+      frequency_mhz: 923.2,
+      rssi_dbm: -78,
+      snr_db: 9.5,
+      spreading_factor: 'SF9BW125',
+      f_cnt: 1478,
+      battery_volts: 3.64,
+      battery_pct: 95,
+      water_level_m: 0.42,
+      temp_c: 28.4,
+      raw_payload: '010201A40267011C03020E38',
+      status: 'synced'
+    },
+    {
+      id: 'lora-pkt-002',
+      timestamp_time: '20:10:15',
+      dev_eui: '70-B3-D5-7E-D0-04-A1-2F',
+      gateway_id: 'GW-THEWARAT-BELF-01',
+      frequency_mhz: 923.4,
+      rssi_dbm: -79,
+      snr_db: 9.1,
+      spreading_factor: 'SF9BW125',
+      f_cnt: 1479,
+      battery_volts: 3.63,
+      battery_pct: 94,
+      water_level_m: 0.58,
+      temp_c: 28.2,
+      raw_payload: '010202440267011A03020E2E',
+      status: 'synced'
+    },
+    {
+      id: 'lora-pkt-003',
+      timestamp_time: '20:20:15',
+      dev_eui: '70-B3-D5-7E-D0-04-A1-2F',
+      gateway_id: 'GW-THEWARAT-BELF-01',
+      frequency_mhz: 923.2,
+      rssi_dbm: -77,
+      snr_db: 9.8,
+      spreading_factor: 'SF9BW125',
+      f_cnt: 1480,
+      battery_volts: 3.62,
+      battery_pct: 94,
+      water_level_m: 0.72,
+      temp_c: 28.1,
+      raw_payload: '010202D00267011903020E24',
+      status: 'synced'
+    },
+    {
+      id: 'lora-pkt-004',
+      timestamp_time: '20:30:15',
+      dev_eui: '70-B3-D5-7E-D0-04-A1-2F',
+      gateway_id: 'GW-THEWARAT-BELF-01',
+      frequency_mhz: 923.6,
+      rssi_dbm: -78,
+      snr_db: 9.4,
+      spreading_factor: 'SF9BW125',
+      f_cnt: 1481,
+      battery_volts: 3.62,
+      battery_pct: 94,
+      water_level_m: 0.88,
+      temp_c: 27.9,
+      raw_payload: '010203700267011703020E24',
+      status: 'synced'
+    },
+    {
+      id: 'lora-pkt-005',
+      timestamp_time: '20:38:00',
+      dev_eui: '70-B3-D5-7E-D0-04-A1-2F',
+      gateway_id: 'GW-THEWARAT-BELF-01',
+      frequency_mhz: 923.2,
+      rssi_dbm: -76,
+      snr_db: 10.2,
+      spreading_factor: 'SF9BW125',
+      f_cnt: 1482,
+      battery_volts: 3.61,
+      battery_pct: 93,
+      water_level_m: 0.99,
+      temp_c: 27.8,
+      raw_payload: '010203DE0267011603020E1A',
+      status: 'synced'
+    }
+  ];
+
+  for (const pkt of initialPackets) {
+    insertPacket.run({
+      $id: pkt.id,
+      $timestamp_time: pkt.timestamp_time,
+      $dev_eui: pkt.dev_eui,
+      $gateway_id: pkt.gateway_id,
+      $frequency_mhz: pkt.frequency_mhz,
+      $rssi_dbm: pkt.rssi_dbm,
+      $snr_db: pkt.snr_db,
+      $spreading_factor: pkt.spreading_factor,
+      $f_cnt: pkt.f_cnt,
+      $battery_volts: pkt.battery_volts,
+      $battery_pct: pkt.battery_pct,
+      $water_level_m: pkt.water_level_m,
+      $temp_c: pkt.temp_c,
+      $raw_payload: pkt.raw_payload,
+      $status: pkt.status
+    });
+  }
+}
+
+export function getLatestLoraPacket() {
+  return db.query('SELECT * FROM lora_packets ORDER BY id DESC LIMIT 1').get() as any;
+}
+
+export function getAllLoraPackets(limit = 20) {
+  return db.query('SELECT * FROM lora_packets ORDER BY id DESC LIMIT ?').all(limit) as any[];
 }
 
 // Ensure database tables and seed are initialized on import

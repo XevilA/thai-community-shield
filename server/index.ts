@@ -4,7 +4,7 @@
  * 100% Bun + Native SQLite + Three.js 3D Viewer + Offline Ready
  */
 
-import { initDatabase, db, resetDatabaseToBaseline } from './db';
+import { initDatabase, db, resetDatabaseToBaseline, getLatestLoraPacket, getAllLoraPackets } from './db';
 import { calculateRiverWaterLevel, calculateWaterDepthCm } from './hydrology';
 import { findShortestPath, evaluateAllPlans } from './router';
 import { explainRiskAssessment, parseCitizenVoiceReport } from './ai';
@@ -192,6 +192,30 @@ export function getSystemState(stepOverride?: number) {
     tasks,
     nurseNotes,
     lineBroadcasts: db.query('SELECT * FROM line_broadcasts ORDER BY id DESC').all(),
+    lora: (() => {
+      const latestLora = getLatestLoraPacket();
+      return {
+        gatewayId: 'GW-THEWARAT-BELF-01',
+        gatewayName: 'เกตเวย์หอระฆังวัดเทวราชกุญชร (Belfry Gateway)',
+        nodeDevEui: '70-B3-D5-7E-D0-04-A1-2F',
+        nodeName: 'เซนเซอร์วัดระดับน้ำท่าน้ำเจ้าพระยา (Pier Node 01)',
+        standard: 'AS923-TH (กสทช.)',
+        frequencyMhz: latestLora ? latestLora.frequency_mhz : 923.2,
+        rssiDbm: latestLora ? latestLora.rssi_dbm : -78,
+        snrDb: latestLora ? latestLora.snr_db : 9.5,
+        spreadingFactor: latestLora ? latestLora.spreading_factor : 'SF9BW125',
+        fCnt: latestLora ? latestLora.f_cnt : 1482,
+        batteryVolts: latestLora ? latestLora.battery_volts : 3.62,
+        batteryPct: latestLora ? latestLora.battery_pct : 94,
+        waterLevelM: latestLora ? latestLora.water_level_m : hydro.level,
+        tempC: latestLora ? latestLora.temp_c : 28.4,
+        rawPayload: latestLora ? latestLora.raw_payload : '010201A40267011C03020E38',
+        status: 'online',
+        lastPacketTime: latestLora ? latestLora.timestamp_time : step.time,
+        packetLossPct: 0.08,
+        totalPackets: 1482,
+      };
+    })(),
     aiExplanation,
   };
 }
@@ -718,6 +742,112 @@ const server = (Bun as any).serve({
       if (url.pathname === '/api/line/history') {
         const history = db.query('SELECT * FROM line_broadcasts ORDER BY id DESC').all();
         return json({ history });
+      }
+
+      // --- LoRaWAN Telemetry & Packets Engine (Section 37) ---
+      if (url.pathname === '/api/lora/status') {
+        const latestLora = getLatestLoraPacket();
+        const packets = getAllLoraPackets(15);
+        return json({
+          status: 'online',
+          architecture: 'Section 37: Water Sensor -> LoRa -> Community Gateway -> SQLite DB -> AI Forecast -> Risk Map -> Response Task -> Sync',
+          gateway: {
+            id: 'GW-THEWARAT-BELF-01',
+            location: 'หอระฆังวัดเทวราชกุญชร เขตดุสิต (Belfry Tower)',
+            antenna: 'High-Gain Fiberglass Collinear 5.8 dBi',
+            backhaul: 'Cellular 4G LTE + Local Ethernet + Offline Buffer',
+            status: 'operational',
+            uptime: '99.98%'
+          },
+          node: {
+            devEui: '70-B3-D5-7E-D0-04-A1-2F',
+            appEui: '00-00-00-00-00-00-00-00',
+            location: 'ท่าน้ำวัดเทวราชกุญชร ริมแม่น้ำเจ้าพระยา (Chao Phraya Pier)',
+            transducer: 'IP67 Submersible Ultrasonic & Hydrostatic Transducer',
+            solarAssisted: true,
+            batteryPct: latestLora ? latestLora.battery_pct : 94,
+            batteryVolts: latestLora ? latestLora.battery_volts : 3.62
+          },
+          rf: {
+            standard: 'AS923-TH (กสทช.)',
+            frequencyMhz: latestLora ? latestLora.frequency_mhz : 923.2,
+            bandwidthKhz: 125,
+            spreadingFactor: latestLora ? latestLora.spreading_factor : 'SF9BW125',
+            rssiDbm: latestLora ? latestLora.rssi_dbm : -78,
+            snrDb: latestLora ? latestLora.snr_db : 9.5
+          },
+          latestPacket: latestLora,
+          packetHistory: packets
+        });
+      }
+
+      if (url.pathname === '/api/lora/ping' && req.method === 'POST') {
+        return (async () => {
+          const body = await req.json().catch(() => ({}));
+          const step = TIMELINE_STEPS[currentStepIndex];
+          const hydro = calculateRiverWaterLevel(step.minutes);
+          const now = new Date();
+          const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+          
+          const waterLevel = Number((hydro.level + (Math.random() * 0.02 - 0.01)).toFixed(2));
+          const waterLevelDm = Math.max(0, Math.round(waterLevel * 100));
+          const waterHex = waterLevelDm.toString(16).padStart(4, '0').toUpperCase();
+          const tempC = Number((28.0 + (Math.random() * 0.6 - 0.3)).toFixed(1));
+          const tempHex = Math.round(tempC * 10).toString(16).padStart(4, '0').toUpperCase();
+          const batV = Number((3.60 + Math.random() * 0.04).toFixed(2));
+          const batMv = Math.round(batV * 1000);
+          const batHex = batMv.toString(16).padStart(4, '0').toUpperCase();
+          const rawPayload = `0102${waterHex}0267${tempHex}0302${batHex}`;
+
+          const pktId = `lora-pkt-${Date.now()}`;
+          const fCnt = Math.floor(1483 + Math.random() * 50);
+          const freqs = [923.2, 923.4, 923.6];
+          const freq = freqs[Math.floor(Math.random() * freqs.length)];
+          const rssi = Math.floor(-75 - Math.random() * 8);
+          const snr = Number((9.0 + Math.random() * 1.5).toFixed(1));
+
+          db.run(`
+            INSERT INTO lora_packets (
+              id, timestamp_time, dev_eui, gateway_id, frequency_mhz, rssi_dbm, snr_db,
+              spreading_factor, f_cnt, battery_volts, battery_pct, water_level_m, temp_c, raw_payload, status
+            ) VALUES (
+              $id, $timestamp_time, $dev_eui, $gateway_id, $frequency_mhz, $rssi_dbm, $snr_db,
+              $spreading_factor, $f_cnt, $battery_volts, $battery_pct, $water_level_m, $temp_c, $raw_payload, 'synced'
+            );
+          `, {
+            $id: pktId,
+            $timestamp_time: timeStr,
+            $dev_eui: '70-B3-D5-7E-D0-04-A1-2F',
+            $gateway_id: 'GW-THEWARAT-BELF-01',
+            $frequency_mhz: freq,
+            $rssi_dbm: rssi,
+            $snr_db: snr,
+            $spreading_factor: 'SF9BW125',
+            $f_cnt: fCnt,
+            $battery_volts: batV,
+            $battery_pct: 94,
+            $water_level_m: waterLevel,
+            $temp_c: tempC,
+            $raw_payload: rawPayload
+          });
+
+          const newPacket = db.query('SELECT * FROM lora_packets WHERE id = ?').get(pktId);
+          const state = getSystemState();
+
+          broadcast('LORA_PACKET_RECEIVED', {
+            packet: newPacket,
+            event: 'UPLINK_TRANSMITTED',
+            telemetry: { waterLevel, tempC, batV, rssi, snr, freq }
+          });
+          broadcast('STATE_UPDATED', state);
+
+          return json({ success: true, packet: newPacket, state });
+        })();
+      }
+
+      if (url.pathname === '/api/lora/history') {
+        const packets = getAllLoraPackets(50);
+        return json({ packets });
       }
 
       // 5. Serve PWA Manifest, Service Worker & Static Assets
