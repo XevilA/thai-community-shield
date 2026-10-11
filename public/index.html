@@ -2561,6 +2561,11 @@
         <span class="lora-btn-label-mobile">📡 LoRa</span>
       </button>
 
+      <button class="btn-step" id="btn-hdr-lora-settings" onclick="openLoraSettingsModal()" title="ตั้งค่าการเชื่อมต่อ LoRaWAN Gateway และโมเดล LoRA AI จริง" style="height:32px; font-size:12px; padding:0 10px; display:inline-flex; align-items:center; gap:5px; border-radius:8px; background:var(--surface-raised); border:1px solid var(--border-subtle); color:var(--text-primary); cursor:pointer;">
+        <span>⚙️</span>
+        <span class="lora-btn-label-desktop">ตั้งค่า LoRA จริง</span>
+      </button>
+
       <div class="segmented-control">
         <button class="seg-btn active" id="tab-command" onclick="setAppMode('command')">
           <svg class="icon" viewBox="0 0 24 24">
@@ -3586,7 +3591,12 @@
             </div>
           </div>
         </div>
-        <button class="btn-step" onclick="closeModal('lora-telemetry-modal')" style="padding:4px 10px; font-size:12px;">✕ ปิด</button>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-step" onclick="closeModal('lora-telemetry-modal'); openLoraSettingsModal();" style="padding:4px 10px; font-size:12px; background:var(--surface-raised); border:1px solid #0284c7; color:#0284c7; font-weight:600;">
+            ⚙️ ตั้งค่าเชื่อมต่อเกตเวย์จริง
+          </button>
+          <button class="btn-step" onclick="closeModal('lora-telemetry-modal')" style="padding:4px 10px; font-size:12px;">✕ ปิด</button>
+        </div>
       </div>
 
       <!-- Section 37 Pipeline Architecture Diagram -->
@@ -3808,6 +3818,250 @@
               <!-- Populated by JavaScript -->
             </tbody>
           </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Real LoRA / LoRaWAN & AI Connection Settings Modal -->
+  <div class="modal-backdrop" id="lora-settings-modal" onclick="if(event.target===this) closeModal('lora-settings-modal')">
+    <div class="modal-dialog" style="max-width:880px; max-height:92vh; overflow-y:auto;">
+      <div class="modal-drag-handle"></div>
+      
+      <!-- Modal Header -->
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid var(--border-subtle);">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="width:40px; height:40px; border-radius:10px; background:linear-gradient(135deg, #4f46e5, #0ea5e9); display:flex; align-items:center; justify-content:center; color:#fff; font-size:18px; box-shadow:0 4px 12px rgba(79,70,229,0.35);">
+            ⚙️
+          </div>
+          <div>
+            <div style="font-size:16px; font-weight:700; color:var(--text-primary); display:flex; align-items:center; gap:8px;">
+              <span>ตั้งค่าการเชื่อมต่อ LoRaWAN & LoRA AI จริง</span>
+              <span class="brand-badge" id="cfg-conn-badge" style="background:rgba(16,185,129,0.12); color:#10B981; border-color:rgba(16,185,129,0.3);">🟢 พร้อมเชื่อมต่อจริง</span>
+            </div>
+            <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">
+              เชื่อมต่อฮาร์ดแวร์เซนเซอร์จริงผ่าน Gateway, ChirpStack, The Things Network (TTN) หรือโมเดล LoRA AI จริง
+            </div>
+          </div>
+        </div>
+        <button class="btn-step" onclick="closeModal('lora-settings-modal')" style="padding:4px 10px; font-size:12px;">✕ ปิด</button>
+      </div>
+
+      <!-- Navigation Tabs inside Settings Modal -->
+      <div style="display:flex; gap:6px; border-bottom:1px solid var(--border-subtle); margin-bottom:16px; padding-bottom:4px;">
+        <button class="btn-step active" id="tab-btn-cfg-gw" onclick="switchLoraSettingsTab('gw')" style="font-size:12px; font-weight:600; padding:6px 14px; border-radius:8px;">
+          📡 1. เชื่อมต่อ Gateway จริง
+        </button>
+        <button class="btn-step" id="tab-btn-cfg-ai" onclick="switchLoraSettingsTab('ai')" style="font-size:12px; font-weight:600; padding:6px 14px; border-radius:8px;">
+          🧠 2. เชื่อมต่อ LoRA AI จริง
+        </button>
+        <button class="btn-step" id="tab-btn-cfg-webhook" onclick="switchLoraSettingsTab('webhook')" style="font-size:12px; font-weight:600; padding:6px 14px; border-radius:8px;">
+          📥 3. ลิงก์ Webhook Ingest
+        </button>
+      </div>
+
+      <!-- Tab 1: Real LoRa Gateway & Hardware Settings -->
+      <div id="lora-cfg-tab-gw" style="display:block;">
+        <div style="background:var(--surface-sunken); border:1px solid var(--border-subtle); border-radius:12px; padding:14px; margin-bottom:14px;">
+          <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+            <span>🌐 รูปแบบโพรโทคอลเกตเวย์ (Connection Protocol)</span>
+            <span style="font-size:11px; color:var(--text-tertiary);">รองรับทั้ง LAN Wi-Fi & Cloud</span>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+            <div>
+              <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:4px;">โหมดการเชื่อมต่อ (Protocol Mode):</label>
+              <select id="cfg-lora-mode" onchange="onLoraProtocolChange()" style="width:100%; font-size:12px; padding:8px 10px; border-radius:8px; border:1px solid var(--border-subtle); background:var(--surface-card); color:var(--text-primary);">
+                <option value="chirpstack">🗼 ChirpStack v4 Application Server (REST / gRPC)</option>
+                <option value="ttn">🌐 The Things Network v3 (TTN Cloud)</option>
+                <option value="direct_ip">🛜 Local Sensor Node / ESP32 IP Direct (ท่าน้ำเจ้าพระยา)</option>
+                <option value="custom_url">🔌 Custom REST Webhook / Telemetry Endpoint</option>
+                <option value="local_sim">🔄 Built-in Native Transceiver (จำลองความเร็วสูง)</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:4px;">แผนความถี่คลื่นวิทยุ (Frequency Plan):</label>
+              <select id="cfg-lora-freq" style="width:100%; font-size:12px; padding:8px 10px; border-radius:8px; border:1px solid var(--border-subtle); background:var(--surface-card); color:var(--text-primary);">
+                <option value="AS923-TH (923.2 MHz)">AS923-TH (923.2 MHz - กสทช. ประเทศไทย แนะนำ)</option>
+                <option value="AS923-1 (923.2 - 923.4 MHz)">AS923-1 (923.2 - 923.4 MHz Southeast Asia)</option>
+                <option value="EU868 (868.1 MHz)">EU868 (868.1 MHz Europe standard)</option>
+                <option value="US915 (915.0 MHz)">US915 (915.0 MHz Americas standard)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Gateway Endpoint URL & Presets -->
+          <div style="margin-bottom:10px;">
+            <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:4px;">URL ของ Gateway หรือ Telemetry API (Gateway Endpoint URL):</label>
+            <div style="display:flex; gap:6px;">
+              <input type="url" id="cfg-lora-url" value="http://192.168.1.100:8080/api/v1/telemetry" placeholder="เช่น http://192.168.1.100:8080 หรือ https://eu1.cloud.thethings.network/api/v3" style="flex:1; font-size:12px; padding:8px 12px; border-radius:8px; border:1px solid var(--border-subtle); background:var(--surface-card); color:var(--text-primary); font-family:monospace;">
+            </div>
+            <!-- Quick Preset Pills -->
+            <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:6px;">
+              <span style="font-size:10px; color:var(--text-tertiary); align-self:center;">ตัวเลือกสำเร็จรูป:</span>
+              <button type="button" class="btn-step" onclick="applyLoraGatewayPreset('chirpstack')" style="font-size:10px; padding:3px 8px;">🗼 ChirpStack Local (192.168.1.100:8080)</button>
+              <button type="button" class="btn-step" onclick="applyLoraGatewayPreset('ttn')" style="font-size:10px; padding:3px 8px;">🌐 TTN Cloud (eu1.cloud.thethings.network)</button>
+              <button type="button" class="btn-step" onclick="applyLoraGatewayPreset('esp32')" style="font-size:10px; padding:3px 8px;">🛜 โหนด ESP32 ท่าน้ำ (192.168.1.150)</button>
+              <button type="button" class="btn-step" onclick="applyLoraGatewayPreset('mock')" style="font-size:10px; padding:3px 8px;">🔄 Serverless Endpoint (/api/lora/status)</button>
+            </div>
+          </div>
+
+          <!-- Gateway Auth Token & Node Hardware IDs -->
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:10px;">
+            <div>
+              <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:4px;">API Key / Auth Token (ถ้ามี):</label>
+              <input type="password" id="cfg-lora-key" placeholder="Bearer NNSXS.XXXX..." style="width:100%; font-size:12px; padding:8px 10px; border-radius:8px; border:1px solid var(--border-subtle); background:var(--surface-card); color:var(--text-primary);">
+            </div>
+            <div>
+              <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:4px;">Device EUI (DevEUI 64-bit):</label>
+              <input type="text" id="cfg-lora-deveui" value="70-B3-D5-7E-D0-04-A1-2F" style="width:100%; font-size:12px; padding:8px 10px; border-radius:8px; border:1px solid var(--border-subtle); background:var(--surface-card); color:var(--text-primary); font-family:monospace;">
+            </div>
+            <div>
+              <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:4px;">Spreading Factor (SF):</label>
+              <select id="cfg-lora-sf" style="width:100%; font-size:12px; padding:8px 10px; border-radius:8px; border:1px solid var(--border-subtle); background:var(--surface-card); color:var(--text-primary);">
+                <option value="SF7BW125">SF7 (เร็วสุด ระยะปานกลาง 1-3 กม.)</option>
+                <option value="SF8BW125">SF8 (สมดุลระยะ 3-6 กม.)</option>
+                <option value="SF9BW125" selected>SF9 (แนะนำสำหรับชุมชนเมือง 5-10 กม.)</option>
+                <option value="SF10BW125">SF10 (สัญญาณทะลุตึกสูง 10-15 กม.)</option>
+                <option value="SF11BW125">SF11 (ระยะไกลมาก ทะลุสิ่งกีดขวาง)</option>
+                <option value="SF12BW125">SF12 (ทะลุทะลวงสูงสุด ระยะ 15-20+ กม.)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Real Test Connection Button & Live Indicator -->
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; padding-top:8px; border-top:1px dashed var(--border-subtle);">
+            <button class="btn-step" id="btn-test-lora-gw" onclick="testRealLoraGatewayConnection()" style="background:#0284c7; color:#fff; font-weight:700; border-color:#0284c7; padding:8px 16px; font-size:12px;">
+              🔌 ทดสอบเชื่อมต่อ Gateway จริง (Test Connection)
+            </button>
+            <div style="font-size:11px; color:var(--text-tertiary);" id="cfg-gw-status-text">
+              ยังไม่ได้ทดสอบการเชื่อมต่อ
+            </div>
+          </div>
+
+          <!-- Real Test Connection Live Output Banner -->
+          <div id="cfg-gw-test-result" style="display:none; margin-top:10px; padding:10px 12px; border-radius:8px; font-size:11.5px; line-height:1.4;">
+            <!-- Output injected by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: Real LoRA AI Model & Inference Server Settings -->
+      <div id="lora-cfg-tab-ai" style="display:none;">
+        <div style="background:var(--surface-sunken); border:1px solid var(--border-subtle); border-radius:12px; padding:14px; margin-bottom:14px;">
+          <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+            <span>🧠 การเชื่อมต่อเครื่องยนต์ประมวลผล LoRA AI จริง (Real AI Engine)</span>
+            <span style="font-size:11px; color:var(--text-tertiary);">รองรับ Ollama, Colab ngrok & LM Studio</span>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+            <div>
+              <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:4px;">เครื่องมือรันโมเดล (AI Backend Provider):</label>
+              <select id="cfg-ai-backend" onchange="onLoraAiBackendChange()" style="width:100%; font-size:12px; padding:8px 10px; border-radius:8px; border:1px solid var(--border-subtle); background:var(--surface-card); color:var(--text-primary);">
+                <option value="ollama_local">🚀 Local Ollama LLM (http://localhost:11434)</option>
+                <option value="colab_tunnel">☁️ Google Colab Live Tunnel (ngrok / Cloudflare)</option>
+                <option value="lm_studio">💻 LM Studio Local Server (http://localhost:1234/v1)</option>
+                <option value="custom_api">🌐 Custom REST API (OpenAI / HuggingFace Endpoint)</option>
+                <option value="embedded_peft">📱 On-Device Embedded Micro-PEFT (ออฟไลน์)</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:4px;">ชื่อโมเดลหลัก (Base LLM):</label>
+              <input type="text" id="cfg-ai-model" value="qwen2.5:0.5b" style="width:100%; font-size:12px; padding:8px 10px; border-radius:8px; border:1px solid var(--border-subtle); background:var(--surface-card); color:var(--text-primary); font-family:monospace;">
+            </div>
+          </div>
+
+          <!-- AI Endpoint URL & Quick Presets -->
+          <div style="margin-bottom:10px;">
+            <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:4px;">AI Generation Endpoint URL:</label>
+            <input type="url" id="cfg-ai-url" value="http://localhost:11434/api/generate" placeholder="เช่น http://localhost:11434/api/generate หรือ https://xxxx.ngrok-free.app/api/generate" style="width:100%; font-size:12px; padding:8px 12px; border-radius:8px; border:1px solid var(--border-subtle); background:var(--surface-card); color:var(--text-primary); font-family:monospace;">
+            
+            <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:6px;">
+              <span style="font-size:10px; color:var(--text-tertiary); align-self:center;">ค่าเซ็ตล่วงหน้า:</span>
+              <button type="button" class="btn-step" onclick="applyLoraAiPreset('ollama')" style="font-size:10px; padding:3px 8px;">🚀 Ollama Local (localhost:11434)</button>
+              <button type="button" class="btn-step" onclick="applyLoraAiPreset('lmstudio')" style="font-size:10px; padding:3px 8px;">💻 LM Studio (localhost:1234)</button>
+              <button type="button" class="btn-step" onclick="applyLoraAiPreset('colab')" style="font-size:10px; padding:3px 8px;">☁️ Colab ngrok Tunnel Template</button>
+              <button type="button" class="btn-step" onclick="applyLoraAiPreset('vercel')" style="font-size:10px; padding:3px 8px;">⚡ Vercel Edge Serverless (/api/lora/ai-query)</button>
+            </div>
+          </div>
+
+          <!-- LoRA Adapter Identifier & Hyperparameters -->
+          <div style="display:grid; grid-template-columns:2fr 1fr 1fr; gap:10px; margin-bottom:10px;">
+            <div>
+              <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:4px;">LoRA Adapter Repo / Path:</label>
+              <input type="text" id="cfg-ai-adapter" value="thewarat-community/disaster-qwen2.5-0.5b-lora" style="width:100%; font-size:12px; padding:8px 10px; border-radius:8px; border:1px solid var(--border-subtle); background:var(--surface-card); color:var(--text-primary); font-family:monospace;">
+            </div>
+            <div>
+              <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:4px;">Temperature:</label>
+              <input type="number" id="cfg-ai-temp" value="0.3" min="0.0" max="1.0" step="0.1" style="width:100%; font-size:12px; padding:8px 10px; border-radius:8px; border:1px solid var(--border-subtle); background:var(--surface-card); color:var(--text-primary);">
+            </div>
+            <div>
+              <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:4px;">Max Tokens:</label>
+              <input type="number" id="cfg-ai-tokens" value="256" min="64" max="1024" step="64" style="width:100%; font-size:12px; padding:8px 10px; border-radius:8px; border:1px solid var(--border-subtle); background:var(--surface-card); color:var(--text-primary);">
+            </div>
+          </div>
+
+          <!-- Real AI Test Button & Live Output -->
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; padding-top:8px; border-top:1px dashed var(--border-subtle);">
+            <button class="btn-step" id="btn-test-lora-ai" onclick="testRealLoraAiConnection()" style="background:#5856D6; color:#fff; font-weight:700; border-color:#5856D6; padding:8px 16px; font-size:12px;">
+              ⚡ ทดสอบส่งคำถาม AI และวัดความเร็วตอบสนอง (Test AI Handshake)
+            </button>
+            <div style="font-size:11px; color:var(--text-tertiary);" id="cfg-ai-status-text">
+              ยังไม่ได้ทดสอบ AI
+            </div>
+          </div>
+
+          <div id="cfg-ai-test-result" style="display:none; margin-top:10px; padding:10px 12px; border-radius:8px; font-size:11.5px; line-height:1.4;">
+            <!-- Output injected by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 3: Webhook Ingest URL for ChirpStack / The Things Network -->
+      <div id="lora-cfg-tab-webhook" style="display:none;">
+        <div style="background:var(--surface-sunken); border:1px solid var(--border-subtle); border-radius:12px; padding:14px; margin-bottom:14px;">
+          <div style="font-size:13px; font-weight:700; color:var(--text-primary); margin-bottom:8px;">
+            📥 ลิงก์ Webhook รับข้อมูลแพ็กเก็ต LoRaWAN เข้าสู่ระบบโดยตรง
+          </div>
+          <div style="font-size:11.5px; color:var(--text-secondary); line-height:1.5; margin-bottom:10px;">
+            ท่านสามารถคัดลอก URL ด้านล่างนี้ไปวางในเมนู <strong>Integrations ➔ Webhooks</strong> บนคอนโซลของ <strong>ChirpStack v4</strong> หรือ <strong>The Things Network (TTN)</strong> เพื่อให้ระบบส่งข้อมูลระดับน้ำจริงเข้าสู่แผนที่ 3D ทันที:
+          </div>
+
+          <div style="background:var(--surface-card); border:1px solid var(--border-subtle); border-radius:8px; padding:10px 12px; display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px;">
+            <code style="font-size:12px; color:#0284c7; word-break:break-all;" id="cfg-webhook-url-display">
+              https://thai-community-shield.vercel.app/api/lora/ingest
+            </code>
+            <button class="btn-step" onclick="copyWebhookUrl()" style="font-size:11px; padding:4px 10px; white-space:nowrap;">
+              📋 คัดลอก URL
+            </button>
+          </div>
+
+          <div style="font-size:11.5px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">
+            🧪 ตัวอย่างคำสั่ง cURL สำหรับทดสอบยิงข้อมูลระดับน้ำจริง:
+          </div>
+          <div style="background:var(--surface-card); border:1px solid var(--border-subtle); border-radius:8px; padding:10px 12px; font-size:11px; font-family:monospace; color:var(--text-secondary); overflow-x:auto;">
+            curl -X POST https://thai-community-shield.vercel.app/api/lora/ingest \<br>
+            &nbsp;&nbsp;-H "Content-Type: application/json" \<br>
+            &nbsp;&nbsp;-d '{"water_level_m": 0.65, "rssi_dbm": -74, "snr_db": 10.5, "battery_volts": 3.63, "battery_pct": 94}'
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer Action Bar -->
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; padding-top:12px; border-top:1px solid var(--border-subtle);">
+        <label style="display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text-primary); cursor:pointer;">
+          <input type="checkbox" id="cfg-lora-autopoll" style="width:16px; height:16px;">
+          <span>เปิดดึงข้อมูลโทรมาตรอัตโนมัติ (Auto-poll ทุก 10 วินาที)</span>
+        </label>
+        
+        <div style="display:flex; gap:8px;">
+          <button class="btn-step" onclick="resetLoraSettingsDefaults()" style="font-size:12px; padding:6px 14px;">
+            🔄 คืนค่าเริ่มต้น
+          </button>
+          <button class="btn-step primary" onclick="saveLoraSettings()" style="font-size:12px; padding:6px 18px; font-weight:700; background:#10B981; border-color:#10B981; color:#fff;">
+            💾 บันทึกและเริ่มรับสัญญาณจริง
+          </button>
         </div>
       </div>
 
@@ -7140,6 +7394,394 @@
       closeModal('lora-telemetry-modal');
     }
 
+    // --- Real LoRA / LoRaWAN & AI Settings Manager ---
+    let loraAutoPollTimer = null;
+
+    function openLoraSettingsModal() {
+      openModal('lora-settings-modal');
+      loadLoraSettingsFromStorage();
+    }
+
+    function closeLoraSettingsModal() {
+      closeModal('lora-settings-modal');
+    }
+
+    function switchLoraSettingsTab(tab) {
+      ['gw', 'ai', 'webhook'].forEach(t => {
+        const el = document.getElementById(`lora-cfg-tab-${t}`);
+        const btn = document.getElementById(`tab-btn-cfg-${t}`);
+        if (el) el.style.display = (t === tab) ? 'block' : 'none';
+        if (btn) btn.classList.toggle('active', t === tab);
+      });
+    }
+
+    function onLoraProtocolChange() {
+      const mode = document.getElementById('cfg-lora-mode')?.value;
+      if (mode === 'chirpstack') applyLoraGatewayPreset('chirpstack');
+      else if (mode === 'ttn') applyLoraGatewayPreset('ttn');
+      else if (mode === 'direct_ip') applyLoraGatewayPreset('esp32');
+      else if (mode === 'local_sim') applyLoraGatewayPreset('mock');
+    }
+
+    function applyLoraGatewayPreset(type) {
+      const urlInput = document.getElementById('cfg-lora-url');
+      const sfInput = document.getElementById('cfg-lora-sf');
+      const modeSelect = document.getElementById('cfg-lora-mode');
+
+      if (type === 'chirpstack') {
+        if (urlInput) urlInput.value = 'http://192.168.1.100:8080/api/v1/telemetry';
+        if (modeSelect) modeSelect.value = 'chirpstack';
+        if (sfInput) sfInput.value = 'SF9BW125';
+      } else if (type === 'ttn') {
+        if (urlInput) urlInput.value = 'https://eu1.cloud.thethings.network/api/v3';
+        if (modeSelect) modeSelect.value = 'ttn';
+        if (sfInput) sfInput.value = 'SF9BW125';
+      } else if (type === 'esp32') {
+        if (urlInput) urlInput.value = 'http://192.168.1.150/telemetry';
+        if (modeSelect) modeSelect.value = 'direct_ip';
+      } else if (type === 'mock') {
+        if (urlInput) urlInput.value = '/api/lora/status';
+        if (modeSelect) modeSelect.value = 'local_sim';
+      }
+    }
+
+    function onLoraAiBackendChange() {
+      const backend = document.getElementById('cfg-ai-backend')?.value;
+      if (backend === 'ollama_local') applyLoraAiPreset('ollama');
+      else if (backend === 'colab_tunnel') applyLoraAiPreset('colab');
+      else if (backend === 'lm_studio') applyLoraAiPreset('lmstudio');
+      else if (backend === 'embedded_peft') applyLoraAiPreset('vercel');
+    }
+
+    function applyLoraAiPreset(type) {
+      const urlInput = document.getElementById('cfg-ai-url');
+      const modelInput = document.getElementById('cfg-ai-model');
+      const backendSelect = document.getElementById('cfg-ai-backend');
+
+      if (type === 'ollama') {
+        if (urlInput) urlInput.value = 'http://localhost:11434/api/generate';
+        if (modelInput) modelInput.value = 'qwen2.5:0.5b';
+        if (backendSelect) backendSelect.value = 'ollama_local';
+      } else if (type === 'lmstudio') {
+        if (urlInput) urlInput.value = 'http://localhost:1234/v1/chat/completions';
+        if (modelInput) modelInput.value = 'qwen2.5-0.5b-instruct';
+        if (backendSelect) backendSelect.value = 'lm_studio';
+      } else if (type === 'colab') {
+        if (urlInput) urlInput.value = 'https://your-colab-tunnel.ngrok-free.app/api/generate';
+        if (modelInput) modelInput.value = 'qwen2.5-0.5b-lora';
+        if (backendSelect) backendSelect.value = 'colab_tunnel';
+      } else if (type === 'vercel') {
+        if (urlInput) urlInput.value = '/api/lora/ai-query';
+        if (modelInput) modelInput.value = 'thewarat-peft-lora-v1';
+        if (backendSelect) backendSelect.value = 'embedded_peft';
+      }
+    }
+
+    function loadLoraSettingsFromStorage() {
+      try {
+        const raw = localStorage.getItem('community_shield_lora_config');
+        if (raw) {
+          const cfg = JSON.parse(raw);
+          if (cfg.connectionMode && document.getElementById('cfg-lora-mode')) document.getElementById('cfg-lora-mode').value = cfg.connectionMode;
+          if (cfg.gatewayUrl && document.getElementById('cfg-lora-url')) document.getElementById('cfg-lora-url').value = cfg.gatewayUrl;
+          if (cfg.gatewayApiKey && document.getElementById('cfg-lora-key')) document.getElementById('cfg-lora-key').value = cfg.gatewayApiKey;
+          if (cfg.devEui && document.getElementById('cfg-lora-deveui')) document.getElementById('cfg-lora-deveui').value = cfg.devEui;
+          if (cfg.frequencyPlan && document.getElementById('cfg-lora-freq')) document.getElementById('cfg-lora-freq').value = cfg.frequencyPlan;
+          if (cfg.spreadingFactor && document.getElementById('cfg-lora-sf')) document.getElementById('cfg-lora-sf').value = cfg.spreadingFactor;
+          if (cfg.aiBackendMode && document.getElementById('cfg-ai-backend')) document.getElementById('cfg-ai-backend').value = cfg.aiBackendMode;
+          if (cfg.aiEndpointUrl && document.getElementById('cfg-ai-url')) document.getElementById('cfg-ai-url').value = cfg.aiEndpointUrl;
+          if (cfg.aiModelName && document.getElementById('cfg-ai-model')) document.getElementById('cfg-ai-model').value = cfg.aiModelName;
+          if (cfg.aiLoraAdapterPath && document.getElementById('cfg-ai-adapter')) document.getElementById('cfg-ai-adapter').value = cfg.aiLoraAdapterPath;
+          if (cfg.aiTemperature && document.getElementById('cfg-ai-temp')) document.getElementById('cfg-ai-temp').value = cfg.aiTemperature;
+          if (cfg.aiMaxTokens && document.getElementById('cfg-ai-tokens')) document.getElementById('cfg-ai-tokens').value = cfg.aiMaxTokens;
+          if (document.getElementById('cfg-lora-autopoll')) document.getElementById('cfg-lora-autopoll').checked = !!cfg.isAutoPolling;
+        }
+      } catch (e) {
+        console.warn('Could not read lora config from storage:', e);
+      }
+    }
+
+    async function saveLoraSettings() {
+      const config = {
+        connectionMode: document.getElementById('cfg-lora-mode')?.value || 'chirpstack',
+        gatewayUrl: document.getElementById('cfg-lora-url')?.value?.trim() || 'http://192.168.1.100:8080/api/v1/telemetry',
+        gatewayApiKey: document.getElementById('cfg-lora-key')?.value?.trim() || '',
+        devEui: document.getElementById('cfg-lora-deveui')?.value?.trim() || '70-B3-D5-7E-D0-04-A1-2F',
+        frequencyPlan: document.getElementById('cfg-lora-freq')?.value || 'AS923-TH (923.2 MHz)',
+        spreadingFactor: document.getElementById('cfg-lora-sf')?.value || 'SF9BW125',
+        aiBackendMode: document.getElementById('cfg-ai-backend')?.value || 'embedded_peft',
+        aiEndpointUrl: document.getElementById('cfg-ai-url')?.value?.trim() || 'http://localhost:11434/api/generate',
+        aiModelName: document.getElementById('cfg-ai-model')?.value?.trim() || 'qwen2.5:0.5b',
+        aiLoraAdapterPath: document.getElementById('cfg-ai-adapter')?.value?.trim() || 'thewarat-community/disaster-qwen2.5-0.5b-lora',
+        aiTemperature: parseFloat(document.getElementById('cfg-ai-temp')?.value || '0.3'),
+        aiMaxTokens: parseInt(document.getElementById('cfg-ai-tokens')?.value || '256', 10),
+        isAutoPolling: document.getElementById('cfg-lora-autopoll')?.checked || false
+      };
+
+      try {
+        localStorage.setItem('community_shield_lora_config', JSON.stringify(config));
+        await fetch('/api/lora/config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(config)
+        }).catch(() => {});
+      } catch (e) {}
+
+      // Update Header & HUD labels
+      const hdrLabel = document.getElementById('hdr-lora-label-desktop');
+      if (hdrLabel) hdrLabel.innerText = `📡 LoRa: AS923 (${config.spreadingFactor})`;
+      const hudText = document.getElementById('lora-hud-text');
+      if (hudText) hudText.innerText = `📡 LoRa AS923: ${config.spreadingFactor} | DevEUI: ${config.devEui.slice(-8)} | เกตเวย์พร้อมรับสัญญาณจริง`;
+
+      // Manage auto-polling
+      if (config.isAutoPolling) {
+        startRealLoraAutoPolling();
+      } else {
+        stopRealLoraAutoPolling();
+      }
+
+      showToast('💾 บันทึกการตั้งค่า LoRA สำเร็จ', `โหมด: ${config.connectionMode} | ปลายทาง: ${config.gatewayUrl.slice(0, 32)}...`, 'success');
+      closeLoraSettingsModal();
+    }
+
+    function resetLoraSettingsDefaults() {
+      applyLoraGatewayPreset('chirpstack');
+      applyLoraAiPreset('ollama');
+      if (document.getElementById('cfg-lora-deveui')) document.getElementById('cfg-lora-deveui').value = '70-B3-D5-7E-D0-04-A1-2F';
+      if (document.getElementById('cfg-lora-key')) document.getElementById('cfg-lora-key').value = '';
+      if (document.getElementById('cfg-lora-autopoll')) document.getElementById('cfg-lora-autopoll').checked = false;
+      showToast('🔄 คืนค่าเริ่มต้น', 'รีเซ็ตพารามิเตอร์ LoRaWAN และ AI เป็นค่ามาตรฐานชุมชน', 'info');
+    }
+
+    // --- Real Gateway Connection Tester ---
+    async function testRealLoraGatewayConnection() {
+      const btn = document.getElementById('btn-test-lora-gw');
+      const resBox = document.getElementById('cfg-gw-test-result');
+      const statusText = document.getElementById('cfg-gw-status-text');
+      const url = document.getElementById('cfg-lora-url')?.value?.trim();
+      const apiKey = document.getElementById('cfg-lora-key')?.value?.trim();
+
+      if (!url) {
+        showToast('⚠️ กรุณาระบุ Gateway URL', 'ต้องใส่ URL ของเกตเวย์หรือ API ก่อนทดสอบ', 'warning');
+        return;
+      }
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerText = '⏳ กำลังทดสอบเชื่อมต่อ...';
+      }
+      if (statusText) statusText.innerText = 'กำลังส่งคลื่น Handshake...';
+      if (resBox) {
+        resBox.style.display = 'block';
+        resBox.style.background = 'var(--surface-sunken)';
+        resBox.style.border = '1px solid var(--border-subtle)';
+        resBox.style.color = 'var(--text-primary)';
+        resBox.innerHTML = `<div>📡 กำลังตรวจสอบการเชื่อมต่อไปยัง: <code style="color:#0284c7;">${url}</code> ...</div>`;
+      }
+
+      const startTime = performance.now();
+      try {
+        const response = await fetch('/api/lora/test-connection', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: 'gateway', url, apiKey })
+        });
+        const result = await response.json();
+        const latency = Math.round(result.latencyMs || (performance.now() - startTime));
+
+        if (result.success && result.reachable) {
+          const isHttpOk = result.ok || result.status < 400;
+          const statusColor = isHttpOk ? '#10B981' : '#F59E0B';
+          if (resBox) {
+            resBox.style.background = isHttpOk ? 'rgba(16,185,129,0.1)' : 'rgba(245,158,11,0.1)';
+            resBox.style.border = `1px solid ${statusColor}`;
+            resBox.innerHTML = `
+              <div style="font-weight:700; color:${statusColor}; margin-bottom:4px; display:flex; justify-content:space-between;">
+                <span>${isHttpOk ? '🟢 เชื่อมต่อเกตเวย์จริงสำเร็จ (Connection Established)' : '🟡 เกตเวย์ตอบรับ แต่ต้องการยืนยันสิทธิ์ (Auth Required)'}</span>
+                <span>${latency} ms</span>
+              </div>
+              <div style="color:var(--text-secondary); margin-bottom:4px;">
+                HTTP Status: <strong>${result.status} ${result.statusText}</strong> | Content-Type: ${result.contentType || 'application/json'}
+              </div>
+              <div style="font-family:monospace; font-size:10.5px; background:var(--surface-card); padding:6px 8px; border-radius:4px; max-height:80px; overflow-y:auto; color:var(--text-primary);">
+                ${typeof result.data === 'object' ? JSON.stringify(result.data, null, 2) : String(result.data || 'No payload body')}
+              </div>
+            `;
+          }
+          if (statusText) statusText.innerHTML = `<span style="color:${statusColor}; font-weight:bold;">🟢 ออนไลน์ (${latency}ms)</span>`;
+          showToast('📡 ทดสอบเชื่อมต่อ Gateway สำเร็จ', `ตอบสนองใน ${latency}ms (HTTP ${result.status})`, 'success');
+        } else {
+          if (resBox) {
+            resBox.style.background = 'rgba(239,68,68,0.1)';
+            resBox.style.border = '1px solid #EF4444';
+            resBox.innerHTML = `
+              <div style="font-weight:700; color:#EF4444; margin-bottom:4px; display:flex; justify-content:space-between;">
+                <span>🔴 ไม่สามารถเชื่อมต่อกับเกตเวย์ได้ (Unreachable)</span>
+                <span>${latency} ms</span>
+              </div>
+              <div style="color:var(--text-secondary); margin-bottom:4px;">
+                สาเหตุ: <span style="color:#EF4444;">${result.error || 'Server connection timed out'}</span>
+              </div>
+              <div style="font-size:11px; color:var(--text-tertiary);">
+                คำแนะนำ: ตรวจสอบว่า IP ของเกตเวย์เปิดอยู่ในวง LAN เดียวกัน หรือถ้าเป็น Cloud ตรวจสอบว่า URL พิมพ์ถูกต้อง
+              </div>
+            `;
+          }
+          if (statusText) statusText.innerHTML = `<span style="color:#EF4444; font-weight:bold;">🔴 ออฟไลน์</span>`;
+          showToast('❌ เชื่อมต่อ Gateway ไม่สำเร็จ', result.error || 'Connection Failed', 'danger');
+        }
+      } catch (err) {
+        const latency = Math.round(performance.now() - startTime);
+        if (resBox) {
+          resBox.style.background = 'rgba(239,68,68,0.1)';
+          resBox.style.border = '1px solid #EF4444';
+          resBox.innerHTML = `
+            <div style="font-weight:700; color:#EF4444; margin-bottom:4px;">🔴 การเชื่อมต่อผิดพลาด (${latency}ms)</div>
+            <div style="color:var(--text-secondary);">${err.message || String(err)}</div>
+          `;
+        }
+        if (statusText) statusText.innerHTML = `<span style="color:#EF4444;">🔴 ผิดพลาด</span>`;
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerText = '🔌 ทดสอบเชื่อมต่อ Gateway จริง (Test Connection)';
+        }
+      }
+    }
+
+    // --- Real LoRA AI Handshake Tester ---
+    async function testRealLoraAiConnection() {
+      const btn = document.getElementById('btn-test-lora-ai');
+      const resBox = document.getElementById('cfg-ai-test-result');
+      const statusText = document.getElementById('cfg-ai-status-text');
+      const url = document.getElementById('cfg-ai-url')?.value?.trim();
+      const model = document.getElementById('cfg-ai-model')?.value?.trim();
+
+      if (!url) {
+        showToast('⚠️ กรุณาระบุ AI Endpoint URL', 'ต้องใส่ URL ปลายทางของ AI ก่อนทดสอบ', 'warning');
+        return;
+      }
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerText = '⏳ กำลังทดสอบโมเดล AI...';
+      }
+      if (statusText) statusText.innerText = 'กำลังส่ง Prompt ทดสอบ...';
+      if (resBox) {
+        resBox.style.display = 'block';
+        resBox.style.background = 'var(--surface-sunken)';
+        resBox.style.border = '1px solid var(--border-subtle)';
+        resBox.style.color = 'var(--text-primary)';
+        resBox.innerHTML = `<div>🧠 กำลังส่งคำขอไปยัง: <code style="color:#5856D6;">${url}</code> (Model: ${model || 'auto'})...</div>`;
+      }
+
+      const startTime = performance.now();
+      try {
+        const response = await fetch('/api/lora/test-connection', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'ai',
+            url,
+            model,
+            prompt: 'ทดสอบความเร็วโมเดล LoRA AI คัดกรองภัยพิบัติชุมชน'
+          })
+        });
+        const result = await response.json();
+        const latency = Math.round(result.latencyMs || (performance.now() - startTime));
+
+        if (result.success && result.reachable) {
+          const isHttpOk = result.ok || result.status < 400;
+          const statusColor = isHttpOk ? '#10B981' : '#F59E0B';
+          let aiOutputText = '';
+          if (result.data) {
+            if (typeof result.data === 'string') aiOutputText = result.data;
+            else if (result.data.response) aiOutputText = result.data.response;
+            else if (result.data.answerTh) aiOutputText = result.data.answerTh;
+            else if (result.data.choices && result.data.choices[0]) aiOutputText = result.data.choices[0].message?.content || result.data.choices[0].text;
+            else aiOutputText = JSON.stringify(result.data, null, 2);
+          }
+
+          if (resBox) {
+            resBox.style.background = 'rgba(88,86,214,0.1)';
+            resBox.style.border = `1px solid ${statusColor}`;
+            resBox.innerHTML = `
+              <div style="font-weight:700; color:#5856D6; margin-bottom:4px; display:flex; justify-content:space-between;">
+                <span>🟢 เชื่อมต่อเครื่องยนต์ LoRA AI จริงสำเร็จ</span>
+                <span>${latency} ms</span>
+              </div>
+              <div style="color:var(--text-secondary); margin-bottom:4px;">
+                Status: <strong>${result.status} ${result.statusText}</strong> | โมเดล: <strong>${model}</strong>
+              </div>
+              <div style="background:var(--surface-card); padding:8px 10px; border-radius:6px; font-size:11px; line-height:1.4; color:var(--text-primary); border-left:3px solid #5856D6;">
+                <strong>ข้อความตอบกลับ:</strong> ${aiOutputText || 'Handshake OK (200)'}
+              </div>
+            `;
+          }
+          if (statusText) statusText.innerHTML = `<span style="color:#10B981; font-weight:bold;">🟢 พร้อมใช้งาน (${latency}ms)</span>`;
+          showToast('🧠 LoRA AI เชื่อมต่อสำเร็จ', `ตอบสนองใน ${latency}ms`, 'success');
+        } else {
+          if (resBox) {
+            resBox.style.background = 'rgba(239,68,68,0.1)';
+            resBox.style.border = '1px solid #EF4444';
+            resBox.innerHTML = `
+              <div style="font-weight:700; color:#EF4444; margin-bottom:4px; display:flex; justify-content:space-between;">
+                <span>🔴 ไม่สามารถเชื่อมต่อกับ AI Endpoint ได้</span>
+                <span>${latency} ms</span>
+              </div>
+              <div style="color:var(--text-secondary);">สาเหตุ: ${result.error || 'Connection Failed'}</div>
+              <div style="font-size:10.5px; color:var(--text-tertiary); margin-top:4px;">
+                ถ้าใช้ Ollama ในเครื่อง ให้รันคำสั่ง <code style="color:#0284c7;">ollama run qwen2.5:0.5b</code> ก่อนทดสอบ
+              </div>
+            `;
+          }
+          if (statusText) statusText.innerHTML = `<span style="color:#EF4444; font-weight:bold;">🔴 เชื่อมต่อไม่สำเร็จ</span>`;
+          showToast('❌ ไม่สามารถเชื่อมต่อ AI', result.error || 'Connection Failed', 'danger');
+        }
+      } catch (err) {
+        const latency = Math.round(performance.now() - startTime);
+        if (resBox) {
+          resBox.style.background = 'rgba(239,68,68,0.1)';
+          resBox.style.border = '1px solid #EF4444';
+          resBox.innerHTML = `<div style="color:#EF4444; font-weight:bold;">🔴 ผิดพลาด: ${err.message || String(err)} (${latency}ms)</div>`;
+        }
+        if (statusText) statusText.innerHTML = `<span style="color:#EF4444;">🔴 ผิดพลาด</span>`;
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerText = '⚡ ทดสอบส่งคำถาม AI และวัดความเร็วตอบสนอง (Test AI Handshake)';
+        }
+      }
+    }
+
+    function copyWebhookUrl() {
+      const urlEl = document.getElementById('cfg-webhook-url-display');
+      const text = urlEl ? urlEl.innerText.trim() : 'https://thai-community-shield.vercel.app/api/lora/ingest';
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('📋 คัดลอกแล้ว', 'คัดลอก Webhook URL ไปยังคลิปบอร์ดแล้ว', 'info');
+      }).catch(() => {
+        showToast('📋 Webhook URL', text, 'info');
+      });
+    }
+
+    function startRealLoraAutoPolling() {
+      stopRealLoraAutoPolling();
+      loraAutoPollTimer = setInterval(async () => {
+        try {
+          await fetchLoraStatus();
+        } catch (_) {}
+      }, 10000);
+      console.log('Real LoRa Auto-polling started (10s interval)');
+    }
+
+    function stopRealLoraAutoPolling() {
+      if (loraAutoPollTimer) {
+        clearInterval(loraAutoPollTimer);
+        loraAutoPollTimer = null;
+        console.log('Real LoRa Auto-polling stopped');
+      }
+    }
+
     async function fetchLoraStatus() {
       try {
         const res = await fetch('/api/lora/status');
@@ -9515,6 +10157,11 @@
       start3DWhenReady();
       fetchState();
       fetchLoraStatus();
+      loadLoraSettingsFromStorage();
+      try {
+        const raw = localStorage.getItem('community_shield_lora_config');
+        if (raw && JSON.parse(raw).isAutoPolling) startRealLoraAutoPolling();
+      } catch (_) {}
       initWebSocket();
 
       // Deep link support: allow direct loading into disaster or view mode via URL params

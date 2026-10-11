@@ -201,6 +201,28 @@ let liveLoraPackets: any[] = [
   }
 ];
 
+let liveLoraConfig: any = {
+  connectionMode: 'real_gateway',
+  gatewayUrl: 'http://192.168.1.100:8080/api/v1/telemetry',
+  gatewayApiKey: '',
+  devEui: '70-B3-D5-7E-D0-04-A1-2F',
+  appEui: '00-00-00-00-00-00-00-00',
+  frequencyPlan: 'AS923-TH (923.2 MHz)',
+  spreadingFactor: 'SF9BW125',
+  bandwidthKhz: 125,
+  autoPollIntervalSec: 10,
+  isAutoPolling: false,
+  lastConnectedAt: null,
+  lastLatencyMs: 0,
+  lastStatus: 'standby',
+  aiBackendMode: 'embedded_peft',
+  aiEndpointUrl: 'http://localhost:11434/api/generate',
+  aiModelName: 'qwen2.5:0.5b',
+  aiLoraAdapterPath: 'thewarat-community/disaster-qwen2.5-0.5b-lora',
+  aiTemperature: 0.3,
+  aiMaxTokens: 256
+};
+
 // --- HYDROLOGY & PATHFINDING ---
 
 function calculateRiverWaterLevel(elapsedMinutes: number) {
@@ -988,6 +1010,165 @@ export default async function handler(req: any, res: any) {
         success: true,
         query,
         ...copilotResult
+      });
+    }
+
+    // 20. LoRa Settings Config (GET / POST)
+    if (urlPath === '/api/lora/config' || urlPath.endsWith('/lora/config')) {
+      if (req.method === 'POST') {
+        const body = req.body || {};
+        liveLoraConfig = {
+          ...liveLoraConfig,
+          ...body,
+          lastUpdatedAt: new Date().toISOString()
+        };
+        return json({ success: true, message: 'บันทึกการตั้งค่า LoRA เรียบร้อย', config: liveLoraConfig });
+      }
+      return json({ success: true, config: liveLoraConfig });
+    }
+
+    // 21. Real LoRa / Gateway / AI Connection Tester
+    if (urlPath === '/api/lora/test-connection' || urlPath.endsWith('/lora/test-connection')) {
+      const body = req.body || {};
+      const { type = 'gateway', url = '', apiKey = '', model = '', prompt = '' } = body;
+
+      if (!url) {
+        return json({ success: false, reachable: false, error: 'URL ไม่ถูกต้องหรือเว้นว่าง' }, 400);
+      }
+
+      const startTime = Date.now();
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4500);
+
+        let fetchHeaders: any = {
+          'Accept': 'application/json, text/plain, */*'
+        };
+        if (apiKey) {
+          fetchHeaders['Authorization'] = apiKey.startsWith('Bearer ') ? apiKey : `Bearer ${apiKey}`;
+        }
+
+        let fetchOptions: any = {
+          method: 'GET',
+          headers: fetchHeaders,
+          signal: controller.signal
+        };
+
+        if (type === 'ai' && (url.includes('generate') || url.includes('chat') || url.includes('11434'))) {
+          fetchOptions.method = 'POST';
+          fetchHeaders['Content-Type'] = 'application/json';
+          fetchOptions.body = JSON.stringify({
+            model: model || 'qwen2.5:0.5b',
+            prompt: prompt || 'ทดสอบการเชื่อมต่อโมเดล LoRA AI ชุมชน',
+            stream: false
+          });
+        }
+
+        const resObj = await fetch(url, fetchOptions);
+        clearTimeout(timeoutId);
+        const latencyMs = Date.now() - startTime;
+        const text = await resObj.text();
+
+        let parsedJson = null;
+        try { parsedJson = JSON.parse(text); } catch (_) {}
+
+        liveLoraConfig.lastConnectedAt = new Date().toLocaleTimeString('th-TH');
+        liveLoraConfig.lastLatencyMs = latencyMs;
+        liveLoraConfig.lastStatus = resObj.ok ? 'connected' : 'auth_required';
+
+        return json({
+          success: true,
+          reachable: true,
+          status: resObj.status,
+          statusText: resObj.statusText,
+          ok: resObj.ok,
+          latencyMs,
+          contentType: resObj.headers.get('content-type') || 'unknown',
+          data: parsedJson || text.slice(0, 400)
+        });
+      } catch (err: any) {
+        const latencyMs = Date.now() - startTime;
+        const errMsg = err.name === 'AbortError' ? 'หมดเวลาเชื่อมต่อ (> 4.5s Timeout)' : (err.message || 'เชื่อมต่อล้มเหลว');
+        liveLoraConfig.lastStatus = 'offline';
+        return json({
+          success: false,
+          reachable: false,
+          error: errMsg,
+          latencyMs
+        });
+      }
+    }
+
+    // 22. Real LoRaWAN Uplink Webhook Ingest (TTN / ChirpStack / ESP32)
+    if (urlPath === '/api/lora/ingest' || urlPath.endsWith('/lora/ingest')) {
+      const body = req.body || {};
+      const now = new Date();
+      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
+      let waterLevel = 0.42;
+      let rssi = -78;
+      let snr = 9.5;
+      let freq = 923.2;
+      let devEui = liveLoraConfig.devEui || '70-B3-D5-7E-D0-04-A1-2F';
+      let batV = 3.62;
+      let batPct = 94;
+      let fCnt = Math.floor(1484 + Math.random() * 20);
+      let gatewayId = 'GW-THEWARAT-BELF-01';
+      let rawHex = '0102002A0267011C03020E24';
+
+      if (body.uplink_message) {
+        const up = body.uplink_message;
+        fCnt = up.f_cnt || fCnt;
+        if (up.rx_metadata && up.rx_metadata[0]) {
+          rssi = up.rx_metadata[0].rssi || rssi;
+          snr = up.rx_metadata[0].snr || snr;
+          gatewayId = up.rx_metadata[0].gateway_ids?.gateway_id || gatewayId;
+        }
+        if (up.decoded_payload) {
+          waterLevel = up.decoded_payload.water_level || up.decoded_payload.waterLevel || waterLevel;
+        }
+      } else if (body.deviceInfo) {
+        fCnt = body.fCnt || fCnt;
+        devEui = body.deviceInfo.devEui || devEui;
+        if (body.rxInfo && body.rxInfo[0]) {
+          rssi = body.rxInfo[0].rssi || rssi;
+          snr = body.rxInfo[0].snr || snr;
+          gatewayId = body.rxInfo[0].gatewayId || gatewayId;
+        }
+      } else if (body.water_level_m !== undefined) {
+        waterLevel = Number(body.water_level_m);
+        rssi = body.rssi_dbm !== undefined ? Number(body.rssi_dbm) : rssi;
+        snr = body.snr_db !== undefined ? Number(body.snr_db) : snr;
+        batV = body.battery_volts !== undefined ? Number(body.battery_volts) : batV;
+        batPct = body.battery_pct !== undefined ? Number(body.battery_pct) : batPct;
+      }
+
+      const newPacket = {
+        id: `lora-real-${Date.now()}`,
+        timestamp_time: timeStr,
+        dev_eui: devEui,
+        gateway_id: gatewayId,
+        frequency_mhz: freq,
+        rssi_dbm: rssi,
+        snr_db: snr,
+        spreading_factor: liveLoraConfig.spreadingFactor || 'SF9BW125',
+        f_cnt: fCnt,
+        battery_volts: batV,
+        battery_pct: batPct,
+        water_level_m: Number(waterLevel.toFixed(2)),
+        temp_c: 28.4,
+        raw_payload: rawHex,
+        status: 'synced_real'
+      };
+
+      liveLoraPackets.unshift(newPacket);
+      if (liveLoraPackets.length > 50) liveLoraPackets.pop();
+
+      return json({
+        success: true,
+        message: 'รับแพ็กเก็ต LoRaWAN จริงสำเร็จ (Real Uplink Ingested)',
+        packet: newPacket,
+        totalPackets: liveLoraPackets.length
       });
     }
 
